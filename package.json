@@ -1,0 +1,25 @@
+{
+  "name": "journey-viewer-card",
+  "version": "0.1.0",
+  "description": "Paginated GPS journey viewer for Home Assistant. Drive, ride, run, hike, sail. Source-agnostic: Toyota, Strava, Garmin, Komoot, OwnTracks-replay, or any custom integration.",
+  "type": "module",
+  "main": "dist/journey-viewer-card.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && ./scripts/deploy-to-ha.sh"
+  },
+  "license": "MIT",
+  "author": "nledenyi",
+  "dependencies": {
+    "custom-card-helpers": "^1.9.0",
+    "leaflet": "^1.9.4",
+    "lit": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.14",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0"
+  }
+}

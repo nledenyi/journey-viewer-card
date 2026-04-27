@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# python tooling cache
+__pycache__/
+*.py[cod]
+
+# strava-fixture.py output (real activity data, never commit)
+strava-trips.json
+*-trips.json
+sample-trips-*.json
+
+# vite preview build cache
+.vite/
+
+# logs
+*.log
+npm-debug.log*

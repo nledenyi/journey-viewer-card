@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>journey-viewer-card · dev</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --primary-text-color: #1f2937;
+        --secondary-text-color: #6b7280;
+        --secondary-background-color: #f3f4f6;
+        --divider-color: #e5e7eb;
+        --error-color: #dc2626;
+      }
+      body {
+        margin: 0;
+        background: #fafafa;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        color: var(--primary-text-color);
+      }
+      header {
+        padding: 12px 16px;
+        background: #fff;
+        border-bottom: 1px solid var(--divider-color);
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      header .meta {
+        font-size: 12px;
+        color: var(--secondary-text-color);
+      }
+      main {
+        max-width: 720px;
+        margin: 16px auto;
+        padding: 0 16px;
+      }
+      ha-card {
+        display: block;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+      /* shim ha-icon to a span when we're outside HA */
+      ha-icon {
+        display: inline-block;
+        width: var(--mdc-icon-size, 16px);
+        height: var(--mdc-icon-size, 16px);
+        background: currentColor;
+        mask: var(--icon-image, none);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>journey-viewer-card · dev preview</h1>
+      <span class="meta">synthetic in-memory trips · vite hot-reload</span>
+    </header>
+    <main>
+      <journey-viewer-card id="card"></journey-viewer-card>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
