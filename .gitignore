@@ -20,6 +20,12 @@ sample-trips-*.json
 # vite preview build cache
 .vite/
 
+# env files (HA URL + long-lived token live in .env.local)
+.env
+.env.local
+.env.*.local
+!.env.example
+
 # logs
 *.log
 npm-debug.log*

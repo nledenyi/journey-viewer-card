@@ -267,14 +267,18 @@ Coming soon. Until then, manual install above.
 
 ## Development
 
-Local hot-reload preview, no HA round-trip:
+Local hot-reload preview against your live HA — no Docker rebuild, no committed fixture data:
 
 ```sh
 npm install
+cp .env.example .env.local
+# edit .env.local: set DEV_HA_URL and DEV_HA_TOKEN
 npm run dev
-# opens http://localhost:5173 with the card rendering against synthetic
-# in-memory trips defined in dev/main.ts (no fixture file, no PII)
+# opens http://localhost:5173. Vite proxies /ha-api → your HA, injecting
+# the token server-side so it never reaches the browser.
 ```
+
+The dev harness reads `attributes.trips` from `sensor.rav4_recent_trips` (change in `dev/main.ts` if your sensor is named differently). If the env vars are missing, the proxy is disabled and you'll see the card's empty state — HMR still works for code changes.
 
 Build:
 

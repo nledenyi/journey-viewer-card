@@ -3,74 +3,23 @@ import type { JourneyViewerCard } from "../src/card.js";
 import type { CardConfig, Trip } from "../src/types.js";
 
 // Local Vite harness. Production reads trips from
-// `hass.states[entity].attributes.trips`; we just inline a stub `hass` object
-// with synthetic trips so the card's data path is identical between dev and
-// prod. No real GPS data lives in this repo.
-const ENTITY = "sensor.demo_recent_trips";
-
-/** Two synthetic trips around a fictional point. Coordinates are deliberately
- *  fake (~Null Island shifted slightly) so cloners can run `npm run dev`
- *  without any local fixture file or producer integration. */
-const SYNTHETIC_TRIPS: Trip[] = [
-  {
-    id: "demo-1",
-    label: "Demo trip — today",
-    source: "demo",
-    activity_type: "drive",
-    start_ts: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
-    end_ts: new Date(Date.now() - 1.5 * 3600 * 1000).toISOString(),
-    start: { lat: 0.10, lon: 0.10 },
-    end: { lat: 0.18, lon: 0.16 },
-    route: [
-      { lat: 0.10, lon: 0.10, isEv: true,  overspeed: false },
-      { lat: 0.12, lon: 0.11, isEv: true,  overspeed: false },
-      { lat: 0.14, lon: 0.13, isEv: false, overspeed: false },
-      { lat: 0.16, lon: 0.15, isEv: false, overspeed: true  },
-      { lat: 0.18, lon: 0.16, isEv: false, overspeed: false },
-    ],
-    stats: {
-      distance_m: 12340,
-      duration_s: 1820,
-      average_speed_kmh: 24.4,
-      fuel_consumption_ml: 580,
-      ev_distance_m: 4920,
-    },
-    scores: { acceleration: 88, braking: 74, global: 81 },
-    behaviours: [
-      { lat: 0.13, lon: 0.12, type: "A", good: true,  severity: 180 },
-      { lat: 0.16, lon: 0.15, type: "B", good: false, severity: 240 },
-    ],
-  },
-  {
-    id: "demo-2",
-    label: "Demo trip — yesterday",
-    source: "demo",
-    activity_type: "drive",
-    start_ts: new Date(Date.now() - 26 * 3600 * 1000).toISOString(),
-    end_ts: new Date(Date.now() - 25.5 * 3600 * 1000).toISOString(),
-    start: { lat: 0.18, lon: 0.16 },
-    end: { lat: 0.10, lon: 0.10 },
-    route: [
-      { lat: 0.18, lon: 0.16, isEv: true, overspeed: false },
-      { lat: 0.16, lon: 0.14, isEv: true, overspeed: false },
-      { lat: 0.13, lon: 0.12, isEv: true, overspeed: false },
-      { lat: 0.10, lon: 0.10, isEv: true, overspeed: false },
-    ],
-    stats: {
-      distance_m: 11210,
-      duration_s: 1750,
-      average_speed_kmh: 23.1,
-      fuel_consumption_ml: 0,
-      ev_distance_m: 11210,
-    },
-    scores: { acceleration: 92, braking: 81, global: 87 },
-  },
-];
+// `hass.states[entity].attributes.trips`; in dev we fetch the same data from
+// the running HA via Vite's `/ha-api` proxy (token is injected server-side
+// in vite.config.ts so it never touches the browser).
+//
+// Set up:
+//   1. Copy .env.example → .env.local
+//   2. Edit DEV_HA_URL and DEV_HA_TOKEN
+//   3. npm run dev
+//
+// If the env vars are missing the proxy is disabled and you'll see the empty
+// state — the card itself still mounts and re-renders on save (HMR works).
+const ENTITY = "sensor.rav4_recent_trips";
 
 const config: CardConfig = {
   type: "custom:journey-viewer-card",
-  title: "Demo recent trips",
-  sources: [{ name: "Demo", entity: ENTITY, color: "#e63946", icon: "mdi:car" }],
+  title: "Live HA dev",
+  sources: [{ name: "Vehicle", entity: ENTITY, color: "#e63946", icon: "mdi:car" }],
   order: "newest_first",
   default_index: 0,
   pagination: { show_counter: true, wrap: false, keyboard: true },
@@ -112,18 +61,37 @@ const config: CardConfig = {
     ],
   },
   empty_state: {
-    title: "No recent trips",
-    body: "No trips in the last 14 days.",
+    title: "No trips loaded",
+    body: "Set DEV_HA_URL + DEV_HA_TOKEN in .env.local then restart `npm run dev`.",
     icon: "mdi:car-off",
   },
 };
 
-const card = document.getElementById("card") as JourneyViewerCard;
-card.setConfig(config);
-// Minimal hass shim: only the bits the card touches.
-card.hass = {
-  states: {
-    [ENTITY]: { attributes: { trips: SYNTHETIC_TRIPS } },
-  },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} as any;
+async function loadTripsFromHa(entity: string): Promise<Trip[]> {
+  try {
+    const r = await fetch(`/ha-api/states/${encodeURIComponent(entity)}`);
+    if (!r.ok) {
+      console.warn(`[dev] HA proxy ${r.status} ${r.statusText}; rendering empty state`);
+      return [];
+    }
+    const state = (await r.json()) as { attributes?: { trips?: Trip[] } };
+    return state.attributes?.trips ?? [];
+  } catch (err) {
+    console.warn("[dev] HA proxy unreachable; rendering empty state", err);
+    return [];
+  }
+}
+
+(async () => {
+  const trips = await loadTripsFromHa(ENTITY);
+
+  const card = document.getElementById("card") as JourneyViewerCard;
+  card.setConfig(config);
+  // Minimal hass shim: only the bits the card touches.
+  card.hass = {
+    states: {
+      [ENTITY]: { attributes: { trips } },
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any;
+})();
