@@ -3,7 +3,7 @@ import { property, query, state } from "lit/decorators.js";
 import type { ActionConfig, HomeAssistant, LovelaceCard } from "custom-card-helpers";
 import { hasAction } from "custom-card-helpers";
 import leafletCss from "leaflet/dist/leaflet.css?inline";
-import type { CardConfig, StatsRow, Trip } from "./types.js";
+import type { CardConfig, RoutePoint, StatsRow, Trip } from "./types.js";
 import { TripMap } from "./map.js";
 import { formatStat, renderLabel, validateLabelTemplate } from "./format.js";
 import { getByPath } from "./lookup.js";
@@ -67,6 +67,14 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
   /** Memoized stats-row decorations, keyed on (trip, prevTrip) reference pair.
    *  Cleared whenever `trips` changes (refreshTrips() reassigns the array). */
   private rowCache?: { trip: Trip; prevTrip?: Trip; rows: WeakMap<StatsRow, RowComputed> };
+  /** Lazy-loaded route polylines, keyed by trip id. Populated by
+   *  `maybeLoadRoute()` calling the source's `route_service`. Persists across
+   *  trip-array refreshes so navigating back to a previously-viewed trip
+   *  doesn't re-issue the service call. Lifetime is the card instance. */
+  private routeCache = new Map<string, RoutePoint[]>();
+  /** Trip ids whose route fetch is currently in flight; debounces
+   *  duplicate kickoffs from successive `updated()` cycles. */
+  private routeFetchInFlight = new Set<string>();
   private keyboardListenerActive = false;
 
   // ─── Lovelace lifecycle ────────────────────────────────────────────────
@@ -112,19 +120,20 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     );
   }
 
-  /** Sections-view layout hints (HA 2024.7+). Each grid cell is ~30px wide,
-   *  56px tall, with 8px gaps. The card needs at least the map height plus
-   *  header plus a couple of stats rows to be usable, and works best at
-   *  full section width. Columns must be multiples of 3. */
+  /** Sections-view layout hints (HA 2024.7+). `rows: "auto"` lets HA's
+   *  grid CSS size the cell to the actual rendered card height. Same
+   *  pattern HA's built-in entities-card uses for variable-height content
+   *  — avoids the pixel-arithmetic trap of static heuristics that overflow
+   *  whenever a config edge case pushes the card past the estimate. */
   getGridOptions(): {
-    rows?: number;
+    rows?: number | "auto";
     columns?: number;
     min_rows?: number;
     min_columns?: number;
     max_rows?: number;
     max_columns?: number;
   } {
-    return { rows: 6, columns: 12, min_rows: 4, min_columns: 6 };
+    return { columns: 12, rows: "auto", min_columns: 6 };
   }
 
   // ─── State updates ─────────────────────────────────────────────────────
@@ -182,7 +191,100 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     // inside HA's grid sections layout.
     this.ensureMap();
     const trip = this.currentTrip;
-    if (this.tripMap && trip) this.tripMap.render(trip);
+    if (this.tripMap && trip) {
+      this.tripMap.render(this.resolveTrip(trip));
+      // Lazy-load the route polyline if the trip arrived without it (HA
+      // ships only metadata in attributes; the full polyline lives in the
+      // integration's cache and is fetched on demand via route_service).
+      this.maybeLoadRoute(trip);
+    }
+  }
+
+  /** Return ``trip`` with ``route`` filled from the lazy-load cache.
+   *  If the trip already has a route (fixture mode) it's returned as-is.
+   *  If the cache hasn't loaded yet, route is left empty so the map
+   *  renders endpoints only - the next `updated()` after fetch
+   *  completion replaces it with the full polyline.
+   */
+  private resolveTrip(trip: Trip): Trip {
+    if (trip.route?.length) return trip;
+    const cached = this.routeCache.get(trip.id);
+    if (cached) return { ...trip, route: cached };
+    return trip;
+  }
+
+  /** Kick off a route fetch for ``trip`` if not already cached / in-flight.
+   *  No-op when the trip has no route (route_point_count missing or 0),
+   *  when the trip already has a route, when the source has lazy-loading
+   *  disabled, or when the device id can't be resolved.
+   */
+  private maybeLoadRoute(trip: Trip): void {
+    if (trip.route?.length) return;
+    if (!trip.route_point_count) return;
+    if (!trip.id || this.routeCache.has(trip.id)) return;
+    if (this.routeFetchInFlight.has(trip.id)) return;
+    if (!this.hass || !this.config) return;
+
+    const source = (this.config.sources ?? []).find(
+      (s) => (s.name ?? null) === trip.source,
+    );
+    if (!source?.entity) return;
+    const serviceName = source.route_service ?? "toyota.get_trip_route";
+    if (!serviceName) return; // Empty/null disables lazy-load.
+
+    // hass.entities is a Record<entity_id, EntityRegistryDisplayEntry> in
+    // HA 2023.4+ but isn't typed in custom-card-helpers yet.
+    const entityReg = (this.hass as unknown as {
+      entities?: Record<string, { device_id?: string }>;
+    }).entities?.[source.entity];
+    const deviceId = entityReg?.device_id;
+    if (!deviceId) return;
+
+    const [domain, service] = serviceName.split(".");
+    if (!domain || !service) return;
+
+    this.routeFetchInFlight.add(trip.id);
+    // HA's hass.callService(...) accepts (domain, service, data, target,
+    // notifyOnError, returnResponse) - the 6th arg is missing from
+    // custom-card-helpers's types but present at runtime since 2024.4.
+    const callService = (this.hass as unknown as {
+      callService: (
+        domain: string,
+        service: string,
+        data: Record<string, unknown>,
+        target?: unknown,
+        notifyOnError?: boolean,
+        returnResponse?: boolean,
+      ) => Promise<{ response?: { route?: RoutePoint[] } }>;
+    }).callService;
+
+    callService(
+      domain,
+      service,
+      { device_id: deviceId, trip_id: trip.id },
+      undefined,
+      false,
+      true,
+    )
+      .then((resp) => {
+        const route = resp?.response?.route ?? [];
+        this.routeCache.set(trip.id, route);
+        // Force a re-render so the resolved trip with full route gets
+        // pushed to the map.
+        this.requestUpdate();
+      })
+      .catch((err: unknown) => {
+        // Network glitch / service unavailable / invalid trip id.
+        // Don't throw - leave the trip routeless, log once for debugging.
+        // Next navigation back to this trip will retry.
+        console.warn(
+          `journey-viewer-card: ${serviceName} failed for trip ${trip.id}`,
+          err,
+        );
+      })
+      .finally(() => {
+        this.routeFetchInFlight.delete(trip.id);
+      });
   }
 
   private refreshTrips(): void {
@@ -217,7 +319,10 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     requestAnimationFrame(() => {
       this.ensureMap();
       const trip = this.currentTrip;
-      if (this.tripMap && trip) this.tripMap.render(trip);
+      if (this.tripMap && trip) {
+        this.tripMap.render(this.resolveTrip(trip));
+        this.maybeLoadRoute(trip);
+      }
     });
   }
 

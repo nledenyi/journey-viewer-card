@@ -96,7 +96,14 @@ export interface Trip {
   end_ts?: string;
   start: Coord;
   end: Coord;
-  route: RoutePoint[];
+  /** Full GPS polyline. Optional: HA-mode trips arrive without `route` to keep
+   *  the recent-trips sensor's attribute payload small (the card lazy-loads
+   *  via `route_service` when the user navigates to the trip). Fixture-mode
+   *  trips ship with `route` populated for offline dev. */
+  route?: RoutePoint[];
+  /** Number of points in the source's full route. When `route` is absent
+   *  but this is > 0, the card knows there's data to lazy-load. */
+  route_point_count?: number;
   stats: TripStats;
   scores?: TripScores | null;
   behaviours?: Behaviour[] | null;
@@ -113,6 +120,12 @@ export interface SourceConfig {
   /** Default polyline color for this source if color_by=solid. */
   color?: string;
   icon?: string;
+  /** HA service to call to lazy-load a single trip's route polyline. Format
+   *  "domain.service". Default "toyota.get_trip_route" for the canonical
+   *  ha_toyota integration. The service must accept `{device_id, trip_id}`
+   *  and return `{route: RoutePoint[]}`. Set to "" or null to disable
+   *  lazy-loading (the card will render trips without polylines). */
+  route_service?: string;
 }
 
 export interface MapConfig {

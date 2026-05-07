@@ -208,7 +208,7 @@ export class TripMap {
     if (this.layer) this.layer.remove();
     this.layer = L.layerGroup().addTo(m);
 
-    if (!trip.route.length) {
+    if (!trip.route?.length) {
       this.dropEndpoints(trip);
       this.fitAndSettle(m, this.collectCoords(trip));
       return;
@@ -251,14 +251,15 @@ export class TripMap {
     const weight = cfg.weight ?? 4;
     const opacity = cfg.opacity ?? 0.9;
 
+    const route = trip.route ?? [];
     if (colorBy === "solid") {
-      const path = trip.route.map((p) => [p.lat, p.lon] as [number, number]);
+      const path = route.map((p) => [p.lat, p.lon] as [number, number]);
       L.polyline(path, { color: palette.solid, weight, opacity }).addTo(this.layer!);
       return;
     }
 
     // Multi-colour: split route into runs of same colour.
-    const segments = splitByColor(trip.route, colorBy, palette);
+    const segments = splitByColor(route, colorBy, palette);
     for (const seg of segments) {
       L.polyline(seg.coords, { color: seg.color, weight, opacity }).addTo(this.layer!);
     }
@@ -327,7 +328,9 @@ export class TripMap {
   // ─── Bounds ───────────────────────────────────────────────────────────────
 
   private collectCoords(trip: Trip): Array<[number, number]> {
-    const all: Array<[number, number]> = trip.route.map((p) => [p.lat, p.lon]);
+    const all: Array<[number, number]> = (trip.route ?? []).map(
+      (p) => [p.lat, p.lon] as [number, number],
+    );
     if (validCoord(trip.start)) all.push([trip.start.lat, trip.start.lon]);
     if (validCoord(trip.end)) all.push([trip.end.lat, trip.end.lon]);
     return all;
