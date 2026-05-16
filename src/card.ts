@@ -225,9 +225,14 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     if (this.routeFetchInFlight.has(trip.id)) return;
     if (!this.hass || !this.config) return;
 
-    const source = (this.config.sources ?? []).find(
-      (s) => (s.name ?? null) === trip.source,
-    );
+    // Resolve which source produced this trip. Prefer entity_id (stamped by
+    // normalizeFromHass) over name matching: the sensor's `source` label is
+    // case-sensitive and frequently differs from the user's friendly
+    // `name`, which used to silently disable lazy-loading.
+    const sources = this.config.sources ?? [];
+    const source =
+      sources.find((s) => s.entity && s.entity === trip.source_entity) ??
+      sources.find((s) => (s.name ?? null) === trip.source);
     if (!source?.entity) return;
     const serviceName = source.route_service ?? "toyota.get_trip_route";
     if (!serviceName) return; // Empty/null disables lazy-load.
@@ -269,9 +274,14 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
       .then((resp) => {
         const route = resp?.response?.route ?? [];
         this.routeCache.set(trip.id, route);
-        // Force a re-render so the resolved trip with full route gets
-        // pushed to the map.
-        this.requestUpdate();
+        // Re-render the map directly. shouldUpdate() gates Lit's update
+        // cycle on observable property changes; routeCache is internal,
+        // so requestUpdate() alone gets filtered out and the polyline
+        // never appears. Only render if this trip is still the visible
+        // one (user may have paginated away mid-fetch).
+        if (this.tripMap && this.currentTrip?.id === trip.id) {
+          this.tripMap.render(this.resolveTrip(trip));
+        }
       })
       .catch((err: unknown) => {
         // Network glitch / service unavailable / invalid trip id.

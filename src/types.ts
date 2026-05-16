@@ -104,6 +104,11 @@ export interface Trip {
   /** Number of points in the source's full route. When `route` is absent
    *  but this is > 0, the card knows there's data to lazy-load. */
   route_point_count?: number;
+  /** Entity_id this trip was loaded from. Set by normalizeFromHass; used by
+   *  lazy-load to resolve the source config without depending on `source`
+   *  string matching (which is case-sensitive and brittle when the sensor's
+   *  source label differs from the config's `name`). */
+  source_entity?: string;
   stats: TripStats;
   scores?: TripScores | null;
   behaviours?: Behaviour[] | null;

@@ -24,7 +24,8 @@ export function normalizeFromHass(
     const ent = hass.states[src.entity];
     if (!ent?.attributes) continue;
     const trips = collectTrips(ent.attributes.trips);
-    for (const t of trips) out.push({ ...t, source: t.source ?? src.name });
+    for (const t of trips)
+      out.push({ ...t, source: t.source ?? src.name, source_entity: src.entity });
   }
   return out;
 }
