@@ -6,7 +6,7 @@
  * card never sees source-specific shapes.
  */
 
-import type { ActionConfig } from "custom-card-helpers";
+import type { ActionConfig, LovelaceCardConfig } from "custom-card-helpers";
 
 export interface Coord {
   lat: number;
@@ -130,7 +130,7 @@ export interface SourceConfig {
    *  ha_toyota integration. The service must accept `{device_id, trip_id}`
    *  and return `{route: RoutePoint[]}`. Set to "" or null to disable
    *  lazy-loading (the card will render trips without polylines). */
-  route_service?: string;
+  route_service?: string | null;
 }
 
 export interface MapConfig {
@@ -229,8 +229,9 @@ export interface PaginationConfig {
   keyboard?: boolean;
 }
 
-export interface CardConfig {
-  type: string;
+/** Extends LovelaceCardConfig for the `type` field + index signature, so the
+ *  editor's generic-record merging is type-compatible without cast gymnastics. */
+export interface CardConfig extends LovelaceCardConfig {
   title?: string;
   sources: SourceConfig[];
   order?: "newest_first" | "oldest_first";

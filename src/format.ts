@@ -89,11 +89,11 @@ export function renderLabel(template: string, trip: {
   stats: { distance_m?: number | null; duration_s?: number | null };
 }): string {
   return template
-    .replace("{relative_day}", formatRelativeDay(trip.start_ts))
-    .replace("{start_time}", formatTime(trip.start_ts))
-    .replace("{end_time}", formatTime(trip.end_ts))
-    .replace("{distance}", formatDistance(trip.stats.distance_m))
-    .replace("{duration}", formatDuration(trip.stats.duration_s));
+    .replaceAll("{relative_day}", formatRelativeDay(trip.start_ts))
+    .replaceAll("{start_time}", formatTime(trip.start_ts))
+    .replaceAll("{end_time}", formatTime(trip.end_ts))
+    .replaceAll("{distance}", formatDistance(trip.stats.distance_m))
+    .replaceAll("{duration}", formatDuration(trip.stats.duration_s));
 }
 
 /** Format a single stats-grid row value. */
@@ -107,11 +107,15 @@ export function formatStat(
     return "—";
 
   const v = typeof value === "number" ? value : Number(value);
-  if (format === "km") return formatDistance(v);
-  if (format === "L") return formatVolume(v, decimals ?? 3);
-  if (format === "duration") return formatDuration(v);
+  // Numeric formats on a non-numeric value ("unknown", "n/a") would render
+  // literal "NaN" strings - fall back to the placeholder instead.
+  const numeric = Number.isFinite(v);
+  if (format === "km") return numeric ? formatDistance(v) : "—";
+  if (format === "L") return numeric ? formatVolume(v, decimals ?? 3) : "—";
+  if (format === "duration") return numeric ? formatDuration(v) : "—";
 
   if (format && format.includes("{v")) {
+    if (!numeric) return "—";
     // Light templating: "{v:.1f}" / "{v:.0%}" / "{v} / 100"
     return format
       .replace(/\{v:\.0%\}/g, `${Math.round(v * 100)}%`)
@@ -119,6 +123,6 @@ export function formatStat(
       .replace(/\{v\}/g, String(v));
   }
 
-  if (decimals != null && typeof v === "number") return v.toFixed(decimals);
+  if (decimals != null && numeric) return v.toFixed(decimals);
   return String(value);
 }

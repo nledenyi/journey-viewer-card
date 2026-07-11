@@ -80,7 +80,6 @@ function resolvePalette(
 export class TripMap {
   private map?: L.Map;
   private layer?: L.LayerGroup;
-  private pendingTrip?: Trip;
   private resizeObserver?: ResizeObserver;
   /** Last trip the caller asked us to render. Held so ResizeObserver can
    *  replay the render when the container transitions from zero-size back
@@ -90,7 +89,45 @@ export class TripMap {
   private lastTrip?: Trip;
   private lastSize = { w: 0, h: 0 };
 
-  constructor(private container: HTMLElement, private cfg: MapConfig) {}
+  constructor(private container: HTMLElement, private cfg: MapConfig) {
+    // Observe from day one. If render() is called while the container is
+    // zero-sized (hidden conditional card, inactive tab, edit-mode layout
+    // churn), the observer wakes us the moment layout gives it a real box —
+    // no rAF polling, no busy-loop while the card stays hidden.
+    this.resizeObserver = new ResizeObserver(([entry]) => this.onResize(entry));
+    this.resizeObserver.observe(container);
+  }
+
+  private onResize(entry: ResizeObserverEntry | undefined): void {
+    if (!entry) return;
+    const { width, height } = entry.contentRect;
+    if (width === 0 || height === 0) {
+      // Container hidden (edit mode, drawer collapse, off-screen). Reset
+      // our size tracking so the next non-zero observation is treated as
+      // a meaningful resize.
+      this.lastSize = { w: 0, h: 0 };
+      return;
+    }
+    if (!this.map) {
+      // Container just gained real dimensions; replay the render that
+      // ensure() had to shelve while the box was 0×0.
+      if (this.lastTrip) this.render(this.lastTrip);
+      return;
+    }
+    this.map.invalidateSize();
+    const sizeChanged =
+      Math.abs(width - this.lastSize.w) > 1 ||
+      Math.abs(height - this.lastSize.h) > 1;
+    this.lastSize = { w: width, h: height };
+    if (sizeChanged && this.lastTrip) {
+      // Defer one frame so Leaflet's invalidateSize commit fully applies
+      // before we re-fit. render() doesn't mutate container size, so this
+      // won't loop the observer.
+      requestAnimationFrame(() => {
+        if (this.lastTrip) this.render(this.lastTrip);
+      });
+    }
+  }
 
   /**
    * Init Leaflet once the container has real dimensions.
@@ -141,39 +178,6 @@ export class TripMap {
     }).addTo(m);
     this.map = m;
 
-    // Watch for later size changes (theme switch, dashboard resize, mobile
-    // rotate, Lovelace edit-mode toggle). Two reactions:
-    //   - any non-zero resize → invalidateSize() so panes catch up
-    //   - meaningful resize (>1px diff) AND we have a prior trip → full
-    //     render(lastTrip) so the polyline reprojects against the new size.
-    //     Without this second leg, the polyline stays at its previous pixel
-    //     positions and the map looks blank after edit-mode exit.
-    this.resizeObserver = new ResizeObserver(([entry]) => {
-      if (!entry) return;
-      const { width, height } = entry.contentRect;
-      if (width === 0 || height === 0) {
-        // Container hidden (edit mode, drawer collapse, off-screen). Reset
-        // our size tracking so the next non-zero observation is treated as
-        // a meaningful resize.
-        this.lastSize = { w: 0, h: 0 };
-        return;
-      }
-      m.invalidateSize();
-      const sizeChanged =
-        Math.abs(width - this.lastSize.w) > 1 ||
-        Math.abs(height - this.lastSize.h) > 1;
-      this.lastSize = { w: width, h: height };
-      if (sizeChanged && this.lastTrip) {
-        // Defer one frame so Leaflet's invalidateSize commit fully applies
-        // before we re-fit. Calling render() inside render() is safe — it
-        // doesn't mutate container size, so won't loop the observer.
-        requestAnimationFrame(() => {
-          if (this.lastTrip) this.render(this.lastTrip);
-        });
-      }
-    });
-    this.resizeObserver.observe(this.container);
-
     // Defensive: even though the container had non-zero rect when we read it,
     // Leaflet's internal _size may not match by the time the first paint
     // happens. Schedule an invalidateSize after the next layout pass AND a
@@ -188,22 +192,11 @@ export class TripMap {
   /** Replace all trip-specific layers with this trip's data. */
   render(trip: Trip): void {
     // Remember regardless of whether ensure() succeeds — if the container is
-    // currently zero-sized, the ResizeObserver will replay this trip once
-    // the container is laid out again (Lovelace edit-mode exit).
+    // currently zero-sized, the ResizeObserver (attached in the constructor)
+    // replays this trip once the container is laid out again.
     this.lastTrip = trip;
-    let m = this.ensure();
-    if (!m) {
-      // Container not laid out yet — queue and retry on next animation frame.
-      this.pendingTrip = trip;
-      requestAnimationFrame(() => {
-        if (this.pendingTrip) {
-          const trip2 = this.pendingTrip;
-          this.pendingTrip = undefined;
-          this.render(trip2);
-        }
-      });
-      return;
-    }
+    const m = this.ensure();
+    if (!m) return;
 
     if (this.layer) this.layer.remove();
     this.layer = L.layerGroup().addTo(m);
@@ -361,7 +354,6 @@ export class TripMap {
     this.map?.remove();
     this.map = undefined;
     this.layer = undefined;
-    this.pendingTrip = undefined;
     this.lastTrip = undefined;
     this.lastSize = { w: 0, h: 0 };
   }

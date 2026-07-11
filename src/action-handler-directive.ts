@@ -38,7 +38,13 @@ class ActionHandlerDirective extends Directive {
     // Mushroom's pattern: don't gate on PartType — Lit allows directives on
     // property parts too, and the part still exposes `.element` either way.
     const handler = ensureActionHandlerEl();
-    handler.bind(part.element, options);
+    // If HA hasn't upgraded the <action-handler> element yet, bind is
+    // undefined - skip rather than throw. The directive's update() re-runs
+    // on the next render (options object is fresh each time), so binding
+    // happens as soon as the element is upgraded.
+    if (typeof handler.bind === "function") {
+      handler.bind(part.element, options);
+    }
     return noChange;
   }
 

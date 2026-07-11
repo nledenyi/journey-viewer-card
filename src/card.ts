@@ -105,6 +105,25 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
         );
       }
     }
+    if (
+      config.default_index != null &&
+      (!Number.isInteger(config.default_index) || config.default_index < 0)
+    ) {
+      throw new Error(
+        "journey-viewer-card: 'default_index' must be a non-negative integer",
+      );
+    }
+    // Map options are baked into the Leaflet instance at construction time
+    // (tile provider, gestures, zoom behaviour). If they changed, tear the
+    // map down so updated() rebuilds it against the new config - otherwise
+    // editor changes to map.* silently don't apply until a page reload.
+    if (
+      this.tripMap &&
+      JSON.stringify(this.config?.map ?? {}) !== JSON.stringify(config.map ?? {})
+    ) {
+      this.tripMap.destroy();
+      this.tripMap = undefined;
+    }
     this.config = config;
     this.index = config.default_index ?? 0;
     this.rowCache = undefined;
@@ -141,6 +160,9 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
   /** Re-render only when something we actually care about changed. */
   protected override shouldUpdate(changed: PropertyValues): boolean {
     if (!this.config) return true;
+    // A bare requestUpdate() (no reactive prop changed) means some internal
+    // state wants a re-render - let it through instead of silently eating it.
+    if (changed.size === 0) return true;
     if (
       changed.has("config") ||
       changed.has("index") ||
@@ -200,6 +222,13 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     }
   }
 
+  /** Cache key for a trip's lazy-loaded route. Includes the source entity so
+   *  two sources whose integrations use overlapping trip-id spaces can't
+   *  serve each other's polylines. */
+  private routeKey(trip: Trip): string {
+    return `${trip.source_entity ?? ""}|${trip.id}`;
+  }
+
   /** Return ``trip`` with ``route`` filled from the lazy-load cache.
    *  If the trip already has a route (fixture mode) it's returned as-is.
    *  If the cache hasn't loaded yet, route is left empty so the map
@@ -208,7 +237,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
    */
   private resolveTrip(trip: Trip): Trip {
     if (trip.route?.length) return trip;
-    const cached = this.routeCache.get(trip.id);
+    const cached = this.routeCache.get(this.routeKey(trip));
     if (cached) return { ...trip, route: cached };
     return trip;
   }
@@ -221,8 +250,9 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
   private maybeLoadRoute(trip: Trip): void {
     if (trip.route?.length) return;
     if (!trip.route_point_count) return;
-    if (!trip.id || this.routeCache.has(trip.id)) return;
-    if (this.routeFetchInFlight.has(trip.id)) return;
+    const key = this.routeKey(trip);
+    if (!trip.id || this.routeCache.has(key)) return;
+    if (this.routeFetchInFlight.has(key)) return;
     if (!this.hass || !this.config) return;
 
     // Resolve which source produced this trip. Prefer entity_id (stamped by
@@ -234,7 +264,12 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
       sources.find((s) => s.entity && s.entity === trip.source_entity) ??
       sources.find((s) => (s.name ?? null) === trip.source);
     if (!source?.entity) return;
-    const serviceName = source.route_service ?? "toyota.get_trip_route";
+    // Explicit undefined check (not ??): the docstring promises that "" AND
+    // null both disable lazy-load; ?? would map null back to the default.
+    const serviceName =
+      source.route_service === undefined
+        ? "toyota.get_trip_route"
+        : source.route_service;
     if (!serviceName) return; // Empty/null disables lazy-load.
 
     // hass.entities is a Record<entity_id, EntityRegistryDisplayEntry> in
@@ -248,7 +283,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     const [domain, service] = serviceName.split(".");
     if (!domain || !service) return;
 
-    this.routeFetchInFlight.add(trip.id);
+    this.routeFetchInFlight.add(key);
     // HA's hass.callService(...) accepts (domain, service, data, target,
     // notifyOnError, returnResponse) - the 6th arg is missing from
     // custom-card-helpers's types but present at runtime since 2024.4.
@@ -273,7 +308,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     )
       .then((resp) => {
         const route = resp?.response?.route ?? [];
-        this.routeCache.set(trip.id, route);
+        this.routeCache.set(key, route);
         // Re-render the map directly. shouldUpdate() gates Lit's update
         // cycle on observable property changes; routeCache is internal,
         // so requestUpdate() alone gets filtered out and the polyline
@@ -293,7 +328,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
         );
       })
       .finally(() => {
-        this.routeFetchInFlight.delete(trip.id);
+        this.routeFetchInFlight.delete(key);
       });
   }
 
@@ -301,7 +336,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     if (!this.config) return;
     const fromEntity = normalizeFromHass(this.hass, this.config.sources ?? []);
     this.trips = sortTrips(fromEntity, this.config.order ?? "newest_first");
-    this.index = Math.min(this.index, Math.max(0, this.trips.length - 1));
+    this.index = Math.max(0, Math.min(this.index, this.trips.length - 1));
     // Trip array reassigned -> bust per-row decoration cache.
     this.rowCache = undefined;
   }
@@ -327,6 +362,10 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     // doesn't refire on reconnect alone if no reactive prop changed, so
     // we manually rebuild + render after the next paint.
     requestAnimationFrame(() => {
+      // The card may have been disconnected again before this frame fired
+      // (rapid edit-mode toggle, card deleted). Building a TripMap now would
+      // leak it - disconnectedCallback already ran and won't run again.
+      if (!this.isConnected) return;
       this.ensureMap();
       const trip = this.currentTrip;
       if (this.tripMap && trip) {
@@ -370,6 +409,18 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
   };
 
   private handleKey = (ev: KeyboardEvent): void => {
+    // Don't hijack arrow keys while the user is typing somewhere else on
+    // the page (search box, another card's editor, any form field).
+    const target = ev.composedPath()[0];
+    if (
+      target instanceof HTMLElement &&
+      (target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable)
+    ) {
+      return;
+    }
     if (ev.key === "ArrowLeft") this.prev();
     if (ev.key === "ArrowRight") this.next();
   };
@@ -427,7 +478,18 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
   // ─── Render ────────────────────────────────────────────────────────────
 
   protected override render() {
-    if (!this.trips.length) return this.renderEmpty();
+    if (!this.trips.length) {
+      // Distinguish "entity doesn't exist" (typo, renamed sensor) from a
+      // legitimately empty trip list - a silent empty state gives the user
+      // zero diagnostic signal when the entity id is wrong.
+      const missing = this.missingEntities();
+      if (missing.length) {
+        return html`<ha-card>
+          <hui-warning>Entity not found: ${missing.join(", ")}</hui-warning>
+        </ha-card>`;
+      }
+      return this.renderEmpty();
+    }
     const trip = this.currentTrip!;
     const cfg = this.config;
     const actionable = this.hasAnyAction();
@@ -453,7 +515,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
       </div>
       <div
         class="tv-map-wrap"
-        style=${`height: ${this.config?.map?.height ?? 280}px;`}
+        style=${`height: ${this.config?.map?.height ?? DEFAULT_MAP_HEIGHT_PX}px;`}
       >
         <div class="tv-map"></div>
         ${this.renderLegend()}
@@ -500,6 +562,15 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
         </div>`,
       )}
     </div>`;
+  }
+
+  /** Configured entity ids that don't exist in hass.states. */
+  private missingEntities(): string[] {
+    if (!this.hass) return [];
+    return (this.config?.sources ?? [])
+      .map((s) => s.entity)
+      .filter((e): e is string => !!e)
+      .filter((e) => !this.hass!.states[e]);
   }
 
   private renderEmpty() {
@@ -800,6 +871,9 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     }
 
     ha-card {
+      /* Real HA's ha-card is block already; this makes the padding also
+         apply when the element is undefined (dev harness, tests). */
+      display: block;
       padding: 12px 12px 8px;
       box-sizing: border-box;
     }

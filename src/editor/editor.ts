@@ -1,8 +1,9 @@
 /** Visual config editor for journey-viewer-card.
  *
- *  Day 1 scope: schema-driven sections (top-level, pagination, label, map,
- *  polyline, empty_state) + YAML fallback. Sources[] and stats_grid.rows[] are
- *  not yet GUI-editable — for now they round-trip through YAML untouched.
+ *  Schema-driven sections (top-level, pagination, label, map, polyline,
+ *  empty_state) plus list builders for sources[] and stats_grid.rows[]
+ *  (threshold / bar / trend sub-editors included), with a YAML fallback
+ *  pane for anything not surfaced in the GUI.
  *
  *  Architecture: each section gets its own <ha-form> bound to a flat slice of
  *  the config. _onSectionChange merges the slice back at the right path and
@@ -356,7 +357,12 @@ export class JourneyViewerCardEditor
     if (!this._config) return;
     const next = (ev.detail?.value ?? {}) as SourceConfig;
     const sources = [...(this._config.sources ?? [])];
-    sources[i] = { ...sources[i], ...next };
+    // Strip cleared fields so emptying e.g. `icon` removes the key from the
+    // YAML instead of persisting `icon: ""`.
+    sources[i] = this._stripEmpty({
+      ...sources[i],
+      ...next,
+    }) as unknown as SourceConfig;
     this._updateSources(sources);
   };
 
@@ -728,10 +734,10 @@ export class JourneyViewerCardEditor
     const merged = { ...existing, ...this._stripEmpty(next) } as StatsRow;
     // _stripEmpty drops cleared fields. Make sure cleared decimals/icon
     // actually delete from the row instead of keeping the old value.
-    const mergedRec = merged as Record<string, unknown>;
+    // (All four keys are optional on StatsRow, so `delete` is well-typed.)
     for (const k of ["icon", "format", "decimals", "ratio_of"] as const) {
       if (next[k] === "" || next[k] === null || next[k] === undefined) {
-        delete mergedRec[k];
+        delete merged[k];
       }
     }
     rows[i] = merged;
@@ -800,18 +806,6 @@ export class JourneyViewerCardEditor
       color: var(--secondary-text-color);
       margin-top: 4px;
     }
-    .jve-stub {
-      font-size: 0.9rem;
-      color: var(--secondary-text-color);
-    }
-    .jve-stub pre {
-      background: var(--secondary-background-color);
-      padding: 8px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      white-space: pre-wrap;
-      margin: 8px 0 0;
-    }
     .jve-yaml {
       display: flex;
       flex-direction: column;
@@ -869,9 +863,6 @@ export class JourneyViewerCardEditor
     .jve-row-controls {
       display: flex;
       gap: 0;
-    }
-    .jve-row-tip {
-      margin-top: 4px;
     }
     .jve-subpanel {
       --expansion-panel-summary-padding: 0 8px;

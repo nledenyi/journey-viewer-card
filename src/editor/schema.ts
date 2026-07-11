@@ -144,7 +144,9 @@ export const THRESHOLD_SCHEMA: Schema = [
         required: true,
         selector: { number: { mode: "box", step: 0.01 } },
       },
-      { name: "color", selector: { text: { type: "color" } } },
+      // Plain text, NOT type:"color": color pickers only emit hex, which
+      // would mangle var(--error-color)-style values the README documents.
+      { name: "color", selector: { text: {} } },
       { name: "icon", selector: { icon: {} } },
     ],
   },
@@ -205,7 +207,8 @@ export const SOURCE_SCHEMA: Schema = [
     ],
   },
   { name: "entity", selector: { entity: {} } },
-  { name: "color", selector: { text: { type: "color" } } },
+  // Plain text so CSS vars / named colors survive round-tripping.
+  { name: "color", selector: { text: {} } },
 ];
 
 export const EMPTY_STATE_SCHEMA: Schema = [
