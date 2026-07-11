@@ -9,11 +9,16 @@
 #   1. Validate the build output exists
 #   2. Push the file in 50 KB base64 chunks (qm guest exec arg-list cap ~128 KB)
 #   3. Verify the byte count matches on both ends
-#   4. Bump ?v= cache-bust on the lovelace_resources entry
-#   5. Reload Lovelace so the new resource version is fetched
+#   4. Bump the ?v= cache-bust on the resource entry via the HA WebSocket API.
+#      This is the only method that applies live in storage mode: editing
+#      /config/.storage/lovelace_resources directly only takes effect after an
+#      HA restart (HA keeps the list in memory), and lovelace.reload_resources
+#      exists only for YAML-mode resources.
 #
 # Run from the project root:  ./scripts/deploy-to-ha.sh
-# Requires sudo to talk to qm.
+# Requires sudo to talk to qm. Step 4 needs the python3 `websockets` package
+# on this host plus DEV_HA_URL + DEV_HA_TOKEN in .env.local (same values the
+# dev harness uses); without them it falls back to printing manual steps.
 
 set -euo pipefail
 
@@ -59,45 +64,54 @@ if [ "$LOCAL_SIZE" != "$REMOTE_SIZE" ]; then
 fi
 echo "[deploy] Size verified: $REMOTE_SIZE bytes"
 
-# 4. Bump the ?v=N cache-bust on the lovelace_resources entry. Insert a
-#    placeholder ?v=1 if the URL has no version yet.
-sudo qm guest exec "$VMID" -- docker exec homeassistant python3 -c "
-import json, sys
-path = '/config/.storage/lovelace_resources'
-with open(path) as f:
-    d = json.load(f)
-changed = False
-for r in d['data']['items']:
-    url = r.get('url', '')
-    if '${CARD_NAME}' not in url:
-        continue
-    if '?v=' in url:
-        base, v = url.split('?v=')
-        url = f'{base}?v={int(v) + 1}'
-    else:
-        url = f'{url}?v=1'
-    r['url'] = url
-    changed = True
-    print(f'[deploy] Bumped resource: {url}')
-if not changed:
-    print('[deploy] WARNING: no ${CARD_NAME} entry in lovelace_resources', file=sys.stderr)
-    sys.exit(2)
-with open(path, 'w') as f:
-    json.dump(d, f, indent=2)
-" >/dev/null
+# 4. Bump the ?v=N cache-bust on the resource entry via the WebSocket API
+#    so it applies immediately (memory + storage stay in sync). Inserts a
+#    ?v=1 if the URL has no version yet.
+if [ -f .env.local ]; then
+  set -a
+  # shellcheck disable=SC1091
+  . ./.env.local
+  set +a
+fi
+if [ -z "${DEV_HA_URL:-}" ] || [ -z "${DEV_HA_TOKEN:-}" ]; then
+  echo "[deploy] DEV_HA_URL / DEV_HA_TOKEN not set - bump the resource manually:"
+  echo "[deploy]   Settings > Dashboards > (three-dot menu) > Resources > edit the ${CARD_NAME} URL"
+else
+  python3 - "$CARD_NAME" <<'PYEOF'
+import json, os, sys
+from websockets.sync.client import connect
 
-# 5. Reload core config so the new resource URL is picked up. (A frontend
-#    reload is enough; we don't need to restart HA.)
-sudo qm guest exec "$VMID" -- docker exec homeassistant python3 -c "
-import requests, os
-url = 'http://localhost:8123/api/services/lovelace/reload_resources'
-token = os.environ.get('SUPERVISOR_TOKEN', '')
-# Best-effort; if SUPERVISOR_TOKEN isn't set in this container, just print.
-if not token:
-    print('[deploy] Reload manually: Settings > Dashboards > Resources > Reload')
-else:
-    requests.post(url, headers={'Authorization': f'Bearer {token}'})
-    print('[deploy] Lovelace resources reloaded')
-" >/dev/null || true
+card = sys.argv[1]
+base_url = os.environ["DEV_HA_URL"].rstrip("/")
+ws_url = base_url.replace("https://", "wss://", 1).replace("http://", "ws://", 1) + "/api/websocket"
+
+with connect(ws_url) as ws:
+    json.loads(ws.recv())  # auth_required
+    ws.send(json.dumps({"type": "auth", "access_token": os.environ["DEV_HA_TOKEN"]}))
+    msg = json.loads(ws.recv())
+    if msg.get("type") != "auth_ok":
+        sys.exit(f"[deploy] WS auth failed: {msg}")
+
+    ws.send(json.dumps({"id": 1, "type": "lovelace/resources"}))
+    resources = json.loads(ws.recv())["result"]
+    entry = next((r for r in resources if card in r["url"]), None)
+    if entry is None:
+        sys.exit(f"[deploy] WARNING: no {card} entry in lovelace resources")
+
+    base, _, v = entry["url"].partition("?v=")
+    new_url = f"{base}?v={int(v) + 1 if v else 1}"
+    ws.send(json.dumps({
+        "id": 2,
+        "type": "lovelace/resources/update",
+        "resource_id": entry["id"],
+        "url": new_url,
+        "res_type": entry["type"],
+    }))
+    resp = json.loads(ws.recv())
+    if not resp.get("success"):
+        sys.exit(f"[deploy] Resource update failed: {resp}")
+    print(f"[deploy] Resource bumped live: {new_url}")
+PYEOF
+fi
 
 echo "[deploy] Done. Hard-refresh the dashboard (Ctrl+Shift+R) to pick up the new bundle."
