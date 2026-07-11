@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-# Deploy dist/journey-viewer-card.js into HA OS (VM 101) via the PVE host.
+# Maintainer-only deploy helper: assumes Home Assistant OS running in a
+# Proxmox QEMU VM reachable from this host (`qm guest exec`). If that's not
+# your setup, use the manual install steps in README.md instead.
+#
+# Deploy dist/journey-viewer-card.js into HA OS (VM $HA_VMID) via the PVE host.
 #
 # Steps:
 #   1. Validate the build output exists

@@ -1,11 +1,6 @@
----
-name: ha-custom-card
-description: Build a Home Assistant Lovelace custom card from scratch with Lit + TypeScript, theme-aware styling, lifecycle-safe map/library embedding, ha-form-based visual editor, and chunked deployment to HA OS. Use when the user asks to create a new HA custom Lovelace card, integrate a third-party JS library (Leaflet, ApexCharts, etc.) into a card, or add a visual editor (`getConfigElement` / `getConfigForm`). Examples: "build a custom card for X", "make a Lovelace card that shows Y", "integrate Leaflet into a card", "add a visual editor to my card".
----
+# Building HA custom Lovelace cards - development notes
 
-# Building HA custom Lovelace cards
-
-A working playbook distilled from building `journey-viewer-card` end-to-end (Lit + Leaflet + threshold/bar/trend stats grid). Everything here was either load-bearing in production OR caught a real bug in testing.
+Working notes distilled from building `journey-viewer-card` end-to-end (Lit + Leaflet + threshold/bar/trend stats grid). Everything here was either load-bearing in production OR caught a real bug in testing. Kept in-repo as a reference for contributors; the deploy sections assume the maintainer's Home Assistant OS setup (Proxmox VM + QEMU guest agent) - adapt paths/commands to your own environment.
 
 ## When to use this skill
 

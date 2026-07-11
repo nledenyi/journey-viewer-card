@@ -4,7 +4,9 @@ Paginated GPS journey viewer for Home Assistant. Browse past drives, rides, runs
 
 **Source-agnostic.** Toyota, Strava, Garmin, Komoot, OwnTracks-replay, or any custom integration that exposes journey data in the [contract shape](#data-contract).
 
-> **Status: v0.1.** Card + visual editor are feature-complete against the [data contract](#data-contract). The Vite dev harness mounts the card with synthetic in-memory trips so cloners can iterate without a running HA. Live HA usage requires a producer integration (e.g. a modified `ha_toyota`) exposing a sensor with `attributes.trips[]`.
+![Journey Viewer Card](docs/img/hero.png)
+
+> **Status: v0.1.** Card + visual editor are feature-complete against the [data contract](#data-contract). Live HA usage requires a producer integration (e.g. a modified `ha_toyota`) exposing a sensor with `attributes.trips[]`. For development the Vite harness proxies your live HA instance (see [Development](#development)); without the proxy env vars it renders the empty state and HMR still works.
 
 ## Why this card exists
 
@@ -16,6 +18,7 @@ Home Assistant has good integrations for vehicles (Toyota, Tesla, BMW), fitness 
 
 - **One journey per view, prev/next pagination** (or keyboard arrows).
 - **Map with route polyline**, optionally coloured by EV vs ICE / overspeed / highway / drive-mode.
+- **Lazy route loading**: trips can ship metadata-only in the sensor attributes (keeping HA's recorder + WebSocket payloads small) and the card fetches the full polyline on demand via a service call ([`route_service`](#lazy-route-loading)).
 - **Start/end pins** + behaviour markers for hard-accel/brake events along the route.
 - **Stats grid** below the map: distance, duration, max/avg speed, fuel, driving scores, EV ratio, etc. — fully configurable rows.
 - **Multi-source aware**: configure `sources: []` with one entry per data source (e.g. one car + one Strava). Trips can be combined or per-source.
@@ -40,6 +43,7 @@ Each source's `entity` should expose `attributes.trips[]`, where each item match
     { "lat": 0.10, "lon": 0.10, "isEv": true,  "overspeed": false },
     { "lat": 0.12, "lon": 0.11, "isEv": false, "overspeed": false }
   ],
+  "route_point_count": 2,
   "stats": {
     "distance_m": 4943,
     "duration_s": 549,
@@ -58,6 +62,16 @@ Each source's `entity` should expose `attributes.trips[]`, where each item match
 
 Per-route-point flags are optional and drive the polyline colouring: `isEv`, `overspeed`, `highway`, `mode`. Behaviours are GPS-tagged events (hard accel/brake) that render as map markers.
 
+### Lazy route loading
+
+`route` is **optional**. Entity attributes are recorded to HA's database on every state change and broadcast to every websocket subscriber, so a full GPS polyline per trip quickly bloats both (HA warns at 16 KiB per entity). The recommended producer shape is:
+
+- The sensor ships each trip with metadata + `route_point_count` (how many points exist upstream), but **without** `route`.
+- The card calls the source's `route_service` (default `toyota.get_trip_route`) with `{device_id, trip_id}` when the user navigates to a trip, and the service returns `{route: [...]}` (a response-supporting service, HA 2024.4+).
+- Fetched routes are cached per card instance; navigating back to a trip doesn't re-call the service.
+
+Trips that arrive **with** `route` inline (fixtures, small datasets, template sensors) skip the service call entirely. Set `route_service: ""` on a source to disable lazy-loading for it.
+
 ## Configuration
 
 ```yaml
@@ -69,6 +83,8 @@ sources:
     entity: sensor.rav4_recent_trips      # exposes attributes.trips[]
     color: "#e63946"                      # default polyline color (used when color_by: solid)
     icon: mdi:car
+    route_service: toyota.get_trip_route  # service for lazy route loading (default).
+                                          # "" disables; see "Lazy route loading".
 
 order: newest_first                       # newest_first | oldest_first
 default_index: 0
@@ -83,7 +99,8 @@ double_tap_action: { action: none }
 pagination:
   show_counter: true                      # "1 / 5"
   wrap: false                             # disable [<] / [>] at edges
-  keyboard: true                          # ← / → arrows when card focused
+  keyboard: true                          # ← / → paginate anywhere on the view
+                                          # (ignored while typing in an input)
 
 label:
   template: "{relative_day} {start_time} ({distance} / {duration})"
@@ -91,7 +108,8 @@ label:
 
 map:
   height: 280
-  zoom_to_fit: true
+  zoom_to_fit: true                       # default false: center on start point
+                                          # at fixed zoom. true: fit whole route.
   padding_pct: 10
   gestures: locked                        # locked | enabled
   tile_provider: openstreetmap            # openstreetmap | carto-positron | carto-dark-matter
@@ -155,12 +173,11 @@ stats_grid:
       bar:
         max: 1                     # ratio's natural domain
         color: var(--journey-viewer-polyline-ev)
-    - { key: stats.distance_m,         label: "Distance",  format: "km",          decimals: 2 }
+
+    # More plain tiles
     - { key: stats.duration_s,         label: "Duration",  format: "duration" }
     - { key: stats.average_speed_kmh,  label: "Avg speed", format: "{v:.1f} km/h" }
     - { key: stats.fuel_consumption_ml,label: "Fuel",      format: "L",           decimals: 3 }
-    - { key: scores.global,            label: "Score",     format: "{v} / 100",   icon: mdi:medal }
-    - { key: stats.ev_distance_m, ratio_of: stats.distance_m, label: "EV ratio", format: "{v:.0%}" }
 
 empty_state:
   title: "No recent journeys"
@@ -254,16 +271,22 @@ Each source needs a normaliser somewhere upstream (a custom integration, a templ
 
 ## Install
 
+### HACS (recommended)
+
+The card isn't in the HACS default repository list (yet), so add it as a custom repository:
+
+1. HACS → ⋮ (top-right) → **Custom repositories**.
+2. Repository: `https://github.com/nledenyi/journey-viewer-card`, type: **Dashboard**.
+3. Find "Journey Viewer Card" in HACS and click **Download**.
+4. HACS registers the Lovelace resource automatically (`/hacsfiles/journey-viewer-card/journey-viewer-card.js`). If you manage resources manually (YAML-mode dashboards), add that URL as a `module` resource.
+5. Hard-refresh your dashboard (Ctrl+Shift+R), then add a `custom:journey-viewer-card` to a view.
+
 ### Manual
 
 1. Build the bundle: `npm install && npm run build`. Output at `dist/journey-viewer-card.js`.
 2. Copy `dist/journey-viewer-card.js` into your HA `/config/www/community/journey-viewer-card/journey-viewer-card.js`.
 3. Add a Lovelace resource: **Settings → Dashboards → ⋮ → Resources → Add**, URL `/local/community/journey-viewer-card/journey-viewer-card.js`, type `JavaScript Module`.
 4. Hard-refresh your dashboard (Ctrl+Shift+R), then add a `custom:journey-viewer-card` to a view.
-
-### HACS
-
-Coming soon. Until then, manual install above.
 
 ## Development
 
@@ -291,7 +314,7 @@ npm run build
 
 The card ships a built-in GUI editor (`getConfigElement`). When you add the card via "+ Add card" or click edit on an existing instance, HA loads `<journey-viewer-card-editor>` automatically. It covers:
 
-- All top-level fields (title, order, default index)
+- All top-level fields (title, order, default index; `tap_action` / `hold_action` / `double_tap_action` and stats-grid tile background are YAML-only for now)
 - Sources list builder (add/remove/reorder, name, entity, icon, colour)
 - Pagination, label template, map (with polyline subsection), empty state
 - Stats grid row builder with a stat-catalogue picker (Distance, Duration, Avg/Max speed, Fuel, Score, EV/Eco/Highway ratio, custom path) plus per-row threshold ladder, bar background, and trend arrow editors
