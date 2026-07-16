@@ -105,16 +105,27 @@ export function renderLabel(template: string, trip: {
   source?: string | null;
   stats: { distance_m?: number | null; duration_s?: number | null };
 }): string {
-  return template
-    .replaceAll("{relative_day}", formatRelativeDay(trip.start_ts))
-    .replaceAll("{start_time}", formatTime(trip.start_ts))
-    .replaceAll("{end_time}", formatTime(trip.end_ts))
-    .replaceAll("{distance}", formatDistance(trip.stats.distance_m))
-    .replaceAll("{duration}", formatDuration(trip.stats.duration_s))
-    .replaceAll("{label}", trip.label ?? "")
-    .replaceAll("{activity_type}", trip.activity_type ?? "")
-    .replaceAll("{source}", trip.source ?? "")
-    .replace(/\s{2,}/g, " ")
+  const values: Record<string, string> = {
+    "{relative_day}": formatRelativeDay(trip.start_ts),
+    "{start_time}": formatTime(trip.start_ts),
+    "{end_time}": formatTime(trip.end_ts),
+    "{distance}": formatDistance(trip.stats.distance_m),
+    "{duration}": formatDuration(trip.stats.duration_s),
+    "{label}": trip.label ?? "",
+    "{activity_type}": trip.activity_type ?? "",
+    "{source}": trip.source ?? "",
+  };
+  // Single pass so substituted text is never re-scanned: brace text inside
+  // trip-supplied fields ({label} etc.) can't get substituted again. Tokens
+  // that resolve to "" leave a \0 sentinel so the cleanup below collapses
+  // only the whitespace they orphan, not spacing the template author wrote.
+  const out = template.replace(/\{[a-z_]+\}/g, (token) => {
+    const v = values[token];
+    if (v === undefined) return token; // unknown; setConfig validation's job
+    return v === "" ? "\0" : v;
+  });
+  return out
+    .replace(/\s*\0+\s*/g, (m) => (/\s/.test(m) ? " " : ""))
     .trim();
 }
 

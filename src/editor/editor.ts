@@ -69,6 +69,35 @@ import type {
 } from "../types.js";
 import { STAT_CATALOGUE, findCatalogueEntry } from "./stat-catalogue.js";
 
+/** Static ha-form schemas hoisted to module scope: ha-form memoizes on
+ *  schema identity, so a schema rebuilt per render defeats that memoization. */
+const ROUTE_PRESET_SCHEMA: Schema = [
+  {
+    name: "route_preset",
+    selector: {
+      select: {
+        mode: "dropdown",
+        options: SOURCE_PRESETS.map((p) => ({ value: p.id, label: p.label })),
+      },
+    },
+  },
+];
+
+const STAT_PICKER_SCHEMA: Schema = [
+  {
+    name: "stat_id",
+    selector: {
+      select: {
+        mode: "dropdown",
+        options: STAT_CATALOGUE.map((e) => ({ value: e.id, label: e.label })),
+      },
+    },
+  },
+];
+
+/** Source keys owned by the route-preset control, not the source ha-form. */
+const PRESET_MANAGED_KEYS = ["route_service", "route_service_data"] as const;
+
 type SectionPath =
   | "top"
   | "pagination"
@@ -182,10 +211,17 @@ export class JourneyViewerCardEditor
     data: unknown,
     path: SectionPath,
   ) {
+    // Bind the section's defaults into the form data so unset fields show
+    // the value the card actually uses; _mergeAtPath strips default-equal
+    // keys back out on change, so inject + strip stay one paired mechanism.
+    const bound = {
+      ...SECTION_DEFAULTS[path],
+      ...((data ?? {}) as Record<string, unknown>),
+    };
     return html`
       <ha-form
         .hass=${this.hass}
-        .data=${data ?? {}}
+        .data=${bound}
         .schema=${schema}
         .computeLabel=${this._computeLabel}
         .computeHelper=${this._computeHelper}
@@ -220,11 +256,7 @@ export class JourneyViewerCardEditor
 
         ${this._section(
           "Pagination",
-          this._renderForm(
-            PAGINATION_SCHEMA,
-            { ...SECTION_DEFAULTS.pagination, ...c.pagination },
-            "pagination",
-          ),
+          this._renderForm(PAGINATION_SCHEMA, c.pagination, "pagination"),
         )}
         ${this._section(
           "Trip label",
@@ -233,17 +265,9 @@ export class JourneyViewerCardEditor
         ${this._section(
           "Map",
           html`
-            ${this._renderForm(
-              MAP_SCHEMA,
-              { ...SECTION_DEFAULTS.map, ...c.map },
-              "map",
-            )}
+            ${this._renderForm(MAP_SCHEMA, c.map, "map")}
             <div class="jve-subhead">Polyline</div>
-            ${this._renderForm(
-              POLYLINE_SCHEMA,
-              { ...SECTION_DEFAULTS["map.polyline"], ...c.map?.polyline },
-              "map.polyline",
-            )}
+            ${this._renderForm(POLYLINE_SCHEMA, c.map?.polyline, "map.polyline")}
           `,
         )}
 
@@ -328,23 +352,12 @@ export class JourneyViewerCardEditor
     // to whatever detectSourcePreset() reads from an empty value.
     const preset = this._customRouteRows.has(i)
       ? "custom"
-      : detectSourcePreset(src.route_service);
-    const presetSchema: Schema = [
-      {
-        name: "route_preset",
-        selector: {
-          select: {
-            mode: "dropdown",
-            options: SOURCE_PRESETS.map((p) => ({ value: p.id, label: p.label })),
-          },
-        },
-      },
-    ];
+      : detectSourcePreset(src);
     return html`
       <ha-form
         .hass=${this.hass}
         .data=${{ route_preset: preset }}
-        .schema=${presetSchema}
+        .schema=${ROUTE_PRESET_SCHEMA}
         .computeLabel=${this._computeLabel}
         @value-changed=${(ev: CustomEvent) => this._onSourcePresetChange(i, ev)}
       ></ha-form>
@@ -375,7 +388,7 @@ export class JourneyViewerCardEditor
       // a recognized preset's service so the text field starts blank (blank =
       // card default until the user types), and drop the preset payload.
       custom.add(i);
-      if (detectSourcePreset(src.route_service) !== "custom") {
+      if (detectSourcePreset(src) !== "custom") {
         delete src.route_service;
       }
       delete src.route_service_data;
@@ -426,11 +439,10 @@ export class JourneyViewerCardEditor
     // Route-loading keys are managed by the preset control, not this form -
     // re-attach them verbatim or the strip above silently drops the "None"
     // preset's route_service: null on every unrelated edit.
-    if ("route_service" in prev) merged.route_service = prev.route_service;
-    else delete merged.route_service;
-    if (prev.route_service_data)
-      merged.route_service_data = prev.route_service_data;
-    else delete merged.route_service_data;
+    for (const k of PRESET_MANAGED_KEYS) {
+      if (k in prev) (merged as unknown as Record<string, unknown>)[k] = prev[k];
+      else delete merged[k];
+    }
     sources[i] = merged;
     this._updateSources(sources);
   };
@@ -495,7 +507,6 @@ export class JourneyViewerCardEditor
 
   private _renderRowCard(row: StatsRow, i: number, total: number) {
     const entry = findCatalogueEntry(row.key, row.ratio_of);
-    const statSchema = this._buildStatSchema();
     return html`
       <div class="jve-row">
         <div class="jve-row-head">
@@ -530,9 +541,8 @@ export class JourneyViewerCardEditor
         <ha-form
           .hass=${this.hass}
           .data=${{ stat_id: entry.id }}
-          .schema=${statSchema}
+          .schema=${STAT_PICKER_SCHEMA}
           .computeLabel=${this._computeLabel}
-          .computeHelper=${this._computeStatHelper}
           @value-changed=${(ev: CustomEvent) => this._onRowStatChange(i, ev)}
         ></ha-form>
         ${entry.id === "__custom__"
@@ -749,33 +759,6 @@ export class JourneyViewerCardEditor
         })();
     this._updateRows(rows);
   }
-
-  /** Build the stat-picker schema from the catalogue. */
-  private _buildStatSchema(): Schema {
-    return [
-      {
-        name: "stat_id",
-        selector: {
-          select: {
-            mode: "dropdown",
-            options: STAT_CATALOGUE.map((e) => ({
-              value: e.id,
-              label: e.label,
-            })),
-          },
-        },
-      },
-    ];
-  }
-
-  private _computeStatHelper = (s: { name: string }): string | undefined => {
-    if (s.name !== "stat_id") return undefined;
-    // Helper text describing what this metric returns. Looked up from the
-    // *currently selected* entry on this form, but ha-form passes only the
-    // schema item — so we can't see selected value here. Skip helper text
-    // for now; description renders inline via the row-head subtitle anyway.
-    return undefined;
-  };
 
   /** User picked a different entry from the stat catalogue. Stamp key,
    *  ratio_of, and re-seed label/format/icon/decimals — but only fields the

@@ -2,6 +2,7 @@
 
 import L from "leaflet";
 import type { MapConfig, RoutePoint, Trip } from "./types.js";
+import { MAP_DEFAULTS, POLYLINE_DEFAULTS } from "./defaults.js";
 
 /** Always-on minimal attribution (per OSM / CARTO usage policy). Styled tiny
  * and low-contrast in card.ts; fades up on hover for users who want to click
@@ -92,7 +93,14 @@ function resolvePalette(
 export class TripMap {
   private map?: L.Map;
   private layer?: L.LayerGroup;
+  private tiles?: L.TileLayer;
   private resizeObserver?: ResizeObserver;
+  /** Deferred setTimeout / rAF callbacks still pending, so destroy() can
+   *  cancel them wholesale — calling into a removed Leaflet instance throws
+   *  on its unloaded panes (e.g. an editor map.* change tears the map down
+   *  between slider ticks, after checkpoints were already scheduled). */
+  private pendingTimeouts = new Set<ReturnType<typeof setTimeout>>();
+  private pendingFrames = new Set<number>();
   /** Last trip the caller asked us to render. Held so ResizeObserver can
    *  replay the render when the container transitions from zero-size back
    *  to laid-out (e.g. after a Lovelace edit-mode exit). Without this,
@@ -104,8 +112,8 @@ export class TripMap {
   constructor(
     private container: HTMLElement,
     private cfg: MapConfig,
-    /** HA theme darkness at construction time; drives the "auto" tile
-     *  provider. The card rebuilds the map when this flips. */
+    /** HA theme darkness; drives the "auto" tile provider. Updated via
+     *  setDark() when the theme flips. */
     private dark = false,
   ) {
     // Observe from day one. If render() is called while the container is
@@ -141,10 +149,28 @@ export class TripMap {
       // Defer one frame so Leaflet's invalidateSize commit fully applies
       // before we re-fit. render() doesn't mutate container size, so this
       // won't loop the observer.
-      requestAnimationFrame(() => {
+      this.deferFrame(() => {
         if (this.lastTrip) this.render(this.lastTrip);
       });
     }
+  }
+
+  /** Track a macrotask-deferred callback so destroy() can cancel it. */
+  private deferTimeout(fn: () => void): void {
+    const t = setTimeout(() => {
+      this.pendingTimeouts.delete(t);
+      fn();
+    }, 0);
+    this.pendingTimeouts.add(t);
+  }
+
+  /** Track a frame-deferred callback so destroy() can cancel it. */
+  private deferFrame(fn: () => void): void {
+    const f = requestAnimationFrame(() => {
+      this.pendingFrames.delete(f);
+      fn();
+    });
+    this.pendingFrames.add(f);
   }
 
   /**
@@ -189,7 +215,7 @@ export class TripMap {
     // Drop Leaflet's "Leaflet" marketing prefix — keep just the OSM/CARTO link.
     m.attributionControl.setPrefix(false);
 
-    L.tileLayer(provider.url, {
+    this.tiles = L.tileLayer(provider.url, {
       attribution: provider.attributionShort,
       maxZoom: 19,
     }).addTo(m);
@@ -200,17 +226,29 @@ export class TripMap {
     // happens. Schedule an invalidateSize after the next layout pass AND a
     // microtask later. Cheap, idempotent, and reliably fixes the "panes are
     // 0×0 even though the container is sized" symptom inside shadow DOM /
-    // grid-layout containers.
-    // `this.map === m` guards: destroy() (e.g. an editor map.* change tears
-    // the map down between slider ticks) may run before these fire — calling
-    // into a removed Leaflet instance throws on its unloaded panes.
-    setTimeout(() => {
-      if (this.map === m) m.invalidateSize();
-    }, 0);
-    requestAnimationFrame(() => {
-      if (this.map === m) m.invalidateSize();
-    });
+    // grid-layout containers. Tracked so destroy() cancels them if the map
+    // is torn down before they fire.
+    this.deferTimeout(() => m.invalidateSize());
+    this.deferFrame(() => m.invalidateSize());
     return m;
+  }
+
+  /** Update theme darkness. When that changes the effective tile provider
+   *  (unset/"auto" only), swap just the tile layer — viewport, polyline, and
+   *  markers stay intact, no full map rebuild needed. Replacing the layer
+   *  (rather than setUrl) keeps the attribution control in sync too, since
+   *  OSM and CARTO require different attributions. */
+  setDark(dark: boolean): void {
+    const before = resolveTileKey(this.cfg, this.dark);
+    this.dark = dark;
+    const after = resolveTileKey(this.cfg, dark);
+    if (before === after || !this.map || !this.tiles) return;
+    const provider = TILE_PROVIDERS[after] ?? TILE_PROVIDERS.openstreetmap!;
+    this.tiles.remove();
+    this.tiles = L.tileLayer(provider.url, {
+      attribution: provider.attributionShort,
+      maxZoom: 19,
+    }).addTo(this.map);
   }
 
   /** Replace all trip-specific layers with this trip's data. */
@@ -249,28 +287,22 @@ export class TripMap {
   private fitAndSettle(m: L.Map, coords: Array<[number, number]>): void {
     m.invalidateSize();
     this.fitToBounds(m, coords);
-    // Same destroy() race as in ensure(): skip if the map was torn down (or
-    // replaced) before the deferred checkpoints fire.
-    setTimeout(() => {
-      if (this.map !== m) return;
+    const settle = () => {
       m.invalidateSize();
       this.fitToBounds(m, coords);
-    }, 0);
-    requestAnimationFrame(() => {
-      if (this.map !== m) return;
-      m.invalidateSize();
-      this.fitToBounds(m, coords);
-    });
+    };
+    this.deferTimeout(settle);
+    this.deferFrame(settle);
   }
 
   // ─── Polyline ─────────────────────────────────────────────────────────────
 
   private drawPolyline(trip: Trip): void {
     const cfg = this.cfg.polyline ?? {};
-    const colorBy = cfg.color_by ?? "solid";
+    const colorBy = cfg.color_by ?? POLYLINE_DEFAULTS.color_by;
     const palette = resolvePalette(this.container, cfg.palette);
-    const weight = cfg.weight ?? 4;
-    const opacity = cfg.opacity ?? 0.9;
+    const weight = cfg.weight ?? POLYLINE_DEFAULTS.weight;
+    const opacity = cfg.opacity ?? POLYLINE_DEFAULTS.opacity;
 
     const route = trip.route ?? [];
     if (colorBy === "solid") {
@@ -366,7 +398,7 @@ export class TripMap {
       m.setView(coords[0]!, 14);
       return;
     }
-    const pad = Math.round((this.cfg.padding_pct ?? 10));
+    const pad = Math.round(this.cfg.padding_pct ?? MAP_DEFAULTS.padding_pct);
     const bounds = L.latLngBounds(coords);
     m.fitBounds(bounds, { padding: [pad, pad], maxZoom: 17 });
   }
@@ -377,10 +409,15 @@ export class TripMap {
   }
 
   destroy(): void {
+    for (const t of this.pendingTimeouts) clearTimeout(t);
+    this.pendingTimeouts.clear();
+    for (const f of this.pendingFrames) cancelAnimationFrame(f);
+    this.pendingFrames.clear();
     this.resizeObserver?.disconnect();
     this.resizeObserver = undefined;
     this.map?.remove();
     this.map = undefined;
+    this.tiles = undefined;
     this.layer = undefined;
     this.lastTrip = undefined;
     this.lastSize = { w: 0, h: 0 };

@@ -3,18 +3,18 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Ue = globalThis, Ii = Ue.ShadowRoot && (Ue.ShadyCSS === void 0 || Ue.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Zi = Symbol(), so = /* @__PURE__ */ new WeakMap();
-let Eo = class {
-  constructor(o, s, h) {
-    if (this._$cssResult$ = !0, h !== Zi) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+const Ue = globalThis, $i = Ue.ShadowRoot && (Ue.ShadyCSS === void 0 || Ue.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Bi = Symbol(), ho = /* @__PURE__ */ new WeakMap();
+let Oo = class {
+  constructor(o, s, l) {
+    if (this._$cssResult$ = !0, l !== Bi) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = o, this.t = s;
   }
   get styleSheet() {
     let o = this.o;
     const s = this.t;
-    if (Ii && o === void 0) {
-      const h = s !== void 0 && s.length === 1;
-      h && (o = so.get(s)), o === void 0 && ((this.o = o = new CSSStyleSheet()).replaceSync(this.cssText), h && so.set(s, o));
+    if ($i && o === void 0) {
+      const l = s !== void 0 && s.length === 1;
+      l && (o = ho.get(s)), o === void 0 && ((this.o = o = new CSSStyleSheet()).replaceSync(this.cssText), l && ho.set(s, o));
     }
     return o;
   }
@@ -22,33 +22,33 @@ let Eo = class {
     return this.cssText;
   }
 };
-const Mo = (c) => new Eo(typeof c == "string" ? c : c + "", void 0, Zi), zo = (c, ...o) => {
-  const s = c.length === 1 ? c[0] : o.reduce((h, a, u) => h + ((d) => {
-    if (d._$cssResult$ === !0) return d.cssText;
-    if (typeof d == "number") return d;
-    throw Error("Value passed to 'css' function must be a 'css' function result: " + d + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
+const Io = (c) => new Oo(typeof c == "string" ? c : c + "", void 0, Bi), Ro = (c, ...o) => {
+  const s = c.length === 1 ? c[0] : o.reduce((l, a, u) => l + ((f) => {
+    if (f._$cssResult$ === !0) return f.cssText;
+    if (typeof f == "number") return f;
+    throw Error("Value passed to 'css' function must be a 'css' function result: " + f + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(a) + c[u + 1], c[0]);
-  return new Eo(s, c, Zi);
-}, fr = (c, o) => {
-  if (Ii) c.adoptedStyleSheets = o.map((s) => s instanceof CSSStyleSheet ? s : s.styleSheet);
+  return new Oo(s, c, Bi);
+}, mr = (c, o) => {
+  if ($i) c.adoptedStyleSheets = o.map((s) => s instanceof CSSStyleSheet ? s : s.styleSheet);
   else for (const s of o) {
-    const h = document.createElement("style"), a = Ue.litNonce;
-    a !== void 0 && h.setAttribute("nonce", a), h.textContent = s.cssText, c.appendChild(h);
+    const l = document.createElement("style"), a = Ue.litNonce;
+    a !== void 0 && l.setAttribute("nonce", a), l.textContent = s.cssText, c.appendChild(l);
   }
-}, ro = Ii ? (c) => c : (c) => c instanceof CSSStyleSheet ? ((o) => {
+}, co = $i ? (c) => c : (c) => c instanceof CSSStyleSheet ? ((o) => {
   let s = "";
-  for (const h of o.cssRules) s += h.cssText;
-  return Mo(s);
+  for (const l of o.cssRules) s += l.cssText;
+  return Io(s);
 })(c) : c;
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: pr, defineProperty: _r, getOwnPropertyDescriptor: mr, getOwnPropertyNames: gr, getOwnPropertySymbols: vr, getPrototypeOf: yr } = Object, Ge = globalThis, ao = Ge.trustedTypes, br = ao ? ao.emptyScript : "", wr = Ge.reactiveElementPolyfillSupport, _e = (c, o) => c, Ve = { toAttribute(c, o) {
+const { is: gr, defineProperty: vr, getOwnPropertyDescriptor: yr, getOwnPropertyNames: br, getOwnPropertySymbols: wr, getPrototypeOf: xr } = Object, Ye = globalThis, uo = Ye.trustedTypes, Pr = uo ? uo.emptyScript : "", Lr = Ye.reactiveElementPolyfillSupport, pe = (c, o) => c, Ge = { toAttribute(c, o) {
   switch (o) {
     case Boolean:
-      c = c ? br : null;
+      c = c ? Pr : null;
       break;
     case Object:
     case Array:
@@ -73,54 +73,54 @@ const { is: pr, defineProperty: _r, getOwnPropertyDescriptor: mr, getOwnProperty
       }
   }
   return s;
-} }, $i = (c, o) => !pr(c, o), lo = { attribute: !0, type: String, converter: Ve, reflect: !1, useDefault: !1, hasChanged: $i };
-Symbol.metadata ??= Symbol("metadata"), Ge.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
-let Ft = class extends HTMLElement {
+} }, Ni = (c, o) => !gr(c, o), fo = { attribute: !0, type: String, converter: Ge, reflect: !1, useDefault: !1, hasChanged: Ni };
+Symbol.metadata ??= Symbol("metadata"), Ye.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
+let jt = class extends HTMLElement {
   static addInitializer(o) {
     this._$Ei(), (this.l ??= []).push(o);
   }
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(o, s = lo) {
+  static createProperty(o, s = fo) {
     if (s.state && (s.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(o) && ((s = Object.create(s)).wrapped = !0), this.elementProperties.set(o, s), !s.noAccessor) {
-      const h = Symbol(), a = this.getPropertyDescriptor(o, h, s);
-      a !== void 0 && _r(this.prototype, o, a);
+      const l = Symbol(), a = this.getPropertyDescriptor(o, l, s);
+      a !== void 0 && vr(this.prototype, o, a);
     }
   }
-  static getPropertyDescriptor(o, s, h) {
-    const { get: a, set: u } = mr(this.prototype, o) ?? { get() {
+  static getPropertyDescriptor(o, s, l) {
+    const { get: a, set: u } = yr(this.prototype, o) ?? { get() {
       return this[s];
-    }, set(d) {
-      this[s] = d;
+    }, set(f) {
+      this[s] = f;
     } };
-    return { get: a, set(d) {
+    return { get: a, set(f) {
       const m = a?.call(this);
-      u?.call(this, d), this.requestUpdate(o, m, h);
+      u?.call(this, f), this.requestUpdate(o, m, l);
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(o) {
-    return this.elementProperties.get(o) ?? lo;
+    return this.elementProperties.get(o) ?? fo;
   }
   static _$Ei() {
-    if (this.hasOwnProperty(_e("elementProperties"))) return;
-    const o = yr(this);
+    if (this.hasOwnProperty(pe("elementProperties"))) return;
+    const o = xr(this);
     o.finalize(), o.l !== void 0 && (this.l = [...o.l]), this.elementProperties = new Map(o.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty(_e("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(_e("properties"))) {
-      const s = this.properties, h = [...gr(s), ...vr(s)];
-      for (const a of h) this.createProperty(a, s[a]);
+    if (this.hasOwnProperty(pe("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(pe("properties"))) {
+      const s = this.properties, l = [...br(s), ...wr(s)];
+      for (const a of l) this.createProperty(a, s[a]);
     }
     const o = this[Symbol.metadata];
     if (o !== null) {
       const s = litPropertyMetadata.get(o);
-      if (s !== void 0) for (const [h, a] of s) this.elementProperties.set(h, a);
+      if (s !== void 0) for (const [l, a] of s) this.elementProperties.set(l, a);
     }
     this._$Eh = /* @__PURE__ */ new Map();
-    for (const [s, h] of this.elementProperties) {
-      const a = this._$Eu(s, h);
+    for (const [s, l] of this.elementProperties) {
+      const a = this._$Eu(s, l);
       a !== void 0 && this._$Eh.set(a, s);
     }
     this.elementStyles = this.finalizeStyles(this.styles);
@@ -128,14 +128,14 @@ let Ft = class extends HTMLElement {
   static finalizeStyles(o) {
     const s = [];
     if (Array.isArray(o)) {
-      const h = new Set(o.flat(1 / 0).reverse());
-      for (const a of h) s.unshift(ro(a));
-    } else o !== void 0 && s.push(ro(o));
+      const l = new Set(o.flat(1 / 0).reverse());
+      for (const a of l) s.unshift(co(a));
+    } else o !== void 0 && s.push(co(o));
     return s;
   }
   static _$Eu(o, s) {
-    const h = s.attribute;
-    return h === !1 ? void 0 : typeof h == "string" ? h : typeof o == "string" ? o.toLowerCase() : void 0;
+    const l = s.attribute;
+    return l === !1 ? void 0 : typeof l == "string" ? l : typeof o == "string" ? o.toLowerCase() : void 0;
   }
   constructor() {
     super(), this._$Ep = void 0, this.isUpdatePending = !1, this.hasUpdated = !1, this._$Em = null, this._$Ev();
@@ -151,12 +151,12 @@ let Ft = class extends HTMLElement {
   }
   _$E_() {
     const o = /* @__PURE__ */ new Map(), s = this.constructor.elementProperties;
-    for (const h of s.keys()) this.hasOwnProperty(h) && (o.set(h, this[h]), delete this[h]);
+    for (const l of s.keys()) this.hasOwnProperty(l) && (o.set(l, this[l]), delete this[l]);
     o.size > 0 && (this._$Ep = o);
   }
   createRenderRoot() {
     const o = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return fr(o, this.constructor.elementStyles), o;
+    return mr(o, this.constructor.elementStyles), o;
   }
   connectedCallback() {
     this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(!0), this._$EO?.forEach((o) => o.hostConnected?.());
@@ -166,35 +166,35 @@ let Ft = class extends HTMLElement {
   disconnectedCallback() {
     this._$EO?.forEach((o) => o.hostDisconnected?.());
   }
-  attributeChangedCallback(o, s, h) {
-    this._$AK(o, h);
+  attributeChangedCallback(o, s, l) {
+    this._$AK(o, l);
   }
   _$ET(o, s) {
-    const h = this.constructor.elementProperties.get(o), a = this.constructor._$Eu(o, h);
-    if (a !== void 0 && h.reflect === !0) {
-      const u = (h.converter?.toAttribute !== void 0 ? h.converter : Ve).toAttribute(s, h.type);
+    const l = this.constructor.elementProperties.get(o), a = this.constructor._$Eu(o, l);
+    if (a !== void 0 && l.reflect === !0) {
+      const u = (l.converter?.toAttribute !== void 0 ? l.converter : Ge).toAttribute(s, l.type);
       this._$Em = o, u == null ? this.removeAttribute(a) : this.setAttribute(a, u), this._$Em = null;
     }
   }
   _$AK(o, s) {
-    const h = this.constructor, a = h._$Eh.get(o);
+    const l = this.constructor, a = l._$Eh.get(o);
     if (a !== void 0 && this._$Em !== a) {
-      const u = h.getPropertyOptions(a), d = typeof u.converter == "function" ? { fromAttribute: u.converter } : u.converter?.fromAttribute !== void 0 ? u.converter : Ve;
+      const u = l.getPropertyOptions(a), f = typeof u.converter == "function" ? { fromAttribute: u.converter } : u.converter?.fromAttribute !== void 0 ? u.converter : Ge;
       this._$Em = a;
-      const m = d.fromAttribute(s, u.type);
+      const m = f.fromAttribute(s, u.type);
       this[a] = m ?? this._$Ej?.get(a) ?? m, this._$Em = null;
     }
   }
-  requestUpdate(o, s, h, a = !1, u) {
+  requestUpdate(o, s, l, a = !1, u) {
     if (o !== void 0) {
-      const d = this.constructor;
-      if (a === !1 && (u = this[o]), h ??= d.getPropertyOptions(o), !((h.hasChanged ?? $i)(u, s) || h.useDefault && h.reflect && u === this._$Ej?.get(o) && !this.hasAttribute(d._$Eu(o, h)))) return;
-      this.C(o, s, h);
+      const f = this.constructor;
+      if (a === !1 && (u = this[o]), l ??= f.getPropertyOptions(o), !((l.hasChanged ?? Ni)(u, s) || l.useDefault && l.reflect && u === this._$Ej?.get(o) && !this.hasAttribute(f._$Eu(o, l)))) return;
+      this.C(o, s, l);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
   }
-  C(o, s, { useDefault: h, reflect: a, wrapped: u }, d) {
-    h && !(this._$Ej ??= /* @__PURE__ */ new Map()).has(o) && (this._$Ej.set(o, d ?? s ?? this[o]), u !== !0 || d !== void 0) || (this._$AL.has(o) || (this.hasUpdated || h || (s = void 0), this._$AL.set(o, s)), a === !0 && this._$Em !== o && (this._$Eq ??= /* @__PURE__ */ new Set()).add(o));
+  C(o, s, { useDefault: l, reflect: a, wrapped: u }, f) {
+    l && !(this._$Ej ??= /* @__PURE__ */ new Map()).has(o) && (this._$Ej.set(o, f ?? s ?? this[o]), u !== !0 || f !== void 0) || (this._$AL.has(o) || (this.hasUpdated || l || (s = void 0), this._$AL.set(o, s)), a === !0 && this._$Em !== o && (this._$Eq ??= /* @__PURE__ */ new Set()).add(o));
   }
   async _$EP() {
     this.isUpdatePending = !0;
@@ -216,18 +216,18 @@ let Ft = class extends HTMLElement {
         for (const [a, u] of this._$Ep) this[a] = u;
         this._$Ep = void 0;
       }
-      const h = this.constructor.elementProperties;
-      if (h.size > 0) for (const [a, u] of h) {
-        const { wrapped: d } = u, m = this[a];
-        d !== !0 || this._$AL.has(a) || m === void 0 || this.C(a, void 0, u, m);
+      const l = this.constructor.elementProperties;
+      if (l.size > 0) for (const [a, u] of l) {
+        const { wrapped: f } = u, m = this[a];
+        f !== !0 || this._$AL.has(a) || m === void 0 || this.C(a, void 0, u, m);
       }
     }
     let o = !1;
     const s = this._$AL;
     try {
-      o = this.shouldUpdate(s), o ? (this.willUpdate(s), this._$EO?.forEach((h) => h.hostUpdate?.()), this.update(s)) : this._$EM();
-    } catch (h) {
-      throw o = !1, this._$EM(), h;
+      o = this.shouldUpdate(s), o ? (this.willUpdate(s), this._$EO?.forEach((l) => l.hostUpdate?.()), this.update(s)) : this._$EM();
+    } catch (l) {
+      throw o = !1, this._$EM(), l;
     }
     o && this._$AE(s);
   }
@@ -256,56 +256,56 @@ let Ft = class extends HTMLElement {
   firstUpdated(o) {
   }
 };
-Ft.elementStyles = [], Ft.shadowRootOptions = { mode: "open" }, Ft[_e("elementProperties")] = /* @__PURE__ */ new Map(), Ft[_e("finalized")] = /* @__PURE__ */ new Map(), wr?.({ ReactiveElement: Ft }), (Ge.reactiveElementVersions ??= []).push("2.1.2");
+jt.elementStyles = [], jt.shadowRootOptions = { mode: "open" }, jt[pe("elementProperties")] = /* @__PURE__ */ new Map(), jt[pe("finalized")] = /* @__PURE__ */ new Map(), Lr?.({ ReactiveElement: jt }), (Ye.reactiveElementVersions ??= []).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Bi = globalThis, ho = (c) => c, qe = Bi.trustedTypes, co = qe ? qe.createPolicy("lit-html", { createHTML: (c) => c }) : void 0, Oo = "$lit$", Pt = `lit$${Math.random().toFixed(9).slice(2)}$`, Ro = "?" + Pt, xr = `<${Ro}>`, zt = document, me = () => zt.createComment(""), ge = (c) => c === null || typeof c != "object" && typeof c != "function", Ni = Array.isArray, Pr = (c) => Ni(c) || typeof c?.[Symbol.iterator] == "function", Oi = `[ 	
-\f\r]`, he = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, uo = /-->/g, fo = />/g, Et = RegExp(`>|${Oi}(?:([^\\s"'>=/]+)(${Oi}*=${Oi}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), po = /'/g, _o = /"/g, Io = /^(?:script|style|textarea|title)$/i, Lr = (c) => (o, ...s) => ({ _$litType$: c, strings: o, values: s }), Z = Lr(1), Lt = Symbol.for("lit-noChange"), I = Symbol.for("lit-nothing"), mo = /* @__PURE__ */ new WeakMap(), Mt = zt.createTreeWalker(zt, 129);
-function Zo(c, o) {
-  if (!Ni(c) || !c.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return co !== void 0 ? co.createHTML(o) : o;
+const Di = globalThis, po = (c) => c, Ke = Di.trustedTypes, _o = Ke ? Ke.createPolicy("lit-html", { createHTML: (c) => c }) : void 0, Zo = "$lit$", Pt = `lit$${Math.random().toFixed(9).slice(2)}$`, $o = "?" + Pt, Tr = `<${$o}>`, Ot = document, me = () => Ot.createComment(""), ge = (c) => c === null || typeof c != "object" && typeof c != "function", Hi = Array.isArray, kr = (c) => Hi(c) || typeof c?.[Symbol.iterator] == "function", Ri = `[ 	
+\f\r]`, he = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, mo = /-->/g, go = />/g, Ct = RegExp(`>|${Ri}(?:([^\\s"'>=/]+)(${Ri}*=${Ri}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), vo = /'/g, yo = /"/g, Bo = /^(?:script|style|textarea|title)$/i, Sr = (c) => (o, ...s) => ({ _$litType$: c, strings: o, values: s }), Z = Sr(1), Lt = Symbol.for("lit-noChange"), I = Symbol.for("lit-nothing"), bo = /* @__PURE__ */ new WeakMap(), Mt = Ot.createTreeWalker(Ot, 129);
+function No(c, o) {
+  if (!Hi(c) || !c.hasOwnProperty("raw")) throw Error("invalid template strings array");
+  return _o !== void 0 ? _o.createHTML(o) : o;
 }
-const Tr = (c, o) => {
-  const s = c.length - 1, h = [];
-  let a, u = o === 2 ? "<svg>" : o === 3 ? "<math>" : "", d = he;
+const Ar = (c, o) => {
+  const s = c.length - 1, l = [];
+  let a, u = o === 2 ? "<svg>" : o === 3 ? "<math>" : "", f = he;
   for (let m = 0; m < s; m++) {
     const g = c[m];
-    let P, T, b = -1, D = 0;
-    for (; D < g.length && (d.lastIndex = D, T = d.exec(g), T !== null); ) D = d.lastIndex, d === he ? T[1] === "!--" ? d = uo : T[1] !== void 0 ? d = fo : T[2] !== void 0 ? (Io.test(T[2]) && (a = RegExp("</" + T[2], "g")), d = Et) : T[3] !== void 0 && (d = Et) : d === Et ? T[0] === ">" ? (d = a ?? he, b = -1) : T[1] === void 0 ? b = -2 : (b = d.lastIndex - T[2].length, P = T[1], d = T[3] === void 0 ? Et : T[3] === '"' ? _o : po) : d === _o || d === po ? d = Et : d === uo || d === fo ? d = he : (d = Et, a = void 0);
-    const K = d === Et && c[m + 1].startsWith("/>") ? " " : "";
-    u += d === he ? g + xr : b >= 0 ? (h.push(P), g.slice(0, b) + Oo + g.slice(b) + Pt + K) : g + Pt + (b === -2 ? m : K);
+    let P, T, b = -1, N = 0;
+    for (; N < g.length && (f.lastIndex = N, T = f.exec(g), T !== null); ) N = f.lastIndex, f === he ? T[1] === "!--" ? f = mo : T[1] !== void 0 ? f = go : T[2] !== void 0 ? (Bo.test(T[2]) && (a = RegExp("</" + T[2], "g")), f = Ct) : T[3] !== void 0 && (f = Ct) : f === Ct ? T[0] === ">" ? (f = a ?? he, b = -1) : T[1] === void 0 ? b = -2 : (b = f.lastIndex - T[2].length, P = T[1], f = T[3] === void 0 ? Ct : T[3] === '"' ? yo : vo) : f === yo || f === vo ? f = Ct : f === mo || f === go ? f = he : (f = Ct, a = void 0);
+    const K = f === Ct && c[m + 1].startsWith("/>") ? " " : "";
+    u += f === he ? g + Tr : b >= 0 ? (l.push(P), g.slice(0, b) + Zo + g.slice(b) + Pt + K) : g + Pt + (b === -2 ? m : K);
   }
-  return [Zo(c, u + (c[s] || "<?>") + (o === 2 ? "</svg>" : o === 3 ? "</math>" : "")), h];
+  return [No(c, u + (c[s] || "<?>") + (o === 2 ? "</svg>" : o === 3 ? "</math>" : "")), l];
 };
 class ve {
-  constructor({ strings: o, _$litType$: s }, h) {
+  constructor({ strings: o, _$litType$: s }, l) {
     let a;
     this.parts = [];
-    let u = 0, d = 0;
-    const m = o.length - 1, g = this.parts, [P, T] = Tr(o, s);
-    if (this.el = ve.createElement(P, h), Mt.currentNode = this.el.content, s === 2 || s === 3) {
+    let u = 0, f = 0;
+    const m = o.length - 1, g = this.parts, [P, T] = Ar(o, s);
+    if (this.el = ve.createElement(P, l), Mt.currentNode = this.el.content, s === 2 || s === 3) {
       const b = this.el.content.firstChild;
       b.replaceWith(...b.childNodes);
     }
     for (; (a = Mt.nextNode()) !== null && g.length < m; ) {
       if (a.nodeType === 1) {
-        if (a.hasAttributes()) for (const b of a.getAttributeNames()) if (b.endsWith(Oo)) {
-          const D = T[d++], K = a.getAttribute(b).split(Pt), $ = /([.?@])?(.*)/.exec(D);
-          g.push({ type: 1, index: u, name: $[2], strings: K, ctor: $[1] === "." ? Sr : $[1] === "?" ? Ar : $[1] === "@" ? Cr : Ke }), a.removeAttribute(b);
+        if (a.hasAttributes()) for (const b of a.getAttributeNames()) if (b.endsWith(Zo)) {
+          const N = T[f++], K = a.getAttribute(b).split(Pt), $ = /([.?@])?(.*)/.exec(N);
+          g.push({ type: 1, index: u, name: $[2], strings: K, ctor: $[1] === "." ? Cr : $[1] === "?" ? Mr : $[1] === "@" ? zr : Je }), a.removeAttribute(b);
         } else b.startsWith(Pt) && (g.push({ type: 6, index: u }), a.removeAttribute(b));
-        if (Io.test(a.tagName)) {
-          const b = a.textContent.split(Pt), D = b.length - 1;
-          if (D > 0) {
-            a.textContent = qe ? qe.emptyScript : "";
-            for (let K = 0; K < D; K++) a.append(b[K], me()), Mt.nextNode(), g.push({ type: 2, index: ++u });
-            a.append(b[D], me());
+        if (Bo.test(a.tagName)) {
+          const b = a.textContent.split(Pt), N = b.length - 1;
+          if (N > 0) {
+            a.textContent = Ke ? Ke.emptyScript : "";
+            for (let K = 0; K < N; K++) a.append(b[K], me()), Mt.nextNode(), g.push({ type: 2, index: ++u });
+            a.append(b[N], me());
           }
         }
-      } else if (a.nodeType === 8) if (a.data === Ro) g.push({ type: 2, index: u });
+      } else if (a.nodeType === 8) if (a.data === $o) g.push({ type: 2, index: u });
       else {
         let b = -1;
         for (; (b = a.data.indexOf(Pt, b + 1)) !== -1; ) g.push({ type: 7, index: u }), b += Pt.length - 1;
@@ -314,17 +314,17 @@ class ve {
     }
   }
   static createElement(o, s) {
-    const h = zt.createElement("template");
-    return h.innerHTML = o, h;
+    const l = Ot.createElement("template");
+    return l.innerHTML = o, l;
   }
 }
-function Ut(c, o, s = c, h) {
+function Ut(c, o, s = c, l) {
   if (o === Lt) return o;
-  let a = h !== void 0 ? s._$Co?.[h] : s._$Cl;
+  let a = l !== void 0 ? s._$Co?.[l] : s._$Cl;
   const u = ge(o) ? void 0 : o._$litDirective$;
-  return a?.constructor !== u && (a?._$AO?.(!1), u === void 0 ? a = void 0 : (a = new u(c), a._$AT(c, s, h)), h !== void 0 ? (s._$Co ??= [])[h] = a : s._$Cl = a), a !== void 0 && (o = Ut(c, a._$AS(c, o.values), a, h)), o;
+  return a?.constructor !== u && (a?._$AO?.(!1), u === void 0 ? a = void 0 : (a = new u(c), a._$AT(c, s, l)), l !== void 0 ? (s._$Co ??= [])[l] = a : s._$Cl = a), a !== void 0 && (o = Ut(c, a._$AS(c, o.values), a, l)), o;
 }
-class kr {
+class Er {
   constructor(o, s) {
     this._$AV = [], this._$AN = void 0, this._$AD = o, this._$AM = s;
   }
@@ -335,29 +335,29 @@ class kr {
     return this._$AM._$AU;
   }
   u(o) {
-    const { el: { content: s }, parts: h } = this._$AD, a = (o?.creationScope ?? zt).importNode(s, !0);
+    const { el: { content: s }, parts: l } = this._$AD, a = (o?.creationScope ?? Ot).importNode(s, !0);
     Mt.currentNode = a;
-    let u = Mt.nextNode(), d = 0, m = 0, g = h[0];
+    let u = Mt.nextNode(), f = 0, m = 0, g = l[0];
     for (; g !== void 0; ) {
-      if (d === g.index) {
+      if (f === g.index) {
         let P;
-        g.type === 2 ? P = new be(u, u.nextSibling, this, o) : g.type === 1 ? P = new g.ctor(u, g.name, g.strings, this, o) : g.type === 6 && (P = new Er(u, this, o)), this._$AV.push(P), g = h[++m];
+        g.type === 2 ? P = new be(u, u.nextSibling, this, o) : g.type === 1 ? P = new g.ctor(u, g.name, g.strings, this, o) : g.type === 6 && (P = new Or(u, this, o)), this._$AV.push(P), g = l[++m];
       }
-      d !== g?.index && (u = Mt.nextNode(), d++);
+      f !== g?.index && (u = Mt.nextNode(), f++);
     }
-    return Mt.currentNode = zt, a;
+    return Mt.currentNode = Ot, a;
   }
   p(o) {
     let s = 0;
-    for (const h of this._$AV) h !== void 0 && (h.strings !== void 0 ? (h._$AI(o, h, s), s += h.strings.length - 2) : h._$AI(o[s])), s++;
+    for (const l of this._$AV) l !== void 0 && (l.strings !== void 0 ? (l._$AI(o, l, s), s += l.strings.length - 2) : l._$AI(o[s])), s++;
   }
 }
 class be {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
-  constructor(o, s, h, a) {
-    this.type = 2, this._$AH = I, this._$AN = void 0, this._$AA = o, this._$AB = s, this._$AM = h, this.options = a, this._$Cv = a?.isConnected ?? !0;
+  constructor(o, s, l, a) {
+    this.type = 2, this._$AH = I, this._$AN = void 0, this._$AA = o, this._$AB = s, this._$AM = l, this.options = a, this._$Cv = a?.isConnected ?? !0;
   }
   get parentNode() {
     let o = this._$AA.parentNode;
@@ -371,7 +371,7 @@ class be {
     return this._$AB;
   }
   _$AI(o, s = this) {
-    o = Ut(this, o, s), ge(o) ? o === I || o == null || o === "" ? (this._$AH !== I && this._$AR(), this._$AH = I) : o !== this._$AH && o !== Lt && this._(o) : o._$litType$ !== void 0 ? this.$(o) : o.nodeType !== void 0 ? this.T(o) : Pr(o) ? this.k(o) : this._(o);
+    o = Ut(this, o, s), ge(o) ? o === I || o == null || o === "" ? (this._$AH !== I && this._$AR(), this._$AH = I) : o !== this._$AH && o !== Lt && this._(o) : o._$litType$ !== void 0 ? this.$(o) : o.nodeType !== void 0 ? this.T(o) : kr(o) ? this.k(o) : this._(o);
   }
   O(o) {
     return this._$AA.parentNode.insertBefore(o, this._$AB);
@@ -380,63 +380,63 @@ class be {
     this._$AH !== o && (this._$AR(), this._$AH = this.O(o));
   }
   _(o) {
-    this._$AH !== I && ge(this._$AH) ? this._$AA.nextSibling.data = o : this.T(zt.createTextNode(o)), this._$AH = o;
+    this._$AH !== I && ge(this._$AH) ? this._$AA.nextSibling.data = o : this.T(Ot.createTextNode(o)), this._$AH = o;
   }
   $(o) {
-    const { values: s, _$litType$: h } = o, a = typeof h == "number" ? this._$AC(o) : (h.el === void 0 && (h.el = ve.createElement(Zo(h.h, h.h[0]), this.options)), h);
+    const { values: s, _$litType$: l } = o, a = typeof l == "number" ? this._$AC(o) : (l.el === void 0 && (l.el = ve.createElement(No(l.h, l.h[0]), this.options)), l);
     if (this._$AH?._$AD === a) this._$AH.p(s);
     else {
-      const u = new kr(a, this), d = u.u(this.options);
-      u.p(s), this.T(d), this._$AH = u;
+      const u = new Er(a, this), f = u.u(this.options);
+      u.p(s), this.T(f), this._$AH = u;
     }
   }
   _$AC(o) {
-    let s = mo.get(o.strings);
-    return s === void 0 && mo.set(o.strings, s = new ve(o)), s;
+    let s = bo.get(o.strings);
+    return s === void 0 && bo.set(o.strings, s = new ve(o)), s;
   }
   k(o) {
-    Ni(this._$AH) || (this._$AH = [], this._$AR());
+    Hi(this._$AH) || (this._$AH = [], this._$AR());
     const s = this._$AH;
-    let h, a = 0;
-    for (const u of o) a === s.length ? s.push(h = new be(this.O(me()), this.O(me()), this, this.options)) : h = s[a], h._$AI(u), a++;
-    a < s.length && (this._$AR(h && h._$AB.nextSibling, a), s.length = a);
+    let l, a = 0;
+    for (const u of o) a === s.length ? s.push(l = new be(this.O(me()), this.O(me()), this, this.options)) : l = s[a], l._$AI(u), a++;
+    a < s.length && (this._$AR(l && l._$AB.nextSibling, a), s.length = a);
   }
   _$AR(o = this._$AA.nextSibling, s) {
     for (this._$AP?.(!1, !0, s); o !== this._$AB; ) {
-      const h = ho(o).nextSibling;
-      ho(o).remove(), o = h;
+      const l = po(o).nextSibling;
+      po(o).remove(), o = l;
     }
   }
   setConnected(o) {
     this._$AM === void 0 && (this._$Cv = o, this._$AP?.(o));
   }
 }
-class Ke {
+class Je {
   get tagName() {
     return this.element.tagName;
   }
   get _$AU() {
     return this._$AM._$AU;
   }
-  constructor(o, s, h, a, u) {
-    this.type = 1, this._$AH = I, this._$AN = void 0, this.element = o, this.name = s, this._$AM = a, this.options = u, h.length > 2 || h[0] !== "" || h[1] !== "" ? (this._$AH = Array(h.length - 1).fill(new String()), this.strings = h) : this._$AH = I;
+  constructor(o, s, l, a, u) {
+    this.type = 1, this._$AH = I, this._$AN = void 0, this.element = o, this.name = s, this._$AM = a, this.options = u, l.length > 2 || l[0] !== "" || l[1] !== "" ? (this._$AH = Array(l.length - 1).fill(new String()), this.strings = l) : this._$AH = I;
   }
-  _$AI(o, s = this, h, a) {
+  _$AI(o, s = this, l, a) {
     const u = this.strings;
-    let d = !1;
-    if (u === void 0) o = Ut(this, o, s, 0), d = !ge(o) || o !== this._$AH && o !== Lt, d && (this._$AH = o);
+    let f = !1;
+    if (u === void 0) o = Ut(this, o, s, 0), f = !ge(o) || o !== this._$AH && o !== Lt, f && (this._$AH = o);
     else {
       const m = o;
       let g, P;
-      for (o = u[0], g = 0; g < u.length - 1; g++) P = Ut(this, m[h + g], s, g), P === Lt && (P = this._$AH[g]), d ||= !ge(P) || P !== this._$AH[g], P === I ? o = I : o !== I && (o += (P ?? "") + u[g + 1]), this._$AH[g] = P;
+      for (o = u[0], g = 0; g < u.length - 1; g++) P = Ut(this, m[l + g], s, g), P === Lt && (P = this._$AH[g]), f ||= !ge(P) || P !== this._$AH[g], P === I ? o = I : o !== I && (o += (P ?? "") + u[g + 1]), this._$AH[g] = P;
     }
-    d && !a && this.j(o);
+    f && !a && this.j(o);
   }
   j(o) {
     o === I ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, o ?? "");
   }
 }
-class Sr extends Ke {
+class Cr extends Je {
   constructor() {
     super(...arguments), this.type = 3;
   }
@@ -444,7 +444,7 @@ class Sr extends Ke {
     this.element[this.name] = o === I ? void 0 : o;
   }
 }
-let Ar = class extends Ke {
+let Mr = class extends Je {
   constructor() {
     super(...arguments), this.type = 4;
   }
@@ -452,22 +452,22 @@ let Ar = class extends Ke {
     this.element.toggleAttribute(this.name, !!o && o !== I);
   }
 };
-class Cr extends Ke {
-  constructor(o, s, h, a, u) {
-    super(o, s, h, a, u), this.type = 5;
+class zr extends Je {
+  constructor(o, s, l, a, u) {
+    super(o, s, l, a, u), this.type = 5;
   }
   _$AI(o, s = this) {
     if ((o = Ut(this, o, s, 0) ?? I) === Lt) return;
-    const h = this._$AH, a = o === I && h !== I || o.capture !== h.capture || o.once !== h.once || o.passive !== h.passive, u = o !== I && (h === I || a);
-    a && this.element.removeEventListener(this.name, this, h), u && this.element.addEventListener(this.name, this, o), this._$AH = o;
+    const l = this._$AH, a = o === I && l !== I || o.capture !== l.capture || o.once !== l.once || o.passive !== l.passive, u = o !== I && (l === I || a);
+    a && this.element.removeEventListener(this.name, this, l), u && this.element.addEventListener(this.name, this, o), this._$AH = o;
   }
   handleEvent(o) {
     typeof this._$AH == "function" ? this._$AH.call(this.options?.host ?? this.element, o) : this._$AH.handleEvent(o);
   }
 }
-class Er {
-  constructor(o, s, h) {
-    this.element = o, this.type = 6, this._$AN = void 0, this._$AM = s, this.options = h;
+class Or {
+  constructor(o, s, l) {
+    this.element = o, this.type = 6, this._$AN = void 0, this._$AM = s, this.options = l;
   }
   get _$AU() {
     return this._$AM._$AU;
@@ -476,14 +476,14 @@ class Er {
     Ut(this, o);
   }
 }
-const Mr = Bi.litHtmlPolyfillSupport;
-Mr?.(ve, be), (Bi.litHtmlVersions ??= []).push("3.3.2");
-const zr = (c, o, s) => {
-  const h = s?.renderBefore ?? o;
-  let a = h._$litPart$;
+const Ir = Di.litHtmlPolyfillSupport;
+Ir?.(ve, be), (Di.litHtmlVersions ??= []).push("3.3.2");
+const Rr = (c, o, s) => {
+  const l = s?.renderBefore ?? o;
+  let a = l._$litPart$;
   if (a === void 0) {
     const u = s?.renderBefore ?? null;
-    h._$litPart$ = a = new be(o.insertBefore(me(), u), u, void 0, s ?? {});
+    l._$litPart$ = a = new be(o.insertBefore(me(), u), u, void 0, s ?? {});
   }
   return a._$AI(c), a;
 };
@@ -492,8 +492,8 @@ const zr = (c, o, s) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Di = globalThis;
-let jt = class extends Ft {
+const Fi = globalThis;
+let Wt = class extends jt {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
@@ -503,7 +503,7 @@ let jt = class extends Ft {
   }
   update(o) {
     const s = this.render();
-    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(o), this._$Do = zr(s, this.renderRoot, this.renderOptions);
+    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(o), this._$Do = Rr(s, this.renderRoot, this.renderOptions);
   }
   connectedCallback() {
     super.connectedCallback(), this._$Do?.setConnected(!0);
@@ -515,40 +515,40 @@ let jt = class extends Ft {
     return Lt;
   }
 };
-jt._$litElement$ = !0, jt.finalized = !0, Di.litElementHydrateSupport?.({ LitElement: jt });
-const Or = Di.litElementPolyfillSupport;
-Or?.({ LitElement: jt });
-(Di.litElementVersions ??= []).push("4.2.2");
+Wt._$litElement$ = !0, Wt.finalized = !0, Fi.litElementHydrateSupport?.({ LitElement: Wt });
+const Zr = Fi.litElementPolyfillSupport;
+Zr?.({ LitElement: Wt });
+(Fi.litElementVersions ??= []).push("4.2.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Rr = { attribute: !0, type: String, converter: Ve, reflect: !1, hasChanged: $i }, Ir = (c = Rr, o, s) => {
-  const { kind: h, metadata: a } = s;
+const $r = { attribute: !0, type: String, converter: Ge, reflect: !1, hasChanged: Ni }, Br = (c = $r, o, s) => {
+  const { kind: l, metadata: a } = s;
   let u = globalThis.litPropertyMetadata.get(a);
-  if (u === void 0 && globalThis.litPropertyMetadata.set(a, u = /* @__PURE__ */ new Map()), h === "setter" && ((c = Object.create(c)).wrapped = !0), u.set(s.name, c), h === "accessor") {
-    const { name: d } = s;
+  if (u === void 0 && globalThis.litPropertyMetadata.set(a, u = /* @__PURE__ */ new Map()), l === "setter" && ((c = Object.create(c)).wrapped = !0), u.set(s.name, c), l === "accessor") {
+    const { name: f } = s;
     return { set(m) {
       const g = o.get.call(this);
-      o.set.call(this, m), this.requestUpdate(d, g, c, !0, m);
+      o.set.call(this, m), this.requestUpdate(f, g, c, !0, m);
     }, init(m) {
-      return m !== void 0 && this.C(d, void 0, c, m), m;
+      return m !== void 0 && this.C(f, void 0, c, m), m;
     } };
   }
-  if (h === "setter") {
-    const { name: d } = s;
+  if (l === "setter") {
+    const { name: f } = s;
     return function(m) {
-      const g = this[d];
-      o.call(this, m), this.requestUpdate(d, g, c, !0, m);
+      const g = this[f];
+      o.call(this, m), this.requestUpdate(f, g, c, !0, m);
     };
   }
-  throw Error("Unsupported decorator location: " + h);
+  throw Error("Unsupported decorator location: " + l);
 };
-function Hi(c) {
-  return (o, s) => typeof s == "object" ? Ir(c, o, s) : ((h, a, u) => {
-    const d = a.hasOwnProperty(u);
-    return a.constructor.createProperty(u, h), d ? Object.getOwnPropertyDescriptor(a, u) : void 0;
+function ji(c) {
+  return (o, s) => typeof s == "object" ? Br(c, o, s) : ((l, a, u) => {
+    const f = a.hasOwnProperty(u);
+    return a.constructor.createProperty(u, l), f ? Object.getOwnPropertyDescriptor(a, u) : void 0;
   })(c, o, s);
 }
 /**
@@ -557,38 +557,38 @@ function Hi(c) {
  * SPDX-License-Identifier: BSD-3-Clause
  */
 function we(c) {
-  return Hi({ ...c, state: !0, attribute: !1 });
+  return ji({ ...c, state: !0, attribute: !1 });
 }
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Zr = (c, o, s) => (s.configurable = !0, s.enumerable = !0, Reflect.decorate && typeof o != "object" && Object.defineProperty(c, o, s), s);
+const Nr = (c, o, s) => (s.configurable = !0, s.enumerable = !0, Reflect.decorate && typeof o != "object" && Object.defineProperty(c, o, s), s);
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-function $r(c, o) {
-  return (s, h, a) => {
-    const u = (d) => d.renderRoot?.querySelector(c) ?? null;
-    return Zr(s, h, { get() {
+function Dr(c, o) {
+  return (s, l, a) => {
+    const u = (f) => f.renderRoot?.querySelector(c) ?? null;
+    return Nr(s, l, { get() {
       return u(this);
     } });
   };
 }
-var go, vo;
+var wo, xo;
 (function(c) {
   c.language = "language", c.system = "system", c.comma_decimal = "comma_decimal", c.decimal_comma = "decimal_comma", c.space_comma = "space_comma", c.none = "none";
-})(go || (go = {})), (function(c) {
+})(wo || (wo = {})), (function(c) {
   c.language = "language", c.system = "system", c.am_pm = "12", c.twenty_four = "24";
-})(vo || (vo = {}));
+})(xo || (xo = {}));
 function ce(c) {
   return c !== void 0 && c.action !== "none";
 }
-const Br = '.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:transparent}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:auto;padding:0}.leaflet-container img.leaflet-tile{mix-blend-mode:plus-lighter}.leaflet-container.leaflet-touch-zoom{-ms-touch-action:pan-x pan-y;touch-action:pan-x pan-y}.leaflet-container.leaflet-touch-drag{-ms-touch-action:pinch-zoom;touch-action:none;touch-action:pinch-zoom}.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{-ms-touch-action:none;touch-action:none}.leaflet-container{-webkit-tap-highlight-color:transparent}.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,.4)}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;transition:opacity .2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}svg.leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-popup-pane,.leaflet-control{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-image-layer,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-marker-icon.leaflet-interactive,.leaflet-image-layer.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#ddd;outline-offset:1px}.leaflet-container a{color:#0078a8}.leaflet-zoom-box{border:2px dotted #38f;background:#ffffff80}.leaflet-container{font-family:Helvetica Neue,Arial,Helvetica,sans-serif;font-size:12px;font-size:.75rem;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px #000000a6;border-radius:4px}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:#000}.leaflet-bar a,.leaflet-control-layers-toggle{background-position:50% 50%;background-repeat:no-repeat;display:block}.leaflet-bar a:hover,.leaflet-bar a:focus{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-bar a.leaflet-disabled{cursor:default;background-color:#f4f4f4;color:#bbb}.leaflet-touch .leaflet-bar a{width:30px;height:30px;line-height:30px}.leaflet-touch .leaflet-bar a:first-child{border-top-left-radius:2px;border-top-right-radius:2px}.leaflet-touch .leaflet-bar a:last-child{border-bottom-left-radius:2px;border-bottom-right-radius:2px}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:700 18px Lucida Console,Monaco,monospace;text-indent:1px}.leaflet-touch .leaflet-control-zoom-in,.leaflet-touch .leaflet-control-zoom-out{font-size:22px}.leaflet-control-layers{box-shadow:0 1px 5px #0006;background:#fff;border-radius:5px}.leaflet-control-layers-toggle{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAQAAAADQ4RFAAACf0lEQVR4AY1UM3gkARTePdvdoTxXKc+qTl3aU5U6b2Kbkz3Gtq3Zw6ziLGNPzrYx7946Tr6/ee/XeCQ4D3ykPtL5tHno4n0d/h3+xfuWHGLX81cn7r0iTNzjr7LrlxCqPtkbTQEHeqOrTy4Yyt3VCi/IOB0v7rVC7q45Q3Gr5K6jt+3Gl5nCoDD4MtO+j96Wu8atmhGqcNGHObuf8OM/x3AMx38+4Z2sPqzCxRFK2aF2e5Jol56XTLyggAMTL56XOMoS1W4pOyjUcGGQdZxU6qRh7B9Zp+PfpOFlqt0zyDZckPi1ttmIp03jX8gyJ8a/PG2yutpS/Vol7peZIbZcKBAEEheEIAgFbDkz5H6Zrkm2hVWGiXKiF4Ycw0RWKdtC16Q7qe3X4iOMxruonzegJzWaXFrU9utOSsLUmrc0YjeWYjCW4PDMADElpJSSQ0vQvA1Tm6/JlKnqFs1EGyZiFCqnRZTEJJJiKRYzVYzJck2Rm6P4iH+cmSY0YzimYa8l0EtTODFWhcMIMVqdsI2uiTvKmTisIDHJ3od5GILVhBCarCfVRmo4uTjkhrhzkiBV7SsaqS+TzrzM1qpGGUFt28pIySQHR6h7F6KSwGWm97ay+Z+ZqMcEjEWebE7wxCSQwpkhJqoZA5ivCdZDjJepuJ9IQjGGUmuXJdBFUygxVqVsxFsLMbDe8ZbDYVCGKxs+W080max1hFCarCfV+C1KATwcnvE9gRRuMP2prdbWGowm1KB1y+zwMMENkM755cJ2yPDtqhTI6ED1M/82yIDtC/4j4BijjeObflpO9I9MwXTCsSX8jWAFeHr05WoLTJ5G8IQVS/7vwR6ohirYM7f6HzYpogfS3R2OAAAAAElFTkSuQmCC);width:36px;height:36px}.leaflet-retina .leaflet-control-layers-toggle{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAQAAABvcdNgAAAEsklEQVR4AWL4TydIhpZK1kpWOlg0w3ZXP6D2soBtG42jeI6ZmQTHzAxiTbSJsYLjO9HhP+WOmcuhciVnmHVQcJnp7DFvScowZorad/+V/fVzMdMT2g9Cv9guXGv/7pYOrXh2U+RRR3dSd9JRx6bIFc/ekqHI29JC6pJ5ZEh1yWkhkbcFeSjxgx3L2m1cb1C7bceyxA+CNjT/Ifff+/kDk2u/w/33/IeCMOSaWZ4glosqT3DNnNZQ7Cs58/3Ce5HL78iZH/vKVIaYlqzfdLu8Vi7dnvUbEza5Idt36tquZFldl6N5Z/POLof0XLK61mZCmJSWjVF9tEjUluu74IUXvgttuVIHE7YxSkaYhJZam7yiM9Pv82JYfl9nptxZaxMJE4YSPty+vF0+Y2up9d3wwijfjZbabqm/3bZ9ecKHsiGmRflnn1MW4pjHf9oLufyn2z3y1D6n8g8TZhxyzipLNPnAUpsOiuWimg52psrTZYnOWYNDTMuWBWa0tJb4rgq1UvmutpaYEbZlwU3CLJm/ayYjHW5/h7xWLn9Hh1vepDkyf7dE7MtT5LR4e7yYpHrkhOUpEfssBLq2pPhAqoSWKUkk7EDqkmK6RrCEzqDjhNDWNE+XSMvkJRDWlZTmCW0l0PHQGRZY5t1L83kT0Y3l2SItk5JAWHl2dCOBm+fPu3fo5/3v61RMCO9Jx2EEYYhb0rmNQMX/vm7gqOEJLcXTGw3CAuRNeyaPWwjR8PRqKQ1PDA/dpv+on9Shox52WFnx0KY8onHayrJzm87i5h9xGw/tfkev0jGsQizqezUKjk12hBMKJ4kbCqGPVNXudyyrShovGw5CgxsRICxF6aRmSjlBnHRzg7Gx8fKqEubI2rahQYdR1YgDIRQO7JvQyD52hoIQx0mxa0ODtW2Iozn1le2iIRdzwWewedyZzewidueOGqlsn1MvcnQpuVwLGG3/IR1hIKxCjelIDZ8ldqWz25jWAsnldEnK0Zxro19TGVb2ffIZEsIO89EIEDvKMPrzmBOQcKQ+rroye6NgRRxqR4U8EAkz0CL6uSGOm6KQCdWjvjRiSP1BPalCRS5iQYiEIvxuBMJEWgzSoHADcVMuN7IuqqTeyUPq22qFimFtxDyBBJEwNyt6TM88blFHao/6tWWhuuOM4SAK4EI4QmFHA+SEyWlp4EQoJ13cYGzMu7yszEIBOm2rVmHUNqwAIQabISNMRstmdhNWcFLsSm+0tjJH1MdRxO5Nx0WDMhCtgD6OKgZeljJqJKc9po8juskR9XN0Y1lZ3mWjLR9JCO1jRDMd0fpYC2VnvjBSEFg7wBENc0R9HFlb0xvF1+TBEpF68d+DHR6IOWVv2BECtxo46hOFUBd/APU57WIoEwJhIi2CdpyZX0m93BZicktMj1AS9dClteUFAUNUIEygRZCtik5zSxI9MubTBH1GOiHsiLJ3OCoSZkILa9PxiN0EbvhsAo8tdAf9Seepd36lGWHmtNANTv5Jd0z4QYyeo/UEJqxKRpg5LZx6btLPsOaEmdMyxYdlc8LMaJnikDlhclqmPiQnTEpLUIZEwkRagjYkEibQErwhkTAKCLQEbUgkzJQWc/0PstHHcfEdQ+UAAAAASUVORK5CYII=);background-size:26px 26px}.leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}.leaflet-control-layers .leaflet-control-layers-list,.leaflet-control-layers-expanded .leaflet-control-layers-toggle{display:none}.leaflet-control-layers-expanded .leaflet-control-layers-list{display:block;position:relative}.leaflet-control-layers-expanded{padding:6px 10px 6px 6px;color:#333;background:#fff}.leaflet-control-layers-scrollbar{overflow-y:scroll;overflow-x:hidden;padding-right:5px}.leaflet-control-layers-selector{margin-top:2px;position:relative;top:1px}.leaflet-control-layers label{display:block;font-size:13px;font-size:1.08333em}.leaflet-control-layers-separator{height:0;border-top:1px solid #ddd;margin:5px -10px 5px -6px}.leaflet-default-icon-path{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAApCAYAAADAk4LOAAAFgUlEQVR4Aa1XA5BjWRTN2oW17d3YaZtr2962HUzbDNpjszW24mRt28p47v7zq/bXZtrp/lWnXr337j3nPCe85NcypgSFdugCpW5YoDAMRaIMqRi6aKq5E3YqDQO3qAwjVWrD8Ncq/RBpykd8oZUb/kaJutow8r1aP9II0WmLKLIsJyv1w/kqw9Ch2MYdB++12Onxee/QMwvf4/Dk/Lfp/i4nxTXtOoQ4pW5Aj7wpici1A9erdAN2OH64x8OSP9j3Ft3b7aWkTg/Fm91siTra0f9on5sQr9INejH6CUUUpavjFNq1B+Oadhxmnfa8RfEmN8VNAsQhPqF55xHkMzz3jSmChWU6f7/XZKNH+9+hBLOHYozuKQPxyMPUKkrX/K0uWnfFaJGS1QPRtZsOPtr3NsW0uyh6NNCOkU3Yz+bXbT3I8G3xE5EXLXtCXbbqwCO9zPQYPRTZ5vIDXD7U+w7rFDEoUUf7ibHIR4y6bLVPXrz8JVZEql13trxwue/uDivd3fkWRbS6/IA2bID4uk0UpF1N8qLlbBlXs4Ee7HLTfV1j54APvODnSfOWBqtKVvjgLKzF5YdEk5ewRkGlK0i33Eofffc7HT56jD7/6U+qH3Cx7SBLNntH5YIPvODnyfIXZYRVDPqgHtLs5ABHD3YzLuespb7t79FY34DjMwrVrcTuwlT55YMPvOBnRrJ4VXTdNnYug5ucHLBjEpt30701A3Ts+HEa73u6dT3FNWwflY86eMHPk+Yu+i6pzUpRrW7SNDg5JHR4KapmM5Wv2E8Tfcb1HoqqHMHU+uWDD7zg54mz5/2BSnizi9T1Dg4QQXLToGNCkb6tb1NU+QAlGr1++eADrzhn/u8Q2YZhQVlZ5+CAOtqfbhmaUCS1ezNFVm2imDbPmPng5wmz+gwh+oHDce0eUtQ6OGDIyR0uUhUsoO3vfDmmgOezH0mZN59x7MBi++WDL1g/eEiU3avlidO671bkLfwbw5XV2P8Pzo0ydy4t2/0eu33xYSOMOD8hTf4CrBtGMSoXfPLchX+J0ruSePw3LZeK0juPJbYzrhkH0io7B3k164hiGvawhOKMLkrQLyVpZg8rHFW7E2uHOL888IBPlNZ1FPzstSJM694fWr6RwpvcJK60+0HCILTBzZLFNdtAzJaohze60T8qBzyh5ZuOg5e7uwQppofEmf2++DYvmySqGBuKaicF1blQjhuHdvCIMvp8whTTfZzI7RldpwtSzL+F1+wkdZ2TBOW2gIF88PBTzD/gpeREAMEbxnJcaJHNHrpzji0gQCS6hdkEeYt9DF/2qPcEC8RM28Hwmr3sdNyht00byAut2k3gufWNtgtOEOFGUwcXWNDbdNbpgBGxEvKkOQsxivJx33iow0Vw5S6SVTrpVq11ysA2Rp7gTfPfktc6zhtXBBC+adRLshf6sG2RfHPZ5EAc4sVZ83yCN00Fk/4kggu40ZTvIEm5g24qtU4KjBrx/BTTH8ifVASAG7gKrnWxJDcU7x8X6Ecczhm3o6YicvsLXWfh3Ch1W0k8x0nXF+0fFxgt4phz8QvypiwCCFKMqXCnqXExjq10beH+UUA7+nG6mdG/Pu0f3LgFcGrl2s0kNNjpmoJ9o4B29CMO8dMT4Q5ox8uitF6fqsrJOr8qnwNbRzv6hSnG5wP+64C7h9lp30hKNtKdWjtdkbuPA19nJ7Tz3zR/ibgARbhb4AlhavcBebmTHcFl2fvYEnW0ox9xMxKBS8btJ+KiEbq9zA4RthQXDhPa0T9TEe69gWupwc6uBUphquXgf+/FrIjweHQS4/pduMe5ERUMHUd9xv8ZR98CxkS4F2n3EUrUZ10EYNw7BWm9x1GiPssi3GgiGRDKWRYZfXlON+dfNbM+GgIwYdwAAAAASUVORK5CYII=)}.leaflet-container .leaflet-control-attribution{background:#fff;background:#fffc;margin:0}.leaflet-control-attribution,.leaflet-control-scale-line{padding:0 5px;color:#333;line-height:1.4}.leaflet-control-attribution a{text-decoration:none}.leaflet-control-attribution a:hover,.leaflet-control-attribution a:focus{text-decoration:underline}.leaflet-attribution-flag{display:inline!important;vertical-align:baseline!important;width:1em;height:.6669em}.leaflet-left .leaflet-control-scale{margin-left:5px}.leaflet-bottom .leaflet-control-scale{margin-bottom:5px}.leaflet-control-scale-line{border:2px solid #777;border-top:none;line-height:1.1;padding:2px 5px 1px;white-space:nowrap;-moz-box-sizing:border-box;box-sizing:border-box;background:#fffc;text-shadow:1px 1px #fff}.leaflet-control-scale-line:not(:first-child){border-top:2px solid #777;border-bottom:none;margin-top:-2px}.leaflet-control-scale-line:not(:first-child):not(:last-child){border-bottom:2px solid #777}.leaflet-touch .leaflet-control-attribution,.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{box-shadow:none}.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{border:2px solid rgba(0,0,0,.2);background-clip:padding-box}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;font-size:13px;font-size:1.08333em;min-height:1px}.leaflet-popup-content p{margin:1.3em 0}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-top:-1px;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:auto;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#333;box-shadow:0 3px 14px #0006}.leaflet-container a.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#757575;text-decoration:none;background:transparent}.leaflet-container a.leaflet-popup-close-button:hover,.leaflet-container a.leaflet-popup-close-button:focus{color:#585858}.leaflet-popup-scrolled{overflow:auto}.leaflet-oldie .leaflet-popup-content-wrapper{-ms-zoom:1}.leaflet-oldie .leaflet-popup-tip{width:24px;margin:0 auto;-ms-filter:"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";filter:progid:DXImageTransform.Microsoft.Matrix(M11=.70710678,M12=.70710678,M21=-.70710678,M22=.70710678)}.leaflet-oldie .leaflet-control-zoom,.leaflet-oldie .leaflet-control-layers,.leaflet-oldie .leaflet-popup-content-wrapper,.leaflet-oldie .leaflet-popup-tip{border:1px solid #999}.leaflet-div-icon{background:#fff;border:1px solid #666}.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none;box-shadow:0 1px 3px #0006}.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}.leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{position:absolute;pointer-events:none;border:6px solid transparent;background:transparent;content:""}.leaflet-tooltip-bottom{margin-top:6px}.leaflet-tooltip-top{margin-top:-6px}.leaflet-tooltip-bottom:before,.leaflet-tooltip-top:before{left:50%;margin-left:-6px}.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}.leaflet-tooltip-left{margin-left:-6px}.leaflet-tooltip-right{margin-left:6px}.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{top:50%;margin-top:-6px}.leaflet-tooltip-left:before{right:0;margin-right:-12px;border-left-color:#fff}.leaflet-tooltip-right:before{left:0;margin-left:-12px;border-right-color:#fff}@media print{.leaflet-control{-webkit-print-color-adjust:exact;print-color-adjust:exact}}';
-function Nr(c) {
+const Hr = '.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:transparent}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:auto;padding:0}.leaflet-container img.leaflet-tile{mix-blend-mode:plus-lighter}.leaflet-container.leaflet-touch-zoom{-ms-touch-action:pan-x pan-y;touch-action:pan-x pan-y}.leaflet-container.leaflet-touch-drag{-ms-touch-action:pinch-zoom;touch-action:none;touch-action:pinch-zoom}.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{-ms-touch-action:none;touch-action:none}.leaflet-container{-webkit-tap-highlight-color:transparent}.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,.4)}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;transition:opacity .2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}svg.leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-popup-pane,.leaflet-control{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-image-layer,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-marker-icon.leaflet-interactive,.leaflet-image-layer.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#ddd;outline-offset:1px}.leaflet-container a{color:#0078a8}.leaflet-zoom-box{border:2px dotted #38f;background:#ffffff80}.leaflet-container{font-family:Helvetica Neue,Arial,Helvetica,sans-serif;font-size:12px;font-size:.75rem;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px #000000a6;border-radius:4px}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:#000}.leaflet-bar a,.leaflet-control-layers-toggle{background-position:50% 50%;background-repeat:no-repeat;display:block}.leaflet-bar a:hover,.leaflet-bar a:focus{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-bar a.leaflet-disabled{cursor:default;background-color:#f4f4f4;color:#bbb}.leaflet-touch .leaflet-bar a{width:30px;height:30px;line-height:30px}.leaflet-touch .leaflet-bar a:first-child{border-top-left-radius:2px;border-top-right-radius:2px}.leaflet-touch .leaflet-bar a:last-child{border-bottom-left-radius:2px;border-bottom-right-radius:2px}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:700 18px Lucida Console,Monaco,monospace;text-indent:1px}.leaflet-touch .leaflet-control-zoom-in,.leaflet-touch .leaflet-control-zoom-out{font-size:22px}.leaflet-control-layers{box-shadow:0 1px 5px #0006;background:#fff;border-radius:5px}.leaflet-control-layers-toggle{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAQAAAADQ4RFAAACf0lEQVR4AY1UM3gkARTePdvdoTxXKc+qTl3aU5U6b2Kbkz3Gtq3Zw6ziLGNPzrYx7946Tr6/ee/XeCQ4D3ykPtL5tHno4n0d/h3+xfuWHGLX81cn7r0iTNzjr7LrlxCqPtkbTQEHeqOrTy4Yyt3VCi/IOB0v7rVC7q45Q3Gr5K6jt+3Gl5nCoDD4MtO+j96Wu8atmhGqcNGHObuf8OM/x3AMx38+4Z2sPqzCxRFK2aF2e5Jol56XTLyggAMTL56XOMoS1W4pOyjUcGGQdZxU6qRh7B9Zp+PfpOFlqt0zyDZckPi1ttmIp03jX8gyJ8a/PG2yutpS/Vol7peZIbZcKBAEEheEIAgFbDkz5H6Zrkm2hVWGiXKiF4Ycw0RWKdtC16Q7qe3X4iOMxruonzegJzWaXFrU9utOSsLUmrc0YjeWYjCW4PDMADElpJSSQ0vQvA1Tm6/JlKnqFs1EGyZiFCqnRZTEJJJiKRYzVYzJck2Rm6P4iH+cmSY0YzimYa8l0EtTODFWhcMIMVqdsI2uiTvKmTisIDHJ3od5GILVhBCarCfVRmo4uTjkhrhzkiBV7SsaqS+TzrzM1qpGGUFt28pIySQHR6h7F6KSwGWm97ay+Z+ZqMcEjEWebE7wxCSQwpkhJqoZA5ivCdZDjJepuJ9IQjGGUmuXJdBFUygxVqVsxFsLMbDe8ZbDYVCGKxs+W080max1hFCarCfV+C1KATwcnvE9gRRuMP2prdbWGowm1KB1y+zwMMENkM755cJ2yPDtqhTI6ED1M/82yIDtC/4j4BijjeObflpO9I9MwXTCsSX8jWAFeHr05WoLTJ5G8IQVS/7vwR6ohirYM7f6HzYpogfS3R2OAAAAAElFTkSuQmCC);width:36px;height:36px}.leaflet-retina .leaflet-control-layers-toggle{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAQAAABvcdNgAAAEsklEQVR4AWL4TydIhpZK1kpWOlg0w3ZXP6D2soBtG42jeI6ZmQTHzAxiTbSJsYLjO9HhP+WOmcuhciVnmHVQcJnp7DFvScowZorad/+V/fVzMdMT2g9Cv9guXGv/7pYOrXh2U+RRR3dSd9JRx6bIFc/ekqHI29JC6pJ5ZEh1yWkhkbcFeSjxgx3L2m1cb1C7bceyxA+CNjT/Ifff+/kDk2u/w/33/IeCMOSaWZ4glosqT3DNnNZQ7Cs58/3Ce5HL78iZH/vKVIaYlqzfdLu8Vi7dnvUbEza5Idt36tquZFldl6N5Z/POLof0XLK61mZCmJSWjVF9tEjUluu74IUXvgttuVIHE7YxSkaYhJZam7yiM9Pv82JYfl9nptxZaxMJE4YSPty+vF0+Y2up9d3wwijfjZbabqm/3bZ9ecKHsiGmRflnn1MW4pjHf9oLufyn2z3y1D6n8g8TZhxyzipLNPnAUpsOiuWimg52psrTZYnOWYNDTMuWBWa0tJb4rgq1UvmutpaYEbZlwU3CLJm/ayYjHW5/h7xWLn9Hh1vepDkyf7dE7MtT5LR4e7yYpHrkhOUpEfssBLq2pPhAqoSWKUkk7EDqkmK6RrCEzqDjhNDWNE+XSMvkJRDWlZTmCW0l0PHQGRZY5t1L83kT0Y3l2SItk5JAWHl2dCOBm+fPu3fo5/3v61RMCO9Jx2EEYYhb0rmNQMX/vm7gqOEJLcXTGw3CAuRNeyaPWwjR8PRqKQ1PDA/dpv+on9Shox52WFnx0KY8onHayrJzm87i5h9xGw/tfkev0jGsQizqezUKjk12hBMKJ4kbCqGPVNXudyyrShovGw5CgxsRICxF6aRmSjlBnHRzg7Gx8fKqEubI2rahQYdR1YgDIRQO7JvQyD52hoIQx0mxa0ODtW2Iozn1le2iIRdzwWewedyZzewidueOGqlsn1MvcnQpuVwLGG3/IR1hIKxCjelIDZ8ldqWz25jWAsnldEnK0Zxro19TGVb2ffIZEsIO89EIEDvKMPrzmBOQcKQ+rroye6NgRRxqR4U8EAkz0CL6uSGOm6KQCdWjvjRiSP1BPalCRS5iQYiEIvxuBMJEWgzSoHADcVMuN7IuqqTeyUPq22qFimFtxDyBBJEwNyt6TM88blFHao/6tWWhuuOM4SAK4EI4QmFHA+SEyWlp4EQoJ13cYGzMu7yszEIBOm2rVmHUNqwAIQabISNMRstmdhNWcFLsSm+0tjJH1MdRxO5Nx0WDMhCtgD6OKgZeljJqJKc9po8juskR9XN0Y1lZ3mWjLR9JCO1jRDMd0fpYC2VnvjBSEFg7wBENc0R9HFlb0xvF1+TBEpF68d+DHR6IOWVv2BECtxo46hOFUBd/APU57WIoEwJhIi2CdpyZX0m93BZicktMj1AS9dClteUFAUNUIEygRZCtik5zSxI9MubTBH1GOiHsiLJ3OCoSZkILa9PxiN0EbvhsAo8tdAf9Seepd36lGWHmtNANTv5Jd0z4QYyeo/UEJqxKRpg5LZx6btLPsOaEmdMyxYdlc8LMaJnikDlhclqmPiQnTEpLUIZEwkRagjYkEibQErwhkTAKCLQEbUgkzJQWc/0PstHHcfEdQ+UAAAAASUVORK5CYII=);background-size:26px 26px}.leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}.leaflet-control-layers .leaflet-control-layers-list,.leaflet-control-layers-expanded .leaflet-control-layers-toggle{display:none}.leaflet-control-layers-expanded .leaflet-control-layers-list{display:block;position:relative}.leaflet-control-layers-expanded{padding:6px 10px 6px 6px;color:#333;background:#fff}.leaflet-control-layers-scrollbar{overflow-y:scroll;overflow-x:hidden;padding-right:5px}.leaflet-control-layers-selector{margin-top:2px;position:relative;top:1px}.leaflet-control-layers label{display:block;font-size:13px;font-size:1.08333em}.leaflet-control-layers-separator{height:0;border-top:1px solid #ddd;margin:5px -10px 5px -6px}.leaflet-default-icon-path{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAApCAYAAADAk4LOAAAFgUlEQVR4Aa1XA5BjWRTN2oW17d3YaZtr2962HUzbDNpjszW24mRt28p47v7zq/bXZtrp/lWnXr337j3nPCe85NcypgSFdugCpW5YoDAMRaIMqRi6aKq5E3YqDQO3qAwjVWrD8Ncq/RBpykd8oZUb/kaJutow8r1aP9II0WmLKLIsJyv1w/kqw9Ch2MYdB++12Onxee/QMwvf4/Dk/Lfp/i4nxTXtOoQ4pW5Aj7wpici1A9erdAN2OH64x8OSP9j3Ft3b7aWkTg/Fm91siTra0f9on5sQr9INejH6CUUUpavjFNq1B+Oadhxmnfa8RfEmN8VNAsQhPqF55xHkMzz3jSmChWU6f7/XZKNH+9+hBLOHYozuKQPxyMPUKkrX/K0uWnfFaJGS1QPRtZsOPtr3NsW0uyh6NNCOkU3Yz+bXbT3I8G3xE5EXLXtCXbbqwCO9zPQYPRTZ5vIDXD7U+w7rFDEoUUf7ibHIR4y6bLVPXrz8JVZEql13trxwue/uDivd3fkWRbS6/IA2bID4uk0UpF1N8qLlbBlXs4Ee7HLTfV1j54APvODnSfOWBqtKVvjgLKzF5YdEk5ewRkGlK0i33Eofffc7HT56jD7/6U+qH3Cx7SBLNntH5YIPvODnyfIXZYRVDPqgHtLs5ABHD3YzLuespb7t79FY34DjMwrVrcTuwlT55YMPvOBnRrJ4VXTdNnYug5ucHLBjEpt30701A3Ts+HEa73u6dT3FNWwflY86eMHPk+Yu+i6pzUpRrW7SNDg5JHR4KapmM5Wv2E8Tfcb1HoqqHMHU+uWDD7zg54mz5/2BSnizi9T1Dg4QQXLToGNCkb6tb1NU+QAlGr1++eADrzhn/u8Q2YZhQVlZ5+CAOtqfbhmaUCS1ezNFVm2imDbPmPng5wmz+gwh+oHDce0eUtQ6OGDIyR0uUhUsoO3vfDmmgOezH0mZN59x7MBi++WDL1g/eEiU3avlidO671bkLfwbw5XV2P8Pzo0ydy4t2/0eu33xYSOMOD8hTf4CrBtGMSoXfPLchX+J0ruSePw3LZeK0juPJbYzrhkH0io7B3k164hiGvawhOKMLkrQLyVpZg8rHFW7E2uHOL888IBPlNZ1FPzstSJM694fWr6RwpvcJK60+0HCILTBzZLFNdtAzJaohze60T8qBzyh5ZuOg5e7uwQppofEmf2++DYvmySqGBuKaicF1blQjhuHdvCIMvp8whTTfZzI7RldpwtSzL+F1+wkdZ2TBOW2gIF88PBTzD/gpeREAMEbxnJcaJHNHrpzji0gQCS6hdkEeYt9DF/2qPcEC8RM28Hwmr3sdNyht00byAut2k3gufWNtgtOEOFGUwcXWNDbdNbpgBGxEvKkOQsxivJx33iow0Vw5S6SVTrpVq11ysA2Rp7gTfPfktc6zhtXBBC+adRLshf6sG2RfHPZ5EAc4sVZ83yCN00Fk/4kggu40ZTvIEm5g24qtU4KjBrx/BTTH8ifVASAG7gKrnWxJDcU7x8X6Ecczhm3o6YicvsLXWfh3Ch1W0k8x0nXF+0fFxgt4phz8QvypiwCCFKMqXCnqXExjq10beH+UUA7+nG6mdG/Pu0f3LgFcGrl2s0kNNjpmoJ9o4B29CMO8dMT4Q5ox8uitF6fqsrJOr8qnwNbRzv6hSnG5wP+64C7h9lp30hKNtKdWjtdkbuPA19nJ7Tz3zR/ibgARbhb4AlhavcBebmTHcFl2fvYEnW0ox9xMxKBS8btJ+KiEbq9zA4RthQXDhPa0T9TEe69gWupwc6uBUphquXgf+/FrIjweHQS4/pduMe5ERUMHUd9xv8ZR98CxkS4F2n3EUrUZ10EYNw7BWm9x1GiPssi3GgiGRDKWRYZfXlON+dfNbM+GgIwYdwAAAAASUVORK5CYII=)}.leaflet-container .leaflet-control-attribution{background:#fff;background:#fffc;margin:0}.leaflet-control-attribution,.leaflet-control-scale-line{padding:0 5px;color:#333;line-height:1.4}.leaflet-control-attribution a{text-decoration:none}.leaflet-control-attribution a:hover,.leaflet-control-attribution a:focus{text-decoration:underline}.leaflet-attribution-flag{display:inline!important;vertical-align:baseline!important;width:1em;height:.6669em}.leaflet-left .leaflet-control-scale{margin-left:5px}.leaflet-bottom .leaflet-control-scale{margin-bottom:5px}.leaflet-control-scale-line{border:2px solid #777;border-top:none;line-height:1.1;padding:2px 5px 1px;white-space:nowrap;-moz-box-sizing:border-box;box-sizing:border-box;background:#fffc;text-shadow:1px 1px #fff}.leaflet-control-scale-line:not(:first-child){border-top:2px solid #777;border-bottom:none;margin-top:-2px}.leaflet-control-scale-line:not(:first-child):not(:last-child){border-bottom:2px solid #777}.leaflet-touch .leaflet-control-attribution,.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{box-shadow:none}.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{border:2px solid rgba(0,0,0,.2);background-clip:padding-box}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;font-size:13px;font-size:1.08333em;min-height:1px}.leaflet-popup-content p{margin:1.3em 0}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-top:-1px;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:auto;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#333;box-shadow:0 3px 14px #0006}.leaflet-container a.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#757575;text-decoration:none;background:transparent}.leaflet-container a.leaflet-popup-close-button:hover,.leaflet-container a.leaflet-popup-close-button:focus{color:#585858}.leaflet-popup-scrolled{overflow:auto}.leaflet-oldie .leaflet-popup-content-wrapper{-ms-zoom:1}.leaflet-oldie .leaflet-popup-tip{width:24px;margin:0 auto;-ms-filter:"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";filter:progid:DXImageTransform.Microsoft.Matrix(M11=.70710678,M12=.70710678,M21=-.70710678,M22=.70710678)}.leaflet-oldie .leaflet-control-zoom,.leaflet-oldie .leaflet-control-layers,.leaflet-oldie .leaflet-popup-content-wrapper,.leaflet-oldie .leaflet-popup-tip{border:1px solid #999}.leaflet-div-icon{background:#fff;border:1px solid #666}.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none;box-shadow:0 1px 3px #0006}.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}.leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{position:absolute;pointer-events:none;border:6px solid transparent;background:transparent;content:""}.leaflet-tooltip-bottom{margin-top:6px}.leaflet-tooltip-top{margin-top:-6px}.leaflet-tooltip-bottom:before,.leaflet-tooltip-top:before{left:50%;margin-left:-6px}.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}.leaflet-tooltip-left{margin-left:-6px}.leaflet-tooltip-right{margin-left:6px}.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{top:50%;margin-top:-6px}.leaflet-tooltip-left:before{right:0;margin-right:-12px;border-left-color:#fff}.leaflet-tooltip-right:before{left:0;margin-left:-12px;border-right-color:#fff}@media print{.leaflet-control{-webkit-print-color-adjust:exact;print-color-adjust:exact}}';
+function Fr(c) {
   return c && c.__esModule && Object.prototype.hasOwnProperty.call(c, "default") ? c.default : c;
 }
 var de = { exports: {} };
@@ -596,13 +596,13 @@ var de = { exports: {} };
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
  * (c) 2010-2023 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
-var Dr = de.exports, yo;
-function Hr() {
-  return yo || (yo = 1, (function(c, o) {
-    (function(s, h) {
-      h(o);
-    })(Dr, (function(s) {
-      var h = "1.9.4";
+var jr = de.exports, Po;
+function Wr() {
+  return Po || (Po = 1, (function(c, o) {
+    (function(s, l) {
+      l(o);
+    })(jr, (function(s) {
+      var l = "1.9.4";
       function a(t) {
         var e, i, n, r;
         for (i = 1, n = arguments.length; i < n; i++) {
@@ -619,7 +619,7 @@ function Hr() {
           return t.prototype = e, new t();
         };
       })();
-      function d(t, e) {
+      function f(t, e) {
         var i = Array.prototype.slice;
         if (t.bind)
           return t.bind.apply(t, i.call(arguments, 1));
@@ -633,21 +633,21 @@ function Hr() {
         return "_leaflet_id" in t || (t._leaflet_id = ++m), t._leaflet_id;
       }
       function P(t, e, i) {
-        var n, r, l, f;
-        return f = function() {
-          n = !1, r && (l.apply(i, r), r = !1);
-        }, l = function() {
-          n ? r = arguments : (t.apply(i, arguments), setTimeout(f, e), n = !0);
-        }, l;
+        var n, r, h, d;
+        return d = function() {
+          n = !1, r && (h.apply(i, r), r = !1);
+        }, h = function() {
+          n ? r = arguments : (t.apply(i, arguments), setTimeout(d, e), n = !0);
+        }, h;
       }
       function T(t, e, i) {
-        var n = e[1], r = e[0], l = n - r;
-        return t === n && i ? t : ((t - r) % l + l) % l + r;
+        var n = e[1], r = e[0], h = n - r;
+        return t === n && i ? t : ((t - r) % h + h) % h + r;
       }
       function b() {
         return !1;
       }
-      function D(t, e) {
+      function N(t, e) {
         if (e === !1)
           return t;
         var i = Math.pow(10, e === void 0 ? 6 : e);
@@ -671,9 +671,9 @@ function Hr() {
           n.push(encodeURIComponent(i ? r.toUpperCase() : r) + "=" + encodeURIComponent(t[r]));
         return (!e || e.indexOf("?") === -1 ? "?" : "&") + n.join("&");
       }
-      var Do = /\{ *([\w_ -]+) *\}/g;
-      function ji(t, e) {
-        return t.replace(Do, function(i, n) {
+      var jo = /\{ *([\w_ -]+) *\}/g;
+      function qi(t, e) {
+        return t.replace(jo, function(i, n) {
           var r = e[n];
           if (r === void 0)
             throw new Error("No value provided for variable " + i);
@@ -683,38 +683,38 @@ function Hr() {
       var rt = Array.isArray || function(t) {
         return Object.prototype.toString.call(t) === "[object Array]";
       };
-      function Ye(t, e) {
+      function Xe(t, e) {
         for (var i = 0; i < t.length; i++)
           if (t[i] === e)
             return i;
         return -1;
       }
       var Le = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
-      function Je(t) {
+      function Qe(t) {
         return window["webkit" + t] || window["moz" + t] || window["ms" + t];
       }
-      var Wi = 0;
-      function Ui(t) {
-        var e = +/* @__PURE__ */ new Date(), i = Math.max(0, 16 - (e - Wi));
-        return Wi = e + i, window.setTimeout(t, i);
+      var Gi = 0;
+      function Ki(t) {
+        var e = +/* @__PURE__ */ new Date(), i = Math.max(0, 16 - (e - Gi));
+        return Gi = e + i, window.setTimeout(t, i);
       }
-      var Xe = window.requestAnimationFrame || Je("RequestAnimationFrame") || Ui, Vi = window.cancelAnimationFrame || Je("CancelAnimationFrame") || Je("CancelRequestAnimationFrame") || function(t) {
+      var ti = window.requestAnimationFrame || Qe("RequestAnimationFrame") || Ki, Yi = window.cancelAnimationFrame || Qe("CancelAnimationFrame") || Qe("CancelRequestAnimationFrame") || function(t) {
         window.clearTimeout(t);
       };
       function J(t, e, i) {
-        if (i && Xe === Ui)
+        if (i && ti === Ki)
           t.call(e);
         else
-          return Xe.call(window, d(t, e));
+          return ti.call(window, f(t, e));
       }
       function it(t) {
-        t && Vi.call(window, t);
+        t && Yi.call(window, t);
       }
-      var Ho = {
+      var Wo = {
         __proto__: null,
         extend: a,
         create: u,
-        bind: d,
+        bind: f,
         get lastId() {
           return m;
         },
@@ -722,48 +722,48 @@ function Hr() {
         throttle: P,
         wrapNum: T,
         falseFn: b,
-        formatNum: D,
+        formatNum: N,
         trim: K,
         splitWords: $,
         setOptions: O,
         getParamString: qt,
-        template: ji,
+        template: qi,
         isArray: rt,
-        indexOf: Ye,
+        indexOf: Xe,
         emptyImageUrl: Le,
-        requestFn: Xe,
-        cancelFn: Vi,
+        requestFn: ti,
+        cancelFn: Yi,
         requestAnimFrame: J,
         cancelAnimFrame: it
       };
-      function ft() {
+      function pt() {
       }
-      ft.extend = function(t) {
+      pt.extend = function(t) {
         var e = function() {
           O(this), this.initialize && this.initialize.apply(this, arguments), this.callInitHooks();
         }, i = e.__super__ = this.prototype, n = u(i);
         n.constructor = e, e.prototype = n;
         for (var r in this)
           Object.prototype.hasOwnProperty.call(this, r) && r !== "prototype" && r !== "__super__" && (e[r] = this[r]);
-        return t.statics && a(e, t.statics), t.includes && (Fo(t.includes), a.apply(null, [n].concat(t.includes))), a(n, t), delete n.statics, delete n.includes, n.options && (n.options = i.options ? u(i.options) : {}, a(n.options, t.options)), n._initHooks = [], n.callInitHooks = function() {
+        return t.statics && a(e, t.statics), t.includes && (Uo(t.includes), a.apply(null, [n].concat(t.includes))), a(n, t), delete n.statics, delete n.includes, n.options && (n.options = i.options ? u(i.options) : {}, a(n.options, t.options)), n._initHooks = [], n.callInitHooks = function() {
           if (!this._initHooksCalled) {
             i.callInitHooks && i.callInitHooks.call(this), this._initHooksCalled = !0;
-            for (var l = 0, f = n._initHooks.length; l < f; l++)
-              n._initHooks[l].call(this);
+            for (var h = 0, d = n._initHooks.length; h < d; h++)
+              n._initHooks[h].call(this);
           }
         }, e;
-      }, ft.include = function(t) {
+      }, pt.include = function(t) {
         var e = this.prototype.options;
         return a(this.prototype, t), t.options && (this.prototype.options = e, this.mergeOptions(t.options)), this;
-      }, ft.mergeOptions = function(t) {
+      }, pt.mergeOptions = function(t) {
         return a(this.prototype.options, t), this;
-      }, ft.addInitHook = function(t) {
+      }, pt.addInitHook = function(t) {
         var e = Array.prototype.slice.call(arguments, 1), i = typeof t == "function" ? t : function() {
           this[t].apply(this, e);
         };
         return this.prototype._initHooks = this.prototype._initHooks || [], this.prototype._initHooks.push(i), this;
       };
-      function Fo(t) {
+      function Uo(t) {
         if (!(typeof L > "u" || !L || !L.Mixin)) {
           t = rt(t) ? t : [t];
           for (var e = 0; e < t.length; e++)
@@ -784,7 +784,7 @@ function Hr() {
               this._on(n, t[n], e);
           else {
             t = $(t);
-            for (var r = 0, l = t.length; r < l; r++)
+            for (var r = 0, h = t.length; r < h; r++)
               this._on(t[r], e, i);
           }
           return this;
@@ -808,8 +808,8 @@ function Hr() {
               this._off(n, t[n], e);
           else {
             t = $(t);
-            for (var r = arguments.length === 1, l = 0, f = t.length; l < f; l++)
-              r ? this._off(t[l]) : this._off(t[l], e, i);
+            for (var r = arguments.length === 1, h = 0, d = t.length; h < d; h++)
+              r ? this._off(t[h]) : this._off(t[h], e, i);
           }
           return this;
         },
@@ -826,11 +826,11 @@ function Hr() {
           }
         },
         _off: function(t, e, i) {
-          var n, r, l;
+          var n, r, h;
           if (this._events && (n = this._events[t], !!n)) {
             if (arguments.length === 1) {
               if (this._firingCount)
-                for (r = 0, l = n.length; r < l; r++)
+                for (r = 0, h = n.length; r < h; r++)
                   n[r].fn = b;
               delete this._events[t];
               return;
@@ -839,10 +839,10 @@ function Hr() {
               console.warn("wrong listener type: " + typeof e);
               return;
             }
-            var f = this._listens(t, e, i);
-            if (f !== !1) {
-              var p = n[f];
-              this._firingCount && (p.fn = b, this._events[t] = n = n.slice()), n.splice(f, 1);
+            var d = this._listens(t, e, i);
+            if (d !== !1) {
+              var p = n[d];
+              this._firingCount && (p.fn = b, this._events[t] = n = n.slice()), n.splice(d, 1);
             }
           }
         },
@@ -862,8 +862,8 @@ function Hr() {
             var r = this._events[t];
             if (r) {
               this._firingCount = this._firingCount + 1 || 1;
-              for (var l = 0, f = r.length; l < f; l++) {
-                var p = r[l], _ = p.fn;
+              for (var h = 0, d = r.length; h < d; h++) {
+                var p = r[h], _ = p.fn;
                 p.once && this.off(t, _, p.ctx), _.call(p.ctx || this, n);
               }
               this._firingCount--;
@@ -879,12 +879,12 @@ function Hr() {
           typeof t != "string" && console.warn('"string" type argument expected');
           var r = e;
           typeof e != "function" && (n = !!e, r = void 0, i = void 0);
-          var l = this._events && this._events[t];
-          if (l && l.length && this._listens(t, r, i) !== !1)
+          var h = this._events && this._events[t];
+          if (h && h.length && this._listens(t, r, i) !== !1)
             return !0;
           if (n) {
-            for (var f in this._eventParents)
-              if (this._eventParents[f].listens(t, e, i, n))
+            for (var d in this._eventParents)
+              if (this._eventParents[d].listens(t, e, i, n))
                 return !0;
           }
           return !1;
@@ -897,7 +897,7 @@ function Hr() {
           if (!e)
             return !!n.length;
           i === this && (i = void 0);
-          for (var r = 0, l = n.length; r < l; r++)
+          for (var r = 0, h = n.length; r < h; r++)
             if (n[r].fn === e && n[r].ctx === i)
               return r;
           return !1;
@@ -910,7 +910,7 @@ function Hr() {
               this._on(n, t[n], e, !0);
           else {
             t = $(t);
-            for (var r = 0, l = t.length; r < l; r++)
+            for (var r = 0, h = t.length; r < h; r++)
               this._on(t[r], e, i, !0);
           }
           return this;
@@ -934,11 +934,11 @@ function Hr() {
         }
       };
       et.addEventListener = et.on, et.removeEventListener = et.clearAllEventListeners = et.off, et.addOneTimeEventListener = et.once, et.fireEvent = et.fire, et.hasEventListeners = et.listens;
-      var Gt = ft.extend(et);
+      var Gt = pt.extend(et);
       function S(t, e, i) {
         this.x = i ? Math.round(t) : t, this.y = i ? Math.round(e) : e;
       }
-      var qi = Math.trunc || function(t) {
+      var Ji = Math.trunc || function(t) {
         return t > 0 ? Math.floor(t) : Math.ceil(t);
       };
       S.prototype = {
@@ -1023,7 +1023,7 @@ function Hr() {
           return this.clone()._trunc();
         },
         _trunc: function() {
-          return this.x = qi(this.x), this.y = qi(this.y), this;
+          return this.x = Ji(this.x), this.y = Ji(this.y), this;
         },
         // @method distanceTo(otherPoint: Point): Number
         // Returns the cartesian distance between the current and the given points.
@@ -1045,7 +1045,7 @@ function Hr() {
         // @method toString(): String
         // Returns a string representation of the point for debugging purposes.
         toString: function() {
-          return "Point(" + D(this.x) + ", " + D(this.y) + ")";
+          return "Point(" + N(this.x) + ", " + N(this.y) + ")";
         }
       };
       function k(t, e, i) {
@@ -1120,16 +1120,16 @@ function Hr() {
         // intersect if they have at least one point in common.
         intersects: function(t) {
           t = X(t);
-          var e = this.min, i = this.max, n = t.min, r = t.max, l = r.x >= e.x && n.x <= i.x, f = r.y >= e.y && n.y <= i.y;
-          return l && f;
+          var e = this.min, i = this.max, n = t.min, r = t.max, h = r.x >= e.x && n.x <= i.x, d = r.y >= e.y && n.y <= i.y;
+          return h && d;
         },
         // @method overlaps(otherBounds: Bounds): Boolean
         // Returns `true` if the rectangle overlaps the given bounds. Two bounds
         // overlap if their intersection is an area.
         overlaps: function(t) {
           t = X(t);
-          var e = this.min, i = this.max, n = t.min, r = t.max, l = r.x > e.x && n.x < i.x, f = r.y > e.y && n.y < i.y;
-          return l && f;
+          var e = this.min, i = this.max, n = t.min, r = t.max, h = r.x > e.x && n.x < i.x, d = r.y > e.y && n.y < i.y;
+          return h && d;
         },
         // @method isValid(): Boolean
         // Returns `true` if the bounds are properly initialized.
@@ -1251,15 +1251,15 @@ function Hr() {
         // Returns `true` if the rectangle intersects the given bounds. Two bounds intersect if they have at least one point in common.
         intersects: function(t) {
           t = W(t);
-          var e = this._southWest, i = this._northEast, n = t.getSouthWest(), r = t.getNorthEast(), l = r.lat >= e.lat && n.lat <= i.lat, f = r.lng >= e.lng && n.lng <= i.lng;
-          return l && f;
+          var e = this._southWest, i = this._northEast, n = t.getSouthWest(), r = t.getNorthEast(), h = r.lat >= e.lat && n.lat <= i.lat, d = r.lng >= e.lng && n.lng <= i.lng;
+          return h && d;
         },
         // @method overlaps(otherBounds: LatLngBounds): Boolean
         // Returns `true` if the rectangle overlaps the given bounds. Two bounds overlap if their intersection is an area.
         overlaps: function(t) {
           t = W(t);
-          var e = this._southWest, i = this._northEast, n = t.getSouthWest(), r = t.getNorthEast(), l = r.lat > e.lat && n.lat < i.lat, f = r.lng > e.lng && n.lng < i.lng;
-          return l && f;
+          var e = this._southWest, i = this._northEast, n = t.getSouthWest(), r = t.getNorthEast(), h = r.lat > e.lat && n.lat < i.lat, d = r.lng > e.lng && n.lng < i.lng;
+          return h && d;
         },
         // @method toBBoxString(): String
         // Returns a string with bounding box coordinates in a 'southwest_lng,southwest_lat,northeast_lng,northeast_lat' format. Useful for sending requests to web services that return geo data.
@@ -1301,7 +1301,7 @@ function Hr() {
         // @method toString(): String
         // Returns a string representation of the point (for debugging purposes).
         toString: function(t) {
-          return "LatLng(" + D(this.lat, t) + ", " + D(this.lng, t) + ")";
+          return "LatLng(" + N(this.lat, t) + ", " + N(this.lng, t) + ")";
         },
         // @method distanceTo(otherLatLng: LatLng): Number
         // Returns the distance (in meters) to the given `LatLng` calculated using the [Spherical Law of Cosines](https://en.wikipedia.org/wiki/Spherical_law_of_cosines).
@@ -1329,7 +1329,7 @@ function Hr() {
       function M(t, e, i) {
         return t instanceof B ? t : rt(t) && typeof t[0] != "object" ? t.length === 3 ? new B(t[0], t[1], t[2]) : t.length === 2 ? new B(t[0], t[1]) : null : t == null ? t : typeof t == "object" && "lat" in t ? new B(t.lat, "lng" in t ? t.lng : t.lon, t.alt) : e === void 0 ? null : new B(t, e, i);
       }
-      var pt = {
+      var _t = {
         // @method latLngToPoint(latlng: LatLng, zoom: Number): Point
         // Projects geographical coordinates into pixel coordinates for a given zoom.
         latLngToPoint: function(t, e) {
@@ -1408,10 +1408,10 @@ function Hr() {
           var e = t.getCenter(), i = this.wrapLatLng(e), n = e.lat - i.lat, r = e.lng - i.lng;
           if (n === 0 && r === 0)
             return t;
-          var l = t.getSouthWest(), f = t.getNorthEast(), p = new B(l.lat - n, l.lng - r), _ = new B(f.lat - n, f.lng - r);
+          var h = t.getSouthWest(), d = t.getNorthEast(), p = new B(h.lat - n, h.lng - r), _ = new B(d.lat - n, d.lng - r);
           return new Q(p, _);
         }
-      }, bt = a({}, pt, {
+      }, bt = a({}, _t, {
         wrapLng: [-180, 180],
         // Mean Earth Radius, as recommended for use by
         // the International Union of Geodesy and Geophysics,
@@ -1419,11 +1419,11 @@ function Hr() {
         R: 6371e3,
         // distance between two geographical points using spherical law of cosines approximation
         distance: function(t, e) {
-          var i = Math.PI / 180, n = t.lat * i, r = e.lat * i, l = Math.sin((e.lat - t.lat) * i / 2), f = Math.sin((e.lng - t.lng) * i / 2), p = l * l + Math.cos(n) * Math.cos(r) * f * f, _ = 2 * Math.atan2(Math.sqrt(p), Math.sqrt(1 - p));
+          var i = Math.PI / 180, n = t.lat * i, r = e.lat * i, h = Math.sin((e.lat - t.lat) * i / 2), d = Math.sin((e.lng - t.lng) * i / 2), p = h * h + Math.cos(n) * Math.cos(r) * d * d, _ = 2 * Math.atan2(Math.sqrt(p), Math.sqrt(1 - p));
           return this.R * _;
         }
-      }), Gi = 6378137, Qe = {
-        R: Gi,
+      }), Xi = 6378137, ei = {
+        R: Xi,
         MAX_LATITUDE: 85.0511287798,
         project: function(t) {
           var e = Math.PI / 180, i = this.MAX_LATITUDE, n = Math.max(Math.min(i, t.lat), -i), r = Math.sin(n * e);
@@ -1440,18 +1440,18 @@ function Hr() {
           );
         },
         bounds: (function() {
-          var t = Gi * Math.PI;
+          var t = Xi * Math.PI;
           return new H([-t, -t], [t, t]);
         })()
       };
-      function ti(t, e, i, n) {
+      function ii(t, e, i, n) {
         if (rt(t)) {
           this._a = t[0], this._b = t[1], this._c = t[2], this._d = t[3];
           return;
         }
         this._a = t, this._b = e, this._c = i, this._d = n;
       }
-      ti.prototype = {
+      ii.prototype = {
         // @method transform(point: Point, scale?: Number): Point
         // Returns a transformed point, optionally multiplied by the given scale.
         // Only accepts actual `L.Point` instances, not arrays.
@@ -1473,31 +1473,31 @@ function Hr() {
         }
       };
       function Kt(t, e, i, n) {
-        return new ti(t, e, i, n);
+        return new ii(t, e, i, n);
       }
-      var ei = a({}, bt, {
+      var ni = a({}, bt, {
         code: "EPSG:3857",
-        projection: Qe,
+        projection: ei,
         transformation: (function() {
-          var t = 0.5 / (Math.PI * Qe.R);
+          var t = 0.5 / (Math.PI * ei.R);
           return Kt(t, 0.5, -t, 0.5);
         })()
-      }), jo = a({}, ei, {
+      }), Vo = a({}, ni, {
         code: "EPSG:900913"
       });
-      function Ki(t) {
+      function Qi(t) {
         return document.createElementNS("http://www.w3.org/2000/svg", t);
       }
-      function Yi(t, e) {
-        var i = "", n, r, l, f, p, _;
-        for (n = 0, l = t.length; n < l; n++) {
-          for (p = t[n], r = 0, f = p.length; r < f; r++)
+      function tn(t, e) {
+        var i = "", n, r, h, d, p, _;
+        for (n = 0, h = t.length; n < h; n++) {
+          for (p = t[n], r = 0, d = p.length; r < d; r++)
             _ = p[r], i += (r ? "L" : "M") + _.x + " " + _.y;
           i += e ? w.svg ? "z" : "x" : "";
         }
         return i || "M0 0";
       }
-      var ii = document.documentElement.style, Te = "ActiveXObject" in window, Wo = Te && !document.addEventListener, Ji = "msLaunchUri" in navigator && !("documentMode" in document), ni = ht("webkit"), Xi = ht("android"), Qi = ht("android 2") || ht("android 3"), Uo = parseInt(/WebKit\/([0-9]+)|$/.exec(navigator.userAgent)[1], 10), Vo = Xi && ht("Google") && Uo < 537 && !("AudioNode" in window), oi = !!window.opera, tn = !Ji && ht("chrome"), en = ht("gecko") && !ni && !oi && !Te, qo = !tn && ht("safari"), nn = ht("phantom"), on = "OTransition" in ii, Go = navigator.platform.indexOf("Win") === 0, sn = Te && "transition" in ii, si = "WebKitCSSMatrix" in window && "m11" in new window.WebKitCSSMatrix() && !Qi, rn = "MozPerspective" in ii, Ko = !window.L_DISABLE_3D && (sn || si || rn) && !on && !nn, Yt = typeof orientation < "u" || ht("mobile"), Yo = Yt && ni, Jo = Yt && si, an = !window.PointerEvent && window.MSPointerEvent, ln = !!(window.PointerEvent || an), hn = "ontouchstart" in window || !!window.TouchEvent, Xo = !window.L_NO_TOUCH && (hn || ln), Qo = Yt && oi, ts = Yt && en, es = (window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI) > 1, is = (function() {
+      var oi = document.documentElement.style, Te = "ActiveXObject" in window, qo = Te && !document.addEventListener, en = "msLaunchUri" in navigator && !("documentMode" in document), si = ht("webkit"), nn = ht("android"), on = ht("android 2") || ht("android 3"), Go = parseInt(/WebKit\/([0-9]+)|$/.exec(navigator.userAgent)[1], 10), Ko = nn && ht("Google") && Go < 537 && !("AudioNode" in window), ri = !!window.opera, sn = !en && ht("chrome"), rn = ht("gecko") && !si && !ri && !Te, Yo = !sn && ht("safari"), an = ht("phantom"), ln = "OTransition" in oi, Jo = navigator.platform.indexOf("Win") === 0, hn = Te && "transition" in oi, ai = "WebKitCSSMatrix" in window && "m11" in new window.WebKitCSSMatrix() && !on, cn = "MozPerspective" in oi, Xo = !window.L_DISABLE_3D && (hn || ai || cn) && !ln && !an, Yt = typeof orientation < "u" || ht("mobile"), Qo = Yt && si, ts = Yt && ai, un = !window.PointerEvent && window.MSPointerEvent, dn = !!(window.PointerEvent || un), fn = "ontouchstart" in window || !!window.TouchEvent, es = !window.L_NO_TOUCH && (fn || dn), is = Yt && ri, ns = Yt && rn, os = (window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI) > 1, ss = (function() {
         var t = !1;
         try {
           var e = Object.defineProperty({}, "passive", {
@@ -1509,12 +1509,12 @@ function Hr() {
         } catch {
         }
         return t;
-      })(), ns = (function() {
+      })(), rs = (function() {
         return !!document.createElement("canvas").getContext;
-      })(), ri = !!(document.createElementNS && Ki("svg").createSVGRect), os = !!ri && (function() {
+      })(), li = !!(document.createElementNS && Qi("svg").createSVGRect), as = !!li && (function() {
         var t = document.createElement("div");
         return t.innerHTML = "<svg/>", (t.firstChild && t.firstChild.namespaceURI) === "http://www.w3.org/2000/svg";
-      })(), ss = !ri && (function() {
+      })(), ls = !li && (function() {
         try {
           var t = document.createElement("div");
           t.innerHTML = '<v:shape adj="1"/>';
@@ -1523,114 +1523,114 @@ function Hr() {
         } catch {
           return !1;
         }
-      })(), rs = navigator.platform.indexOf("Mac") === 0, as = navigator.platform.indexOf("Linux") === 0;
+      })(), hs = navigator.platform.indexOf("Mac") === 0, cs = navigator.platform.indexOf("Linux") === 0;
       function ht(t) {
         return navigator.userAgent.toLowerCase().indexOf(t) >= 0;
       }
       var w = {
         ie: Te,
-        ielt9: Wo,
-        edge: Ji,
-        webkit: ni,
-        android: Xi,
-        android23: Qi,
-        androidStock: Vo,
-        opera: oi,
-        chrome: tn,
-        gecko: en,
-        safari: qo,
-        phantom: nn,
-        opera12: on,
-        win: Go,
-        ie3d: sn,
-        webkit3d: si,
-        gecko3d: rn,
-        any3d: Ko,
+        ielt9: qo,
+        edge: en,
+        webkit: si,
+        android: nn,
+        android23: on,
+        androidStock: Ko,
+        opera: ri,
+        chrome: sn,
+        gecko: rn,
+        safari: Yo,
+        phantom: an,
+        opera12: ln,
+        win: Jo,
+        ie3d: hn,
+        webkit3d: ai,
+        gecko3d: cn,
+        any3d: Xo,
         mobile: Yt,
-        mobileWebkit: Yo,
-        mobileWebkit3d: Jo,
-        msPointer: an,
-        pointer: ln,
-        touch: Xo,
-        touchNative: hn,
-        mobileOpera: Qo,
-        mobileGecko: ts,
-        retina: es,
-        passiveEvents: is,
-        canvas: ns,
-        svg: ri,
-        vml: ss,
-        inlineSvg: os,
-        mac: rs,
-        linux: as
-      }, cn = w.msPointer ? "MSPointerDown" : "pointerdown", un = w.msPointer ? "MSPointerMove" : "pointermove", dn = w.msPointer ? "MSPointerUp" : "pointerup", fn = w.msPointer ? "MSPointerCancel" : "pointercancel", ai = {
-        touchstart: cn,
-        touchmove: un,
-        touchend: dn,
-        touchcancel: fn
-      }, pn = {
-        touchstart: fs,
+        mobileWebkit: Qo,
+        mobileWebkit3d: ts,
+        msPointer: un,
+        pointer: dn,
+        touch: es,
+        touchNative: fn,
+        mobileOpera: is,
+        mobileGecko: ns,
+        retina: os,
+        passiveEvents: ss,
+        canvas: rs,
+        svg: li,
+        vml: ls,
+        inlineSvg: as,
+        mac: hs,
+        linux: cs
+      }, pn = w.msPointer ? "MSPointerDown" : "pointerdown", _n = w.msPointer ? "MSPointerMove" : "pointermove", mn = w.msPointer ? "MSPointerUp" : "pointerup", gn = w.msPointer ? "MSPointerCancel" : "pointercancel", hi = {
+        touchstart: pn,
+        touchmove: _n,
+        touchend: mn,
+        touchcancel: gn
+      }, vn = {
+        touchstart: ms,
         touchmove: ke,
         touchend: ke,
         touchcancel: ke
-      }, Ot = {}, _n = !1;
-      function ls(t, e, i) {
-        return e === "touchstart" && ds(), pn[e] ? (i = pn[e].bind(this, i), t.addEventListener(ai[e], i, !1), i) : (console.warn("wrong event specified:", e), b);
+      }, It = {}, yn = !1;
+      function us(t, e, i) {
+        return e === "touchstart" && _s(), vn[e] ? (i = vn[e].bind(this, i), t.addEventListener(hi[e], i, !1), i) : (console.warn("wrong event specified:", e), b);
       }
-      function hs(t, e, i) {
-        if (!ai[e]) {
+      function ds(t, e, i) {
+        if (!hi[e]) {
           console.warn("wrong event specified:", e);
           return;
         }
-        t.removeEventListener(ai[e], i, !1);
+        t.removeEventListener(hi[e], i, !1);
       }
-      function cs(t) {
-        Ot[t.pointerId] = t;
+      function fs(t) {
+        It[t.pointerId] = t;
       }
-      function us(t) {
-        Ot[t.pointerId] && (Ot[t.pointerId] = t);
+      function ps(t) {
+        It[t.pointerId] && (It[t.pointerId] = t);
       }
-      function mn(t) {
-        delete Ot[t.pointerId];
+      function bn(t) {
+        delete It[t.pointerId];
       }
-      function ds() {
-        _n || (document.addEventListener(cn, cs, !0), document.addEventListener(un, us, !0), document.addEventListener(dn, mn, !0), document.addEventListener(fn, mn, !0), _n = !0);
+      function _s() {
+        yn || (document.addEventListener(pn, fs, !0), document.addEventListener(_n, ps, !0), document.addEventListener(mn, bn, !0), document.addEventListener(gn, bn, !0), yn = !0);
       }
       function ke(t, e) {
         if (e.pointerType !== (e.MSPOINTER_TYPE_MOUSE || "mouse")) {
           e.touches = [];
-          for (var i in Ot)
-            e.touches.push(Ot[i]);
+          for (var i in It)
+            e.touches.push(It[i]);
           e.changedTouches = [e], t(e);
         }
       }
-      function fs(t, e) {
+      function ms(t, e) {
         e.MSPOINTER_TYPE_TOUCH && e.pointerType === e.MSPOINTER_TYPE_TOUCH && G(e), ke(t, e);
       }
-      function ps(t) {
+      function gs(t) {
         var e = {}, i, n;
         for (n in t)
           i = t[n], e[n] = i && i.bind ? i.bind(t) : i;
         return t = e, e.type = "dblclick", e.detail = 2, e.isTrusted = !1, e._simulated = !0, e;
       }
-      var _s = 200;
-      function ms(t, e) {
+      var vs = 200;
+      function ys(t, e) {
         t.addEventListener("dblclick", e);
         var i = 0, n;
-        function r(l) {
-          if (l.detail !== 1) {
-            n = l.detail;
+        function r(h) {
+          if (h.detail !== 1) {
+            n = h.detail;
             return;
           }
-          if (!(l.pointerType === "mouse" || l.sourceCapabilities && !l.sourceCapabilities.firesTouchEvents)) {
-            var f = wn(l);
-            if (!(f.some(function(_) {
+          if (!(h.pointerType === "mouse" || h.sourceCapabilities && !h.sourceCapabilities.firesTouchEvents)) {
+            var d = Tn(h);
+            if (!(d.some(function(_) {
               return _ instanceof HTMLLabelElement && _.attributes.for;
-            }) && !f.some(function(_) {
+            }) && !d.some(function(_) {
               return _ instanceof HTMLInputElement || _ instanceof HTMLSelectElement;
             }))) {
               var p = Date.now();
-              p - i <= _s ? (n++, n === 2 && e(ps(l))) : n = 1, i = p;
+              p - i <= vs ? (n++, n === 2 && e(gs(h))) : n = 1, i = p;
             }
           }
         }
@@ -1639,15 +1639,15 @@ function Hr() {
           simDblclick: r
         };
       }
-      function gs(t, e) {
+      function bs(t, e) {
         t.removeEventListener("dblclick", e.dblclick), t.removeEventListener("click", e.simDblclick);
       }
-      var li = Ce(
+      var ci = Ee(
         ["transform", "webkitTransform", "OTransform", "MozTransform", "msTransform"]
-      ), Jt = Ce(
+      ), Jt = Ee(
         ["webkitTransition", "transition", "OTransition", "MozTransition", "msTransition"]
-      ), gn = Jt === "webkitTransition" || Jt === "OTransition" ? Jt + "End" : "transitionend";
-      function vn(t) {
+      ), wn = Jt === "webkitTransition" || Jt === "OTransition" ? Jt + "End" : "transitionend";
+      function xn(t) {
         return typeof t == "string" ? document.getElementById(t) : t;
       }
       function Xt(t, e) {
@@ -1674,38 +1674,38 @@ function Hr() {
         var e = t.parentNode;
         e && e.lastChild !== t && e.appendChild(t);
       }
-      function It(t) {
+      function Zt(t) {
         var e = t.parentNode;
         e && e.firstChild !== t && e.insertBefore(t, e.firstChild);
       }
-      function hi(t, e) {
+      function ui(t, e) {
         if (t.classList !== void 0)
           return t.classList.contains(e);
         var i = Ae(t);
         return i.length > 0 && new RegExp("(^|\\s)" + e + "(\\s|$)").test(i);
       }
-      function C(t, e) {
+      function E(t, e) {
         if (t.classList !== void 0)
           for (var i = $(e), n = 0, r = i.length; n < r; n++)
             t.classList.add(i[n]);
-        else if (!hi(t, e)) {
-          var l = Ae(t);
-          ci(t, (l ? l + " " : "") + e);
+        else if (!ui(t, e)) {
+          var h = Ae(t);
+          di(t, (h ? h + " " : "") + e);
         }
       }
       function j(t, e) {
-        t.classList !== void 0 ? t.classList.remove(e) : ci(t, K((" " + Ae(t) + " ").replace(" " + e + " ", " ")));
+        t.classList !== void 0 ? t.classList.remove(e) : di(t, K((" " + Ae(t) + " ").replace(" " + e + " ", " ")));
       }
-      function ci(t, e) {
+      function di(t, e) {
         t.className.baseVal === void 0 ? t.className = e : t.className.baseVal = e;
       }
       function Ae(t) {
         return t.correspondingElement && (t = t.correspondingElement), t.className.baseVal === void 0 ? t.className : t.className.baseVal;
       }
       function nt(t, e) {
-        "opacity" in t.style ? t.style.opacity = e : "filter" in t.style && vs(t, e);
+        "opacity" in t.style ? t.style.opacity = e : "filter" in t.style && ws(t, e);
       }
-      function vs(t, e) {
+      function ws(t, e) {
         var i = !1, n = "DXImageTransform.Microsoft.Alpha";
         try {
           i = t.filters.item(n);
@@ -1715,7 +1715,7 @@ function Hr() {
         }
         e = Math.round(e * 100), i ? (i.Enabled = e !== 100, i.Opacity = e) : t.style.filter += " progid:" + n + "(opacity=" + e + ")";
       }
-      function Ce(t) {
+      function Ee(t) {
         for (var e = document.documentElement.style, i = 0; i < t.length; i++)
           if (t[i] in e)
             return t[i];
@@ -1723,7 +1723,7 @@ function Hr() {
       }
       function Tt(t, e, i) {
         var n = e || new S(0, 0);
-        t.style[li] = (w.ie3d ? "translate(" + n.x + "px," + n.y + "px)" : "translate3d(" + n.x + "px," + n.y + "px,0)") + (i ? " scale(" + i + ")" : "");
+        t.style[ci] = (w.ie3d ? "translate(" + n.x + "px," + n.y + "px)" : "translate3d(" + n.x + "px," + n.y + "px,0)") + (i ? " scale(" + i + ")" : "");
       }
       function U(t, e) {
         t._leaflet_pos = e, w.any3d ? Tt(t, e) : (t.style.left = e.x + "px", t.style.top = e.y + "px");
@@ -1731,48 +1731,48 @@ function Hr() {
       function kt(t) {
         return t._leaflet_pos || new S(0, 0);
       }
-      var Qt, te, ui;
+      var Qt, te, fi;
       if ("onselectstart" in document)
         Qt = function() {
           A(window, "selectstart", G);
         }, te = function() {
-          N(window, "selectstart", G);
+          D(window, "selectstart", G);
         };
       else {
-        var ee = Ce(
+        var ee = Ee(
           ["userSelect", "WebkitUserSelect", "OUserSelect", "MozUserSelect", "msUserSelect"]
         );
         Qt = function() {
           if (ee) {
             var t = document.documentElement.style;
-            ui = t[ee], t[ee] = "none";
+            fi = t[ee], t[ee] = "none";
           }
         }, te = function() {
-          ee && (document.documentElement.style[ee] = ui, ui = void 0);
+          ee && (document.documentElement.style[ee] = fi, fi = void 0);
         };
       }
-      function di() {
+      function pi() {
         A(window, "dragstart", G);
       }
-      function fi() {
-        N(window, "dragstart", G);
+      function _i() {
+        D(window, "dragstart", G);
       }
-      var Ee, pi;
-      function _i(t) {
+      var Ce, mi;
+      function gi(t) {
         for (; t.tabIndex === -1; )
           t = t.parentNode;
-        t.style && (Me(), Ee = t, pi = t.style.outlineStyle, t.style.outlineStyle = "none", A(window, "keydown", Me));
+        t.style && (Me(), Ce = t, mi = t.style.outlineStyle, t.style.outlineStyle = "none", A(window, "keydown", Me));
       }
       function Me() {
-        Ee && (Ee.style.outlineStyle = pi, Ee = void 0, pi = void 0, N(window, "keydown", Me));
+        Ce && (Ce.style.outlineStyle = mi, Ce = void 0, mi = void 0, D(window, "keydown", Me));
       }
-      function yn(t) {
+      function Pn(t) {
         do
           t = t.parentNode;
         while ((!t.offsetWidth || !t.offsetHeight) && t !== document.body);
         return t;
       }
-      function mi(t) {
+      function vi(t) {
         var e = t.getBoundingClientRect();
         return {
           x: e.width / t.offsetWidth || 1,
@@ -1780,25 +1780,25 @@ function Hr() {
           boundingClientRect: e
         };
       }
-      var ys = {
+      var xs = {
         __proto__: null,
-        TRANSFORM: li,
+        TRANSFORM: ci,
         TRANSITION: Jt,
-        TRANSITION_END: gn,
-        get: vn,
+        TRANSITION_END: wn,
+        get: xn,
         getStyle: Xt,
         create: R,
         remove: F,
         empty: Se,
         toFront: Rt,
-        toBack: It,
-        hasClass: hi,
-        addClass: C,
+        toBack: Zt,
+        hasClass: ui,
+        addClass: E,
         removeClass: j,
-        setClass: ci,
+        setClass: di,
         getClass: Ae,
         setOpacity: nt,
-        testProp: Ce,
+        testProp: Ee,
         setTransform: Tt,
         setPosition: U,
         getPosition: kt,
@@ -1808,74 +1808,74 @@ function Hr() {
         get enableTextSelection() {
           return te;
         },
-        disableImageDrag: di,
-        enableImageDrag: fi,
-        preventOutline: _i,
+        disableImageDrag: pi,
+        enableImageDrag: _i,
+        preventOutline: gi,
         restoreOutline: Me,
-        getSizedParentNode: yn,
-        getScale: mi
+        getSizedParentNode: Pn,
+        getScale: vi
       };
       function A(t, e, i, n) {
         if (e && typeof e == "object")
           for (var r in e)
-            vi(t, r, e[r], i);
+            bi(t, r, e[r], i);
         else {
           e = $(e);
-          for (var l = 0, f = e.length; l < f; l++)
-            vi(t, e[l], i, n);
+          for (var h = 0, d = e.length; h < d; h++)
+            bi(t, e[h], i, n);
         }
         return this;
       }
       var ct = "_leaflet_events";
-      function N(t, e, i, n) {
+      function D(t, e, i, n) {
         if (arguments.length === 1)
-          bn(t), delete t[ct];
+          Ln(t), delete t[ct];
         else if (e && typeof e == "object")
           for (var r in e)
-            yi(t, r, e[r], i);
+            wi(t, r, e[r], i);
         else if (e = $(e), arguments.length === 2)
-          bn(t, function(p) {
-            return Ye(e, p) !== -1;
+          Ln(t, function(p) {
+            return Xe(e, p) !== -1;
           });
         else
-          for (var l = 0, f = e.length; l < f; l++)
-            yi(t, e[l], i, n);
+          for (var h = 0, d = e.length; h < d; h++)
+            wi(t, e[h], i, n);
         return this;
       }
-      function bn(t, e) {
+      function Ln(t, e) {
         for (var i in t[ct]) {
           var n = i.split(/\d/)[0];
-          (!e || e(n)) && yi(t, n, null, null, i);
+          (!e || e(n)) && wi(t, n, null, null, i);
         }
       }
-      var gi = {
+      var yi = {
         mouseenter: "mouseover",
         mouseleave: "mouseout",
         wheel: !("onwheel" in window) && "mousewheel"
       };
-      function vi(t, e, i, n) {
+      function bi(t, e, i, n) {
         var r = e + g(i) + (n ? "_" + g(n) : "");
         if (t[ct] && t[ct][r])
           return this;
-        var l = function(p) {
+        var h = function(p) {
           return i.call(n || t, p || window.event);
-        }, f = l;
-        !w.touchNative && w.pointer && e.indexOf("touch") === 0 ? l = ls(t, e, l) : w.touch && e === "dblclick" ? l = ms(t, l) : "addEventListener" in t ? e === "touchstart" || e === "touchmove" || e === "wheel" || e === "mousewheel" ? t.addEventListener(gi[e] || e, l, w.passiveEvents ? { passive: !1 } : !1) : e === "mouseenter" || e === "mouseleave" ? (l = function(p) {
-          p = p || window.event, wi(t, p) && f(p);
-        }, t.addEventListener(gi[e], l, !1)) : t.addEventListener(e, f, !1) : t.attachEvent("on" + e, l), t[ct] = t[ct] || {}, t[ct][r] = l;
+        }, d = h;
+        !w.touchNative && w.pointer && e.indexOf("touch") === 0 ? h = us(t, e, h) : w.touch && e === "dblclick" ? h = ys(t, h) : "addEventListener" in t ? e === "touchstart" || e === "touchmove" || e === "wheel" || e === "mousewheel" ? t.addEventListener(yi[e] || e, h, w.passiveEvents ? { passive: !1 } : !1) : e === "mouseenter" || e === "mouseleave" ? (h = function(p) {
+          p = p || window.event, Pi(t, p) && d(p);
+        }, t.addEventListener(yi[e], h, !1)) : t.addEventListener(e, d, !1) : t.attachEvent("on" + e, h), t[ct] = t[ct] || {}, t[ct][r] = h;
       }
-      function yi(t, e, i, n, r) {
+      function wi(t, e, i, n, r) {
         r = r || e + g(i) + (n ? "_" + g(n) : "");
-        var l = t[ct] && t[ct][r];
-        if (!l)
+        var h = t[ct] && t[ct][r];
+        if (!h)
           return this;
-        !w.touchNative && w.pointer && e.indexOf("touch") === 0 ? hs(t, e, l) : w.touch && e === "dblclick" ? gs(t, l) : "removeEventListener" in t ? t.removeEventListener(gi[e] || e, l, !1) : t.detachEvent("on" + e, l), t[ct][r] = null;
+        !w.touchNative && w.pointer && e.indexOf("touch") === 0 ? ds(t, e, h) : w.touch && e === "dblclick" ? bs(t, h) : "removeEventListener" in t ? t.removeEventListener(yi[e] || e, h, !1) : t.detachEvent("on" + e, h), t[ct][r] = null;
       }
       function St(t) {
         return t.stopPropagation ? t.stopPropagation() : t.originalEvent ? t.originalEvent._stopped = !0 : t.cancelBubble = !0, this;
       }
-      function bi(t) {
-        return vi(t, "wheel", St), this;
+      function xi(t) {
+        return bi(t, "wheel", St), this;
       }
       function ie(t) {
         return A(t, "mousedown touchstart dblclick contextmenu", St), t._leaflet_disable_click = !0, this;
@@ -1886,17 +1886,17 @@ function Hr() {
       function At(t) {
         return G(t), St(t), this;
       }
-      function wn(t) {
+      function Tn(t) {
         if (t.composedPath)
           return t.composedPath();
         for (var e = [], i = t.target; i; )
           e.push(i), i = i.parentNode;
         return e;
       }
-      function xn(t, e) {
+      function kn(t, e) {
         if (!e)
           return new S(t.clientX, t.clientY);
-        var i = mi(e), n = i.boundingClientRect;
+        var i = vi(e), n = i.boundingClientRect;
         return new S(
           // offset.left/top values are in page scale (like clientX/Y),
           // whereas clientLeft/Top (border width) values are the original values (before CSS scale applies).
@@ -1904,11 +1904,11 @@ function Hr() {
           (t.clientY - n.top) / i.y - e.clientTop
         );
       }
-      var bs = w.linux && w.chrome ? window.devicePixelRatio : w.mac ? window.devicePixelRatio * 3 : window.devicePixelRatio > 0 ? 2 * window.devicePixelRatio : 1;
-      function Pn(t) {
+      var Ps = w.linux && w.chrome ? window.devicePixelRatio : w.mac ? window.devicePixelRatio * 3 : window.devicePixelRatio > 0 ? 2 * window.devicePixelRatio : 1;
+      function Sn(t) {
         return w.edge ? t.wheelDeltaY / 2 : (
           // Don't trust window-geometry-based delta
-          t.deltaY && t.deltaMode === 0 ? -t.deltaY / bs : (
+          t.deltaY && t.deltaMode === 0 ? -t.deltaY / Ps : (
             // Pixels
             t.deltaY && t.deltaMode === 1 ? -t.deltaY * 20 : (
               // Lines
@@ -1932,7 +1932,7 @@ function Hr() {
           )
         );
       }
-      function wi(t, e) {
+      function Pi(t, e) {
         var i = e.relatedTarget;
         if (!i)
           return !0;
@@ -1944,22 +1944,22 @@ function Hr() {
         }
         return i !== t;
       }
-      var ws = {
+      var Ls = {
         __proto__: null,
         on: A,
-        off: N,
+        off: D,
         stopPropagation: St,
-        disableScrollPropagation: bi,
+        disableScrollPropagation: xi,
         disableClickPropagation: ie,
         preventDefault: G,
         stop: At,
-        getPropagationPath: wn,
-        getMousePosition: xn,
-        getWheelDelta: Pn,
-        isExternalTarget: wi,
+        getPropagationPath: Tn,
+        getMousePosition: kn,
+        getWheelDelta: Sn,
+        isExternalTarget: Pi,
         addListener: A,
-        removeListener: N
-      }, Ln = Gt.extend({
+        removeListener: D
+      }, An = Gt.extend({
         // @method run(el: HTMLElement, newPos: Point, duration?: Number, easeLinearity?: Number)
         // Run an animation of a given element to a new position, optionally setting
         // duration in seconds (`0.25` by default) and easing linearity factor (3rd
@@ -1996,7 +1996,7 @@ function Hr() {
           // @option crs: CRS = L.CRS.EPSG3857
           // The [Coordinate Reference System](#crs) to use. Don't change this if you're not
           // sure what it means.
-          crs: ei,
+          crs: ni,
           // @option center: LatLng = undefined
           // Initial geographic center of the map
           center: void 0,
@@ -2068,7 +2068,7 @@ function Hr() {
           trackResize: !0
         },
         initialize: function(t, e) {
-          e = O(this, e), this._handlers = [], this._layers = {}, this._zoomBoundLayers = {}, this._sizeChanged = !0, this._initContainer(t), this._initLayout(), this._onResize = d(this._onResize, this), this._initEvents(), e.maxBounds && this.setMaxBounds(e.maxBounds), e.zoom !== void 0 && (this._zoom = this._limitZoom(e.zoom)), e.center && e.zoom !== void 0 && this.setView(M(e.center), e.zoom, { reset: !0 }), this.callInitHooks(), this._zoomAnimated = Jt && w.any3d && !w.mobileOpera && this.options.zoomAnimation, this._zoomAnimated && (this._createAnimProxy(), A(this._proxy, gn, this._catchTransitionEnd, this)), this._addLayers(this.options.layers);
+          e = O(this, e), this._handlers = [], this._layers = {}, this._zoomBoundLayers = {}, this._sizeChanged = !0, this._initContainer(t), this._initLayout(), this._onResize = f(this._onResize, this), this._initEvents(), e.maxBounds && this.setMaxBounds(e.maxBounds), e.zoom !== void 0 && (this._zoom = this._limitZoom(e.zoom)), e.center && e.zoom !== void 0 && this.setView(M(e.center), e.zoom, { reset: !0 }), this.callInitHooks(), this._zoomAnimated = Jt && w.any3d && !w.mobileOpera && this.options.zoomAnimation, this._zoomAnimated && (this._createAnimProxy(), A(this._proxy, wn, this._catchTransitionEnd, this)), this._addLayers(this.options.layers);
         },
         // @section Methods for modifying map state
         // @method setView(center: LatLng, zoom: Number, options?: Zoom/pan options): this
@@ -2105,7 +2105,7 @@ function Hr() {
         // @method setZoomAround(offset: Point, zoom: Number, options: Zoom options): this
         // Zooms the map while keeping a specified pixel on the map (relative to the top-left corner) stationary.
         setZoomAround: function(t, e, i) {
-          var n = this.getZoomScale(e), r = this.getSize().divideBy(2), l = t instanceof S ? t : this.latLngToContainerPoint(t), f = l.subtract(r).multiplyBy(1 - 1 / n), p = this.containerPointToLatLng(r.add(f));
+          var n = this.getZoomScale(e), r = this.getSize().divideBy(2), h = t instanceof S ? t : this.latLngToContainerPoint(t), d = h.subtract(r).multiplyBy(1 - 1 / n), p = this.containerPointToLatLng(r.add(d));
           return this.setView(p, e, { zoom: i });
         },
         _getBoundsCenterZoom: function(t, e) {
@@ -2116,7 +2116,7 @@ function Hr() {
               center: t.getCenter(),
               zoom: r
             };
-          var l = n.subtract(i).divideBy(2), f = this.project(t.getSouthWest(), r), p = this.project(t.getNorthEast(), r), _ = this.unproject(f.add(p).divideBy(2).add(l), r);
+          var h = n.subtract(i).divideBy(2), d = this.project(t.getSouthWest(), r), p = this.project(t.getNorthEast(), r), _ = this.unproject(d.add(p).divideBy(2).add(h), r);
           return {
             center: _,
             zoom: r
@@ -2149,11 +2149,11 @@ function Hr() {
             return this.fire("moveend");
           if (e.animate !== !0 && !this.getSize().contains(t))
             return this._resetView(this.unproject(this.project(this.getCenter()).add(t)), this.getZoom()), this;
-          if (this._panAnim || (this._panAnim = new Ln(), this._panAnim.on({
+          if (this._panAnim || (this._panAnim = new An(), this._panAnim.on({
             step: this._onPanTransitionStep,
             end: this._onPanTransitionEnd
           }, this)), e.noMoveStart || this.fire("movestart"), e.animate !== !1) {
-            C(this._mapPane, "leaflet-pan-anim");
+            E(this._mapPane, "leaflet-pan-anim");
             var i = this._getMapPanePos().subtract(t).round();
             this._panAnim.run(this._mapPane, i, e.duration || 0.25, e.easeLinearity);
           } else
@@ -2167,12 +2167,12 @@ function Hr() {
           if (i = i || {}, i.animate === !1 || !w.any3d)
             return this.setView(t, e, i);
           this._stop();
-          var n = this.project(this.getCenter()), r = this.project(t), l = this.getSize(), f = this._zoom;
-          t = M(t), e = e === void 0 ? f : e;
-          var p = Math.max(l.x, l.y), _ = p * this.getZoomScale(f, e), v = r.distanceTo(n) || 1, y = 1.42, x = y * y;
-          function E(V) {
-            var je = V ? -1 : 1, hr = V ? _ : p, cr = _ * _ - p * p + je * x * x * v * v, ur = 2 * hr * x * v, zi = cr / ur, oo = Math.sqrt(zi * zi + 1) - zi, dr = oo < 1e-9 ? -18 : Math.log(oo);
-            return dr;
+          var n = this.project(this.getCenter()), r = this.project(t), h = this.getSize(), d = this._zoom;
+          t = M(t), e = e === void 0 ? d : e;
+          var p = Math.max(h.x, h.y), _ = p * this.getZoomScale(d, e), v = r.distanceTo(n) || 1, y = 1.42, x = y * y;
+          function C(V) {
+            var je = V ? -1 : 1, dr = V ? _ : p, fr = _ * _ - p * p + je * x * x * v * v, pr = 2 * dr * x * v, Ii = fr / pr, lo = Math.sqrt(Ii * Ii + 1) - Ii, _r = lo < 1e-9 ? -18 : Math.log(lo);
+            return _r;
           }
           function Y(V) {
             return (Math.exp(V) - Math.exp(-V)) / 2;
@@ -2183,26 +2183,26 @@ function Hr() {
           function st(V) {
             return Y(V) / q(V);
           }
-          var tt = E(0);
-          function Ht(V) {
+          var tt = C(0);
+          function Ft(V) {
             return p * (q(tt) / q(tt + y * V));
           }
-          function sr(V) {
+          function lr(V) {
             return p * (q(tt) * st(tt + y * V) - Y(tt)) / x;
           }
-          function rr(V) {
+          function hr(V) {
             return 1 - Math.pow(1 - V, 1.5);
           }
-          var ar = Date.now(), io = (E(1) - tt) / y, lr = i.duration ? 1e3 * i.duration : 1e3 * io * 0.8;
-          function no() {
-            var V = (Date.now() - ar) / lr, je = rr(V) * io;
-            V <= 1 ? (this._flyToFrame = J(no, this), this._move(
-              this.unproject(n.add(r.subtract(n).multiplyBy(sr(je) / v)), f),
-              this.getScaleZoom(p / Ht(je), f),
+          var cr = Date.now(), ro = (C(1) - tt) / y, ur = i.duration ? 1e3 * i.duration : 1e3 * ro * 0.8;
+          function ao() {
+            var V = (Date.now() - cr) / ur, je = hr(V) * ro;
+            V <= 1 ? (this._flyToFrame = J(ao, this), this._move(
+              this.unproject(n.add(r.subtract(n).multiplyBy(lr(je) / v)), d),
+              this.getScaleZoom(p / Ft(je), d),
               { flyTo: !0 }
             )) : this._move(t, e)._moveEnd(!0);
           }
-          return this._moveStart(!0, i.noMoveStart), no.call(this), this;
+          return this._moveStart(!0, i.noMoveStart), ao.call(this), this;
         },
         // @method flyToBounds(bounds: LatLngBounds, options?: fitBounds options): this
         // Sets the view of the map with a smooth animation like [`flyTo`](#map-flyto),
@@ -2242,10 +2242,10 @@ function Hr() {
         // the map will not be panned.
         panInside: function(t, e) {
           e = e || {};
-          var i = k(e.paddingTopLeft || e.padding || [0, 0]), n = k(e.paddingBottomRight || e.padding || [0, 0]), r = this.project(this.getCenter()), l = this.project(t), f = this.getPixelBounds(), p = X([f.min.add(i), f.max.subtract(n)]), _ = p.getSize();
-          if (!p.contains(l)) {
+          var i = k(e.paddingTopLeft || e.padding || [0, 0]), n = k(e.paddingBottomRight || e.padding || [0, 0]), r = this.project(this.getCenter()), h = this.project(t), d = this.getPixelBounds(), p = X([d.min.add(i), d.max.subtract(n)]), _ = p.getSize();
+          if (!p.contains(h)) {
             this._enforcingBounds = !0;
-            var v = l.subtract(p.getCenter()), y = p.extend(l).getSize().subtract(_);
+            var v = h.subtract(p.getCenter()), y = p.extend(h).getSize().subtract(_);
             r.x += v.x < 0 ? -y.x : y.x, r.y += v.y < 0 ? -y.y : y.y, this.panTo(this.unproject(r), e), this._enforcingBounds = !1;
           }
           return this;
@@ -2271,8 +2271,8 @@ function Hr() {
           }, t === !0 ? { animate: !0 } : t);
           var e = this.getSize();
           this._sizeChanged = !0, this._lastCenter = null;
-          var i = this.getSize(), n = e.divideBy(2).round(), r = i.divideBy(2).round(), l = n.subtract(r);
-          return !l.x && !l.y ? this : (t.animate && t.pan ? this.panBy(l) : (t.pan && this._rawPanBy(l), this.fire("move"), t.debounceMoveend ? (clearTimeout(this._sizeTimer), this._sizeTimer = setTimeout(d(this.fire, this, "moveend"), 200)) : this.fire("moveend")), this.fire("resize", {
+          var i = this.getSize(), n = e.divideBy(2).round(), r = i.divideBy(2).round(), h = n.subtract(r);
+          return !h.x && !h.y ? this : (t.animate && t.pan ? this.panBy(h) : (t.pan && this._rawPanBy(h), this.fire("move"), t.debounceMoveend ? (clearTimeout(this._sizeTimer), this._sizeTimer = setTimeout(f(this.fire, this, "moveend"), 200)) : this.fire("moveend")), this.fire("resize", {
             oldSize: e,
             newSize: i
           }));
@@ -2305,7 +2305,7 @@ function Hr() {
               code: 0,
               message: "Geolocation not supported."
             }), this;
-          var e = d(this._handleGeolocationResponse, this), i = d(this._handleGeolocationError, this);
+          var e = f(this._handleGeolocationResponse, this), i = f(this._handleGeolocationError, this);
           return t.watch ? this._locationWatchId = navigator.geolocation.watchPosition(e, i, t) : navigator.geolocation.getCurrentPosition(e, i, t), this;
         },
         // @method stopLocate(): this
@@ -2326,10 +2326,10 @@ function Hr() {
         },
         _handleGeolocationResponse: function(t) {
           if (this._container._leaflet_id) {
-            var e = t.coords.latitude, i = t.coords.longitude, n = new B(e, i), r = n.toBounds(t.coords.accuracy * 2), l = this._locateOptions;
-            if (l.setView) {
-              var f = this.getBoundsZoom(r);
-              this.setView(n, l.maxZoom ? Math.min(f, l.maxZoom) : f);
+            var e = t.coords.latitude, i = t.coords.longitude, n = new B(e, i), r = n.toBounds(t.coords.accuracy * 2), h = this._locateOptions;
+            if (h.setView) {
+              var d = this.getBoundsZoom(r);
+              this.setView(n, h.maxZoom ? Math.min(d, h.maxZoom) : d);
             }
             var p = {
               latlng: n,
@@ -2412,8 +2412,8 @@ function Hr() {
         // the given bounds in its entirety.
         getBoundsZoom: function(t, e, i) {
           t = W(t), i = k(i || [0, 0]);
-          var n = this.getZoom() || 0, r = this.getMinZoom(), l = this.getMaxZoom(), f = t.getNorthWest(), p = t.getSouthEast(), _ = this.getSize().subtract(i), v = X(this.project(p, n), this.project(f, n)).getSize(), y = w.any3d ? this.options.zoomSnap : 1, x = _.x / v.x, E = _.y / v.y, Y = e ? Math.max(x, E) : Math.min(x, E);
-          return n = this.getScaleZoom(Y, n), y && (n = Math.round(n / (y / 100)) * (y / 100), n = e ? Math.ceil(n / y) * y : Math.floor(n / y) * y), Math.max(r, Math.min(l, n));
+          var n = this.getZoom() || 0, r = this.getMinZoom(), h = this.getMaxZoom(), d = t.getNorthWest(), p = t.getSouthEast(), _ = this.getSize().subtract(i), v = X(this.project(p, n), this.project(d, n)).getSize(), y = w.any3d ? this.options.zoomSnap : 1, x = _.x / v.x, C = _.y / v.y, Y = e ? Math.max(x, C) : Math.min(x, C);
+          return n = this.getScaleZoom(Y, n), y && (n = Math.round(n / (y / 100)) * (y / 100), n = e ? Math.ceil(n / y) * y : Math.floor(n / y) * y), Math.max(r, Math.min(h, n));
         },
         // @method getSize(): Point
         // Returns the current size of the map container (in pixels).
@@ -2560,7 +2560,7 @@ function Hr() {
         // Given a MouseEvent object, returns the pixel coordinate relative to the
         // map container where the event took place.
         mouseEventToContainerPoint: function(t) {
-          return xn(t, this._container);
+          return kn(t, this._container);
         },
         // @method mouseEventToLayerPoint(ev: MouseEvent): Point
         // Given a MouseEvent object, returns the pixel coordinate relative to
@@ -2576,7 +2576,7 @@ function Hr() {
         },
         // map initialization methods
         _initContainer: function(t) {
-          var e = this._container = vn(t);
+          var e = this._container = xn(t);
           if (e) {
             if (e._leaflet_id)
               throw new Error("Map container is already initialized.");
@@ -2585,13 +2585,13 @@ function Hr() {
         },
         _initLayout: function() {
           var t = this._container;
-          this._fadeAnimated = this.options.fadeAnimation && w.any3d, C(t, "leaflet-container" + (w.touch ? " leaflet-touch" : "") + (w.retina ? " leaflet-retina" : "") + (w.ielt9 ? " leaflet-oldie" : "") + (w.safari ? " leaflet-safari" : "") + (this._fadeAnimated ? " leaflet-fade-anim" : ""));
+          this._fadeAnimated = this.options.fadeAnimation && w.any3d, E(t, "leaflet-container" + (w.touch ? " leaflet-touch" : "") + (w.retina ? " leaflet-retina" : "") + (w.ielt9 ? " leaflet-oldie" : "") + (w.safari ? " leaflet-safari" : "") + (this._fadeAnimated ? " leaflet-fade-anim" : ""));
           var e = Xt(t, "position");
           e !== "absolute" && e !== "relative" && e !== "fixed" && e !== "sticky" && (t.style.position = "relative"), this._initPanes(), this._initControlPos && this._initControlPos();
         },
         _initPanes: function() {
           var t = this._panes = {};
-          this._paneRenderers = {}, this._mapPane = this.createPane("mapPane", this._container), U(this._mapPane, new S(0, 0)), this.createPane("tilePane"), this.createPane("overlayPane"), this.createPane("shadowPane"), this.createPane("markerPane"), this.createPane("tooltipPane"), this.createPane("popupPane"), this.options.markerZoomAnimation || (C(t.markerPane, "leaflet-zoom-hide"), C(t.shadowPane, "leaflet-zoom-hide"));
+          this._paneRenderers = {}, this._mapPane = this.createPane("mapPane", this._container), U(this._mapPane, new S(0, 0)), this.createPane("tilePane"), this.createPane("overlayPane"), this.createPane("shadowPane"), this.createPane("markerPane"), this.createPane("tooltipPane"), this.createPane("popupPane"), this.options.markerZoomAnimation || (E(t.markerPane, "leaflet-zoom-hide"), E(t.shadowPane, "leaflet-zoom-hide"));
         },
         // private methods that modify map state
         // @section Map state change events
@@ -2633,7 +2633,7 @@ function Hr() {
         // @section Interaction events
         _initEvents: function(t) {
           this._targets = {}, this._targets[g(this._container)] = this;
-          var e = t ? N : A;
+          var e = t ? D : A;
           e(this._container, "click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu keypress keydown keyup", this._handleDOMEvent, this), this.options.trackResize && e(window, "resize", this._onResize, this), w.any3d && this.options.transform3DLimit && (t ? this.off : this.on).call(this, "moveend", this._onMoveEnd);
         },
         _onResize: function() {
@@ -2652,16 +2652,16 @@ function Hr() {
           Math.max(Math.abs(t.x), Math.abs(t.y)) >= this.options.transform3DLimit && this._resetView(this.getCenter(), this.getZoom());
         },
         _findEventTargets: function(t, e) {
-          for (var i = [], n, r = e === "mouseout" || e === "mouseover", l = t.target || t.srcElement, f = !1; l; ) {
-            if (n = this._targets[g(l)], n && (e === "click" || e === "preclick") && this._draggableMoved(n)) {
-              f = !0;
+          for (var i = [], n, r = e === "mouseout" || e === "mouseover", h = t.target || t.srcElement, d = !1; h; ) {
+            if (n = this._targets[g(h)], n && (e === "click" || e === "preclick") && this._draggableMoved(n)) {
+              d = !0;
               break;
             }
-            if (n && n.listens(e, !0) && (r && !wi(l, t) || (i.push(n), r)) || l === this._container)
+            if (n && n.listens(e, !0) && (r && !Pi(h, t) || (i.push(n), r)) || h === this._container)
               break;
-            l = l.parentNode;
+            h = h.parentNode;
           }
-          return !i.length && !f && !r && this.listens(e, !0) && (i = [this]), i;
+          return !i.length && !d && !r && this.listens(e, !0) && (i = [this]), i;
         },
         _isClickDisabled: function(t) {
           for (; t && t !== this._container; ) {
@@ -2674,7 +2674,7 @@ function Hr() {
           var e = t.target || t.srcElement;
           if (!(!this._loaded || e._leaflet_disable_events || t.type === "click" && this._isClickDisabled(e))) {
             var i = t.type;
-            i === "mousedown" && _i(e), this._fireDOMEvent(t, i);
+            i === "mousedown" && gi(e), this._fireDOMEvent(t, i);
           }
         },
         _mouseEvents: ["click", "dblclick", "mouseover", "mouseout", "contextmenu"],
@@ -2685,9 +2685,9 @@ function Hr() {
           }
           var r = this._findEventTargets(t, e);
           if (i) {
-            for (var l = [], f = 0; f < i.length; f++)
-              i[f].listens(e, !0) && l.push(i[f]);
-            r = l.concat(r);
+            for (var h = [], d = 0; d < i.length; d++)
+              i[d].listens(e, !0) && h.push(i[d]);
+            r = h.concat(r);
           }
           if (r.length) {
             e === "contextmenu" && G(t);
@@ -2698,8 +2698,8 @@ function Hr() {
               var v = p.getLatLng && (!p._radius || p._radius <= 10);
               _.containerPoint = v ? this.latLngToContainerPoint(p.getLatLng()) : this.mouseEventToContainerPoint(t), _.layerPoint = this.containerPointToLayerPoint(_.containerPoint), _.latlng = v ? p.getLatLng() : this.layerPointToLatLng(_.layerPoint);
             }
-            for (f = 0; f < r.length; f++)
-              if (r[f].fire(e, _, !0), _.originalEvent._stopped || r[f].options.bubblingMouseEvents === !1 && Ye(this._mouseEvents, e) !== -1)
+            for (d = 0; d < r.length; d++)
+              if (r[d].fire(e, _, !0), _.originalEvent._stopped || r[d].options.bubblingMouseEvents === !1 && Xe(this._mouseEvents, e) !== -1)
                 return;
           }
         },
@@ -2759,8 +2759,8 @@ function Hr() {
         _limitCenter: function(t, e, i) {
           if (!i)
             return t;
-          var n = this.project(t, e), r = this.getSize().divideBy(2), l = new H(n.subtract(r), n.add(r)), f = this._getBoundsOffset(l, i, e);
-          return Math.abs(f.x) <= 1 && Math.abs(f.y) <= 1 ? t : this.unproject(n.add(f), e);
+          var n = this.project(t, e), r = this.getSize().divideBy(2), h = new H(n.subtract(r), n.add(r)), d = this._getBoundsOffset(h, i, e);
+          return Math.abs(d.x) <= 1 && Math.abs(d.y) <= 1 ? t : this.unproject(n.add(d), e);
         },
         // adjust offset for view to get inside bounds
         _limitOffset: function(t, e) {
@@ -2774,8 +2774,8 @@ function Hr() {
           var n = X(
             this.project(e.getNorthEast(), i),
             this.project(e.getSouthWest(), i)
-          ), r = n.min.subtract(t.min), l = n.max.subtract(t.max), f = this._rebound(r.x, -l.x), p = this._rebound(r.y, -l.y);
-          return new S(f, p);
+          ), r = n.min.subtract(t.min), h = n.max.subtract(t.max), d = this._rebound(r.x, -h.x), p = this._rebound(r.y, -h.y);
+          return new S(d, p);
         },
         _rebound: function(t, e) {
           return t + e > 0 ? Math.round(t - e) / 2 : Math.max(0, Math.ceil(t)) - Math.max(0, Math.floor(e));
@@ -2797,7 +2797,7 @@ function Hr() {
         _createAnimProxy: function() {
           var t = this._proxy = R("div", "leaflet-proxy leaflet-zoom-animated");
           this._panes.mapPane.appendChild(t), this.on("zoomanim", function(e) {
-            var i = li, n = this._proxy.style[i];
+            var i = ci, n = this._proxy.style[i];
             Tt(this._proxy, this.project(e.center, e.zoom), this.getZoomScale(e.zoom, 1)), n === this._proxy.style[i] && this._animatingZoom && this._onZoomTransitionEnd();
           }, this), this.on("load moveend", this._animMoveEnd, this), this._on("unload", this._destroyAnimProxy, this);
         },
@@ -2825,20 +2825,20 @@ function Hr() {
           }, this), !0);
         },
         _animateZoom: function(t, e, i, n) {
-          this._mapPane && (i && (this._animatingZoom = !0, this._animateToCenter = t, this._animateToZoom = e, C(this._mapPane, "leaflet-zoom-anim")), this.fire("zoomanim", {
+          this._mapPane && (i && (this._animatingZoom = !0, this._animateToCenter = t, this._animateToZoom = e, E(this._mapPane, "leaflet-zoom-anim")), this.fire("zoomanim", {
             center: t,
             zoom: e,
             noUpdate: n
-          }), this._tempFireZoomEvent || (this._tempFireZoomEvent = this._zoom !== this._animateToZoom), this._move(this._animateToCenter, this._animateToZoom, void 0, !0), setTimeout(d(this._onZoomTransitionEnd, this), 250));
+          }), this._tempFireZoomEvent || (this._tempFireZoomEvent = this._zoom !== this._animateToZoom), this._move(this._animateToCenter, this._animateToZoom, void 0, !0), setTimeout(f(this._onZoomTransitionEnd, this), 250));
         },
         _onZoomTransitionEnd: function() {
           this._animatingZoom && (this._mapPane && j(this._mapPane, "leaflet-zoom-anim"), this._animatingZoom = !1, this._move(this._animateToCenter, this._animateToZoom, void 0, !0), this._tempFireZoomEvent && this.fire("zoom"), delete this._tempFireZoomEvent, this.fire("move"), this._moveEnd(!0));
         }
       });
-      function xs(t, e) {
+      function Ts(t, e) {
         return new z(t, e);
       }
-      var at = ft.extend({
+      var at = pt.extend({
         // @section
         // @aka Control Options
         options: {
@@ -2875,7 +2875,7 @@ function Hr() {
         addTo: function(t) {
           this.remove(), this._map = t;
           var e = this._container = this.onAdd(t), i = this.getPosition(), n = t._controlCorners[i];
-          return C(e, "leaflet-control"), i.indexOf("bottom") !== -1 ? n.insertBefore(e, n.firstChild) : n.appendChild(e), this._map.on("unload", this.remove, this), this;
+          return E(e, "leaflet-control"), i.indexOf("bottom") !== -1 ? n.insertBefore(e, n.firstChild) : n.appendChild(e), this._map.on("unload", this.remove, this), this;
         },
         // @method remove: this
         // Removes the control from the map it is currently active on.
@@ -2901,9 +2901,9 @@ function Hr() {
         },
         _initControlPos: function() {
           var t = this._controlCorners = {}, e = "leaflet-", i = this._controlContainer = R("div", e + "control-container", this._container);
-          function n(r, l) {
-            var f = e + r + " " + e + l;
-            t[r + l] = R("div", f, i);
+          function n(r, h) {
+            var d = e + r + " " + e + h;
+            t[r + h] = R("div", d, i);
           }
           n("top", "left"), n("top", "right"), n("bottom", "left"), n("bottom", "right");
         },
@@ -2913,7 +2913,7 @@ function Hr() {
           F(this._controlContainer), delete this._controlCorners, delete this._controlContainer;
         }
       });
-      var Tn = at.extend({
+      var En = at.extend({
         // @section
         // @aka Control.Layers options
         options: {
@@ -2982,9 +2982,9 @@ function Hr() {
         // @method expand(): this
         // Expand the control container if collapsed.
         expand: function() {
-          C(this._container, "leaflet-control-layers-expanded"), this._section.style.height = null;
+          E(this._container, "leaflet-control-layers-expanded"), this._section.style.height = null;
           var t = this._map.getSize().y - (this._container.offsetTop + 50);
-          return t < this._section.clientHeight ? (C(this._section, "leaflet-control-layers-scrollbar"), this._section.style.height = t + "px") : j(this._section, "leaflet-control-layers-scrollbar"), this._checkDisabledLayers(), this;
+          return t < this._section.clientHeight ? (E(this._section, "leaflet-control-layers-scrollbar"), this._section.style.height = t + "px") : j(this._section, "leaflet-control-layers-scrollbar"), this._checkDisabledLayers(), this;
         },
         // @method collapse(): this
         // Collapse the control container if expanded.
@@ -2993,7 +2993,7 @@ function Hr() {
         },
         _initLayout: function() {
           var t = "leaflet-control-layers", e = this._container = R("div", t), i = this.options.collapsed;
-          e.setAttribute("aria-haspopup", !0), ie(e), bi(e);
+          e.setAttribute("aria-haspopup", !0), ie(e), xi(e);
           var n = this._section = R("section", t + "-list");
           i && (this._map.on("click", this.collapse, this), A(e, {
             mouseenter: this._expandSafely,
@@ -3001,12 +3001,12 @@ function Hr() {
           }, this));
           var r = this._layersLink = R("a", t + "-toggle", e);
           r.href = "#", r.title = "Layers", r.setAttribute("role", "button"), A(r, {
-            keydown: function(l) {
-              l.keyCode === 13 && this._expandSafely();
+            keydown: function(h) {
+              h.keyCode === 13 && this._expandSafely();
             },
             // Certain screen readers intercept the key event and instead send a click event
-            click: function(l) {
-              G(l), this._expandSafely();
+            click: function(h) {
+              G(h), this._expandSafely();
             }
           }, this), i || this.expand(), this._baseLayersList = R("div", t + "-base", n), this._separator = R("div", t + "-separator", n), this._overlaysList = R("div", t + "-overlays", n), e.appendChild(n);
         },
@@ -3020,7 +3020,7 @@ function Hr() {
             layer: t,
             name: e,
             overlay: i
-          }), this.options.sortLayers && this._layers.sort(d(function(n, r) {
+          }), this.options.sortLayers && this._layers.sort(f(function(n, r) {
             return this.options.sortFunction(n.layer, r.layer, n.name, r.name);
           }, this)), this.options.autoZIndex && t.setZIndex && (this._lastZIndex++, t.setZIndex(this._lastZIndex)), this._expandIfNotCollapsed();
         },
@@ -3048,21 +3048,21 @@ function Hr() {
           t.overlay ? (n = document.createElement("input"), n.type = "checkbox", n.className = "leaflet-control-layers-selector", n.defaultChecked = i) : n = this._createRadioElement("leaflet-base-layers_" + g(this), i), this._layerControlInputs.push(n), n.layerId = g(t.layer), A(n, "click", this._onInputClick, this);
           var r = document.createElement("span");
           r.innerHTML = " " + t.name;
-          var l = document.createElement("span");
-          e.appendChild(l), l.appendChild(n), l.appendChild(r);
-          var f = t.overlay ? this._overlaysList : this._baseLayersList;
-          return f.appendChild(e), this._checkDisabledLayers(), e;
+          var h = document.createElement("span");
+          e.appendChild(h), h.appendChild(n), h.appendChild(r);
+          var d = t.overlay ? this._overlaysList : this._baseLayersList;
+          return d.appendChild(e), this._checkDisabledLayers(), e;
         },
         _onInputClick: function() {
           if (!this._preventClick) {
             var t = this._layerControlInputs, e, i, n = [], r = [];
             this._handlingClick = !0;
-            for (var l = t.length - 1; l >= 0; l--)
-              e = t[l], i = this._getLayer(e.layerId).layer, e.checked ? n.push(i) : e.checked || r.push(i);
-            for (l = 0; l < r.length; l++)
-              this._map.hasLayer(r[l]) && this._map.removeLayer(r[l]);
-            for (l = 0; l < n.length; l++)
-              this._map.hasLayer(n[l]) || this._map.addLayer(n[l]);
+            for (var h = t.length - 1; h >= 0; h--)
+              e = t[h], i = this._getLayer(e.layerId).layer, e.checked ? n.push(i) : e.checked || r.push(i);
+            for (h = 0; h < r.length; h++)
+              this._map.hasLayer(r[h]) && this._map.removeLayer(r[h]);
+            for (h = 0; h < n.length; h++)
+              this._map.hasLayer(n[h]) || this._map.addLayer(n[h]);
             this._handlingClick = !1, this._refocusOnMap();
           }
         },
@@ -3078,12 +3078,12 @@ function Hr() {
           this._preventClick = !0, A(t, "click", G), this.expand();
           var e = this;
           setTimeout(function() {
-            N(t, "click", G), e._preventClick = !1;
+            D(t, "click", G), e._preventClick = !1;
           });
         }
-      }), Ps = function(t, e, i) {
-        return new Tn(t, e, i);
-      }, xi = at.extend({
+      }), ks = function(t, e, i) {
+        return new En(t, e, i);
+      }, Li = at.extend({
         // @section
         // @aka Control.Zoom options
         options: {
@@ -3133,22 +3133,22 @@ function Hr() {
           !this._disabled && this._map._zoom > this._map.getMinZoom() && this._map.zoomOut(this._map.options.zoomDelta * (t.shiftKey ? 3 : 1));
         },
         _createButton: function(t, e, i, n, r) {
-          var l = R("a", i, n);
-          return l.innerHTML = t, l.href = "#", l.title = e, l.setAttribute("role", "button"), l.setAttribute("aria-label", e), ie(l), A(l, "click", At), A(l, "click", r, this), A(l, "click", this._refocusOnMap, this), l;
+          var h = R("a", i, n);
+          return h.innerHTML = t, h.href = "#", h.title = e, h.setAttribute("role", "button"), h.setAttribute("aria-label", e), ie(h), A(h, "click", At), A(h, "click", r, this), A(h, "click", this._refocusOnMap, this), h;
         },
         _updateDisabled: function() {
           var t = this._map, e = "leaflet-disabled";
-          j(this._zoomInButton, e), j(this._zoomOutButton, e), this._zoomInButton.setAttribute("aria-disabled", "false"), this._zoomOutButton.setAttribute("aria-disabled", "false"), (this._disabled || t._zoom === t.getMinZoom()) && (C(this._zoomOutButton, e), this._zoomOutButton.setAttribute("aria-disabled", "true")), (this._disabled || t._zoom === t.getMaxZoom()) && (C(this._zoomInButton, e), this._zoomInButton.setAttribute("aria-disabled", "true"));
+          j(this._zoomInButton, e), j(this._zoomOutButton, e), this._zoomInButton.setAttribute("aria-disabled", "false"), this._zoomOutButton.setAttribute("aria-disabled", "false"), (this._disabled || t._zoom === t.getMinZoom()) && (E(this._zoomOutButton, e), this._zoomOutButton.setAttribute("aria-disabled", "true")), (this._disabled || t._zoom === t.getMaxZoom()) && (E(this._zoomInButton, e), this._zoomInButton.setAttribute("aria-disabled", "true"));
         }
       });
       z.mergeOptions({
         zoomControl: !0
       }), z.addInitHook(function() {
-        this.options.zoomControl && (this.zoomControl = new xi(), this.addControl(this.zoomControl));
+        this.options.zoomControl && (this.zoomControl = new Li(), this.addControl(this.zoomControl));
       });
-      var Ls = function(t) {
-        return new xi(t);
-      }, kn = at.extend({
+      var Ss = function(t) {
+        return new Li(t);
+      }, Cn = at.extend({
         // @section
         // @aka Control.Scale options
         options: {
@@ -3200,16 +3200,16 @@ function Hr() {
           var e = Math.pow(10, (Math.floor(t) + "").length - 1), i = t / e;
           return i = i >= 10 ? 10 : i >= 5 ? 5 : i >= 3 ? 3 : i >= 2 ? 2 : 1, e * i;
         }
-      }), Ts = function(t) {
-        return new kn(t);
-      }, ks = '<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" class="leaflet-attribution-flag"><path fill="#4C7BE1" d="M0 0h12v4H0z"/><path fill="#FFD500" d="M0 4h12v3H0z"/><path fill="#E0BC00" d="M0 7h12v1H0z"/></svg>', Pi = at.extend({
+      }), As = function(t) {
+        return new Cn(t);
+      }, Es = '<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" class="leaflet-attribution-flag"><path fill="#4C7BE1" d="M0 0h12v4H0z"/><path fill="#FFD500" d="M0 4h12v3H0z"/><path fill="#E0BC00" d="M0 7h12v1H0z"/></svg>', Ti = at.extend({
         // @section
         // @aka Control.Attribution options
         options: {
           position: "bottomright",
           // @option prefix: String|false = 'Leaflet'
           // The HTML text shown before the attributions. Pass `false` to disable.
-          prefix: '<a href="https://leafletjs.com" title="A JavaScript library for interactive maps">' + (w.inlineSvg ? ks + " " : "") + "Leaflet</a>"
+          prefix: '<a href="https://leafletjs.com" title="A JavaScript library for interactive maps">' + (w.inlineSvg ? Es + " " : "") + "Leaflet</a>"
         },
         initialize: function(t) {
           O(this, t), this._attributions = {};
@@ -3256,13 +3256,13 @@ function Hr() {
       z.mergeOptions({
         attributionControl: !0
       }), z.addInitHook(function() {
-        this.options.attributionControl && new Pi().addTo(this);
+        this.options.attributionControl && new Ti().addTo(this);
       });
-      var Ss = function(t) {
-        return new Pi(t);
+      var Cs = function(t) {
+        return new Ti(t);
       };
-      at.Layers = Tn, at.Zoom = xi, at.Scale = kn, at.Attribution = Pi, ne.layers = Ps, ne.zoom = Ls, ne.scale = Ts, ne.attribution = Ss;
-      var ut = ft.extend({
+      at.Layers = En, at.Zoom = Li, at.Scale = Cn, at.Attribution = Ti, ne.layers = ks, ne.zoom = Ss, ne.scale = As, ne.attribution = Cs;
+      var ut = pt.extend({
         initialize: function(t) {
           this._map = t;
         },
@@ -3291,7 +3291,7 @@ function Hr() {
       ut.addTo = function(t, e) {
         return t.addHandler(e, this), this;
       };
-      var As = { Events: et }, Sn = w.touch ? "touchstart mousedown" : "mousedown", wt = Gt.extend({
+      var Ms = { Events: et }, Mn = w.touch ? "touchstart mousedown" : "mousedown", wt = Gt.extend({
         options: {
           // @section
           // @aka Draggable options
@@ -3308,23 +3308,23 @@ function Hr() {
         // @method enable()
         // Enables the dragging ability
         enable: function() {
-          this._enabled || (A(this._dragStartTarget, Sn, this._onDown, this), this._enabled = !0);
+          this._enabled || (A(this._dragStartTarget, Mn, this._onDown, this), this._enabled = !0);
         },
         // @method disable()
         // Disables the dragging ability
         disable: function() {
-          this._enabled && (wt._dragging === this && this.finishDrag(!0), N(this._dragStartTarget, Sn, this._onDown, this), this._enabled = !1, this._moved = !1);
+          this._enabled && (wt._dragging === this && this.finishDrag(!0), D(this._dragStartTarget, Mn, this._onDown, this), this._enabled = !1, this._moved = !1);
         },
         _onDown: function(t) {
-          if (this._enabled && (this._moved = !1, !hi(this._element, "leaflet-zoom-anim"))) {
+          if (this._enabled && (this._moved = !1, !ui(this._element, "leaflet-zoom-anim"))) {
             if (t.touches && t.touches.length !== 1) {
               wt._dragging === this && this.finishDrag();
               return;
             }
-            if (!(wt._dragging || t.shiftKey || t.which !== 1 && t.button !== 1 && !t.touches) && (wt._dragging = this, this._preventOutline && _i(this._element), di(), Qt(), !this._moving)) {
+            if (!(wt._dragging || t.shiftKey || t.which !== 1 && t.button !== 1 && !t.touches) && (wt._dragging = this, this._preventOutline && gi(this._element), pi(), Qt(), !this._moving)) {
               this.fire("down");
-              var e = t.touches ? t.touches[0] : t, i = yn(this._element);
-              this._startPoint = new S(e.clientX, e.clientY), this._startPos = kt(this._element), this._parentScale = mi(i);
+              var e = t.touches ? t.touches[0] : t, i = Pn(this._element);
+              this._startPoint = new S(e.clientX, e.clientY), this._startPos = kt(this._element), this._parentScale = vi(i);
               var n = t.type === "mousedown";
               A(document, n ? "mousemove" : "touchmove", this._onMove, this), A(document, n ? "mouseup" : "touchend touchcancel", this._onUp, this);
             }
@@ -3337,7 +3337,7 @@ function Hr() {
               return;
             }
             var e = t.touches && t.touches.length === 1 ? t.touches[0] : t, i = new S(e.clientX, e.clientY)._subtract(this._startPoint);
-            !i.x && !i.y || Math.abs(i.x) + Math.abs(i.y) < this.options.clickTolerance || (i.x /= this._parentScale.x, i.y /= this._parentScale.y, G(t), this._moved || (this.fire("dragstart"), this._moved = !0, C(document.body, "leaflet-dragging"), this._lastTarget = t.target || t.srcElement, window.SVGElementInstance && this._lastTarget instanceof window.SVGElementInstance && (this._lastTarget = this._lastTarget.correspondingUseElement), C(this._lastTarget, "leaflet-drag-target")), this._newPos = this._startPos.add(i), this._moving = !0, this._lastEvent = t, this._updatePosition());
+            !i.x && !i.y || Math.abs(i.x) + Math.abs(i.y) < this.options.clickTolerance || (i.x /= this._parentScale.x, i.y /= this._parentScale.y, G(t), this._moved || (this.fire("dragstart"), this._moved = !0, E(document.body, "leaflet-dragging"), this._lastTarget = t.target || t.srcElement, window.SVGElementInstance && this._lastTarget instanceof window.SVGElementInstance && (this._lastTarget = this._lastTarget.correspondingUseElement), E(this._lastTarget, "leaflet-drag-target")), this._newPos = this._startPos.add(i), this._moving = !0, this._lastEvent = t, this._updatePosition());
           }
         },
         _updatePosition: function() {
@@ -3348,7 +3348,7 @@ function Hr() {
           this._enabled && this.finishDrag();
         },
         finishDrag: function(t) {
-          j(document.body, "leaflet-dragging"), this._lastTarget && (j(this._lastTarget, "leaflet-drag-target"), this._lastTarget = null), N(document, "mousemove touchmove", this._onMove, this), N(document, "mouseup touchend touchcancel", this._onUp, this), fi(), te();
+          j(document.body, "leaflet-dragging"), this._lastTarget && (j(this._lastTarget, "leaflet-drag-target"), this._lastTarget = null), D(document, "mousemove touchmove", this._onMove, this), D(document, "mouseup touchend touchcancel", this._onUp, this), _i(), te();
           var e = this._moved && this._moving;
           this._moving = !1, wt._dragging = !1, e && this.fire("dragend", {
             noInertia: t,
@@ -3356,119 +3356,119 @@ function Hr() {
           });
         }
       });
-      function An(t, e, i) {
-        var n, r = [1, 4, 2, 8], l, f, p, _, v, y, x, E;
-        for (l = 0, y = t.length; l < y; l++)
-          t[l]._code = Ct(t[l], e);
+      function zn(t, e, i) {
+        var n, r = [1, 4, 2, 8], h, d, p, _, v, y, x, C;
+        for (h = 0, y = t.length; h < y; h++)
+          t[h]._code = Et(t[h], e);
         for (p = 0; p < 4; p++) {
-          for (x = r[p], n = [], l = 0, y = t.length, f = y - 1; l < y; f = l++)
-            _ = t[l], v = t[f], _._code & x ? v._code & x || (E = ze(v, _, x, e, i), E._code = Ct(E, e), n.push(E)) : (v._code & x && (E = ze(v, _, x, e, i), E._code = Ct(E, e), n.push(E)), n.push(_));
+          for (x = r[p], n = [], h = 0, y = t.length, d = y - 1; h < y; d = h++)
+            _ = t[h], v = t[d], _._code & x ? v._code & x || (C = ze(v, _, x, e, i), C._code = Et(C, e), n.push(C)) : (v._code & x && (C = ze(v, _, x, e, i), C._code = Et(C, e), n.push(C)), n.push(_));
           t = n;
         }
         return t;
       }
-      function Cn(t, e) {
-        var i, n, r, l, f, p, _, v, y;
+      function On(t, e) {
+        var i, n, r, h, d, p, _, v, y;
         if (!t || t.length === 0)
           throw new Error("latlngs not passed");
         ot(t) || (console.warn("latlngs are not flat! Only the first ring will be used"), t = t[0]);
-        var x = M([0, 0]), E = W(t), Y = E.getNorthWest().distanceTo(E.getSouthWest()) * E.getNorthEast().distanceTo(E.getNorthWest());
-        Y < 1700 && (x = Li(t));
+        var x = M([0, 0]), C = W(t), Y = C.getNorthWest().distanceTo(C.getSouthWest()) * C.getNorthEast().distanceTo(C.getNorthWest());
+        Y < 1700 && (x = ki(t));
         var q = t.length, st = [];
         for (i = 0; i < q; i++) {
           var tt = M(t[i]);
           st.push(e.project(M([tt.lat - x.lat, tt.lng - x.lng])));
         }
         for (p = _ = v = 0, i = 0, n = q - 1; i < q; n = i++)
-          r = st[i], l = st[n], f = r.y * l.x - l.y * r.x, _ += (r.x + l.x) * f, v += (r.y + l.y) * f, p += f * 3;
+          r = st[i], h = st[n], d = r.y * h.x - h.y * r.x, _ += (r.x + h.x) * d, v += (r.y + h.y) * d, p += d * 3;
         p === 0 ? y = st[0] : y = [_ / p, v / p];
-        var Ht = e.unproject(k(y));
-        return M([Ht.lat + x.lat, Ht.lng + x.lng]);
+        var Ft = e.unproject(k(y));
+        return M([Ft.lat + x.lat, Ft.lng + x.lng]);
       }
-      function Li(t) {
+      function ki(t) {
         for (var e = 0, i = 0, n = 0, r = 0; r < t.length; r++) {
-          var l = M(t[r]);
-          e += l.lat, i += l.lng, n++;
+          var h = M(t[r]);
+          e += h.lat, i += h.lng, n++;
         }
         return M([e / n, i / n]);
       }
-      var Cs = {
+      var zs = {
         __proto__: null,
-        clipPolygon: An,
-        polygonCenter: Cn,
-        centroid: Li
+        clipPolygon: zn,
+        polygonCenter: On,
+        centroid: ki
       };
-      function En(t, e) {
+      function In(t, e) {
         if (!e || !t.length)
           return t.slice();
         var i = e * e;
-        return t = zs(t, i), t = Ms(t, i), t;
+        return t = Rs(t, i), t = Is(t, i), t;
       }
-      function Mn(t, e, i) {
+      function Rn(t, e, i) {
         return Math.sqrt(oe(t, e, i, !0));
       }
-      function Es(t, e, i) {
+      function Os(t, e, i) {
         return oe(t, e, i);
       }
-      function Ms(t, e) {
+      function Is(t, e) {
         var i = t.length, n = typeof Uint8Array < "u" ? Uint8Array : Array, r = new n(i);
-        r[0] = r[i - 1] = 1, Ti(t, r, e, 0, i - 1);
-        var l, f = [];
-        for (l = 0; l < i; l++)
-          r[l] && f.push(t[l]);
-        return f;
+        r[0] = r[i - 1] = 1, Si(t, r, e, 0, i - 1);
+        var h, d = [];
+        for (h = 0; h < i; h++)
+          r[h] && d.push(t[h]);
+        return d;
       }
-      function Ti(t, e, i, n, r) {
-        var l = 0, f, p, _;
+      function Si(t, e, i, n, r) {
+        var h = 0, d, p, _;
         for (p = n + 1; p <= r - 1; p++)
-          _ = oe(t[p], t[n], t[r], !0), _ > l && (f = p, l = _);
-        l > i && (e[f] = 1, Ti(t, e, i, n, f), Ti(t, e, i, f, r));
+          _ = oe(t[p], t[n], t[r], !0), _ > h && (d = p, h = _);
+        h > i && (e[d] = 1, Si(t, e, i, n, d), Si(t, e, i, d, r));
       }
-      function zs(t, e) {
-        for (var i = [t[0]], n = 1, r = 0, l = t.length; n < l; n++)
-          Os(t[n], t[r]) > e && (i.push(t[n]), r = n);
-        return r < l - 1 && i.push(t[l - 1]), i;
+      function Rs(t, e) {
+        for (var i = [t[0]], n = 1, r = 0, h = t.length; n < h; n++)
+          Zs(t[n], t[r]) > e && (i.push(t[n]), r = n);
+        return r < h - 1 && i.push(t[h - 1]), i;
       }
-      var zn;
-      function On(t, e, i, n, r) {
-        var l = n ? zn : Ct(t, i), f = Ct(e, i), p, _, v;
-        for (zn = f; ; ) {
-          if (!(l | f))
+      var Zn;
+      function $n(t, e, i, n, r) {
+        var h = n ? Zn : Et(t, i), d = Et(e, i), p, _, v;
+        for (Zn = d; ; ) {
+          if (!(h | d))
             return [t, e];
-          if (l & f)
+          if (h & d)
             return !1;
-          p = l || f, _ = ze(t, e, p, i, r), v = Ct(_, i), p === l ? (t = _, l = v) : (e = _, f = v);
+          p = h || d, _ = ze(t, e, p, i, r), v = Et(_, i), p === h ? (t = _, h = v) : (e = _, d = v);
         }
       }
       function ze(t, e, i, n, r) {
-        var l = e.x - t.x, f = e.y - t.y, p = n.min, _ = n.max, v, y;
-        return i & 8 ? (v = t.x + l * (_.y - t.y) / f, y = _.y) : i & 4 ? (v = t.x + l * (p.y - t.y) / f, y = p.y) : i & 2 ? (v = _.x, y = t.y + f * (_.x - t.x) / l) : i & 1 && (v = p.x, y = t.y + f * (p.x - t.x) / l), new S(v, y, r);
+        var h = e.x - t.x, d = e.y - t.y, p = n.min, _ = n.max, v, y;
+        return i & 8 ? (v = t.x + h * (_.y - t.y) / d, y = _.y) : i & 4 ? (v = t.x + h * (p.y - t.y) / d, y = p.y) : i & 2 ? (v = _.x, y = t.y + d * (_.x - t.x) / h) : i & 1 && (v = p.x, y = t.y + d * (p.x - t.x) / h), new S(v, y, r);
       }
-      function Ct(t, e) {
+      function Et(t, e) {
         var i = 0;
         return t.x < e.min.x ? i |= 1 : t.x > e.max.x && (i |= 2), t.y < e.min.y ? i |= 4 : t.y > e.max.y && (i |= 8), i;
       }
-      function Os(t, e) {
+      function Zs(t, e) {
         var i = e.x - t.x, n = e.y - t.y;
         return i * i + n * n;
       }
       function oe(t, e, i, n) {
-        var r = e.x, l = e.y, f = i.x - r, p = i.y - l, _ = f * f + p * p, v;
-        return _ > 0 && (v = ((t.x - r) * f + (t.y - l) * p) / _, v > 1 ? (r = i.x, l = i.y) : v > 0 && (r += f * v, l += p * v)), f = t.x - r, p = t.y - l, n ? f * f + p * p : new S(r, l);
+        var r = e.x, h = e.y, d = i.x - r, p = i.y - h, _ = d * d + p * p, v;
+        return _ > 0 && (v = ((t.x - r) * d + (t.y - h) * p) / _, v > 1 ? (r = i.x, h = i.y) : v > 0 && (r += d * v, h += p * v)), d = t.x - r, p = t.y - h, n ? d * d + p * p : new S(r, h);
       }
       function ot(t) {
         return !rt(t[0]) || typeof t[0][0] != "object" && typeof t[0][0] < "u";
       }
-      function Rn(t) {
+      function Bn(t) {
         return console.warn("Deprecated use of _flat, please use L.LineUtil.isFlat instead."), ot(t);
       }
-      function In(t, e) {
-        var i, n, r, l, f, p, _, v;
+      function Nn(t, e) {
+        var i, n, r, h, d, p, _, v;
         if (!t || t.length === 0)
           throw new Error("latlngs not passed");
         ot(t) || (console.warn("latlngs are not flat! Only the first ring will be used"), t = t[0]);
-        var y = M([0, 0]), x = W(t), E = x.getNorthWest().distanceTo(x.getSouthWest()) * x.getNorthEast().distanceTo(x.getNorthWest());
-        E < 1700 && (y = Li(t));
+        var y = M([0, 0]), x = W(t), C = x.getNorthWest().distanceTo(x.getSouthWest()) * x.getNorthEast().distanceTo(x.getNorthWest());
+        C < 1700 && (y = ki(t));
         var Y = t.length, q = [];
         for (i = 0; i < Y; i++) {
           var st = M(t[i]);
@@ -3479,30 +3479,30 @@ function Hr() {
         if (n === 0)
           v = q[0];
         else
-          for (i = 0, l = 0; i < Y - 1; i++)
-            if (f = q[i], p = q[i + 1], r = f.distanceTo(p), l += r, l > n) {
-              _ = (l - n) / r, v = [
-                p.x - _ * (p.x - f.x),
-                p.y - _ * (p.y - f.y)
+          for (i = 0, h = 0; i < Y - 1; i++)
+            if (d = q[i], p = q[i + 1], r = d.distanceTo(p), h += r, h > n) {
+              _ = (h - n) / r, v = [
+                p.x - _ * (p.x - d.x),
+                p.y - _ * (p.y - d.y)
               ];
               break;
             }
         var tt = e.unproject(k(v));
         return M([tt.lat + y.lat, tt.lng + y.lng]);
       }
-      var Rs = {
+      var $s = {
         __proto__: null,
-        simplify: En,
-        pointToSegmentDistance: Mn,
-        closestPointOnSegment: Es,
-        clipSegment: On,
+        simplify: In,
+        pointToSegmentDistance: Rn,
+        closestPointOnSegment: Os,
+        clipSegment: $n,
         _getEdgeIntersection: ze,
-        _getBitCode: Ct,
+        _getBitCode: Et,
         _sqClosestPointOnSegment: oe,
         isFlat: ot,
-        _flat: Rn,
-        polylineCenter: In
-      }, ki = {
+        _flat: Bn,
+        polylineCenter: Nn
+      }, Ai = {
         project: function(t) {
           return new S(t.lng, t.lat);
         },
@@ -3510,37 +3510,37 @@ function Hr() {
           return new B(t.y, t.x);
         },
         bounds: new H([-180, -90], [180, 90])
-      }, Si = {
+      }, Ei = {
         R: 6378137,
         R_MINOR: 6356752314245179e-9,
         bounds: new H([-2003750834279e-5, -1549657073972e-5], [2003750834279e-5, 1876465623138e-5]),
         project: function(t) {
-          var e = Math.PI / 180, i = this.R, n = t.lat * e, r = this.R_MINOR / i, l = Math.sqrt(1 - r * r), f = l * Math.sin(n), p = Math.tan(Math.PI / 4 - n / 2) / Math.pow((1 - f) / (1 + f), l / 2);
+          var e = Math.PI / 180, i = this.R, n = t.lat * e, r = this.R_MINOR / i, h = Math.sqrt(1 - r * r), d = h * Math.sin(n), p = Math.tan(Math.PI / 4 - n / 2) / Math.pow((1 - d) / (1 + d), h / 2);
           return n = -i * Math.log(Math.max(p, 1e-10)), new S(t.lng * e * i, n);
         },
         unproject: function(t) {
-          for (var e = 180 / Math.PI, i = this.R, n = this.R_MINOR / i, r = Math.sqrt(1 - n * n), l = Math.exp(-t.y / i), f = Math.PI / 2 - 2 * Math.atan(l), p = 0, _ = 0.1, v; p < 15 && Math.abs(_) > 1e-7; p++)
-            v = r * Math.sin(f), v = Math.pow((1 - v) / (1 + v), r / 2), _ = Math.PI / 2 - 2 * Math.atan(l * v) - f, f += _;
-          return new B(f * e, t.x * e / i);
+          for (var e = 180 / Math.PI, i = this.R, n = this.R_MINOR / i, r = Math.sqrt(1 - n * n), h = Math.exp(-t.y / i), d = Math.PI / 2 - 2 * Math.atan(h), p = 0, _ = 0.1, v; p < 15 && Math.abs(_) > 1e-7; p++)
+            v = r * Math.sin(d), v = Math.pow((1 - v) / (1 + v), r / 2), _ = Math.PI / 2 - 2 * Math.atan(h * v) - d, d += _;
+          return new B(d * e, t.x * e / i);
         }
-      }, Is = {
+      }, Bs = {
         __proto__: null,
-        LonLat: ki,
-        Mercator: Si,
-        SphericalMercator: Qe
-      }, Zs = a({}, bt, {
+        LonLat: Ai,
+        Mercator: Ei,
+        SphericalMercator: ei
+      }, Ns = a({}, bt, {
         code: "EPSG:3395",
-        projection: Si,
+        projection: Ei,
         transformation: (function() {
-          var t = 0.5 / (Math.PI * Si.R);
+          var t = 0.5 / (Math.PI * Ei.R);
           return Kt(t, 0.5, -t, 0.5);
         })()
-      }), Zn = a({}, bt, {
+      }), Dn = a({}, bt, {
         code: "EPSG:4326",
-        projection: ki,
+        projection: Ai,
         transformation: Kt(1 / 180, 1, -1 / 180, 0.5)
-      }), $s = a({}, pt, {
-        projection: ki,
+      }), Ds = a({}, _t, {
+        projection: Ai,
         transformation: Kt(1, 0, -1, 0),
         scale: function(t) {
           return Math.pow(2, t);
@@ -3554,7 +3554,7 @@ function Hr() {
         },
         infinite: !0
       });
-      pt.Earth = bt, pt.EPSG3395 = Zs, pt.EPSG3857 = ei, pt.EPSG900913 = jo, pt.EPSG4326 = Zn, pt.Simple = $s;
+      _t.Earth = bt, _t.EPSG3395 = Ns, _t.EPSG3857 = ni, _t.EPSG900913 = Vo, _t.EPSG4326 = Dn, _t.Simple = Ds;
       var lt = Gt.extend({
         // Classes extending `L.Layer` will inherit the following options:
         options: {
@@ -3672,7 +3672,7 @@ function Hr() {
           this._layersMaxZoom = e === -1 / 0 ? void 0 : e, this._layersMinZoom = t === 1 / 0 ? void 0 : t, i !== this._getZoomSpan() && this.fire("zoomlevelschange"), this.options.maxZoom === void 0 && this._layersMaxZoom && this.getZoom() > this._layersMaxZoom && this.setZoom(this._layersMaxZoom), this.options.minZoom === void 0 && this._layersMinZoom && this.getZoom() < this._layersMinZoom && this.setZoom(this._layersMinZoom);
         }
       });
-      var Zt = lt.extend({
+      var $t = lt.extend({
         initialize: function(t, e) {
           O(this, e), this._layers = {};
           var i, n;
@@ -3758,14 +3758,14 @@ function Hr() {
         getLayerId: function(t) {
           return g(t);
         }
-      }), Bs = function(t, e) {
-        return new Zt(t, e);
-      }, _t = Zt.extend({
+      }), Hs = function(t, e) {
+        return new $t(t, e);
+      }, mt = $t.extend({
         addLayer: function(t) {
-          return this.hasLayer(t) ? this : (t.addEventParent(this), Zt.prototype.addLayer.call(this, t), this.fire("layeradd", { layer: t }));
+          return this.hasLayer(t) ? this : (t.addEventParent(this), $t.prototype.addLayer.call(this, t), this.fire("layeradd", { layer: t }));
         },
         removeLayer: function(t) {
-          return this.hasLayer(t) ? (t in this._layers && (t = this._layers[t]), t.removeEventParent(this), Zt.prototype.removeLayer.call(this, t), this.fire("layerremove", { layer: t })) : this;
+          return this.hasLayer(t) ? (t in this._layers && (t = this._layers[t]), t.removeEventParent(this), $t.prototype.removeLayer.call(this, t), this.fire("layerremove", { layer: t })) : this;
         },
         // @method setStyle(style: Path options): this
         // Sets the given path options to each layer of the group that has a `setStyle` method.
@@ -3792,9 +3792,9 @@ function Hr() {
           }
           return t;
         }
-      }), Ns = function(t, e) {
-        return new _t(t, e);
-      }, $t = ft.extend({
+      }), Fs = function(t, e) {
+        return new mt(t, e);
+      }, Bt = pt.extend({
         /* @section
          * @aka Icon options
          *
@@ -3870,8 +3870,8 @@ function Hr() {
         _setIconStyles: function(t, e) {
           var i = this.options, n = i[e + "Size"];
           typeof n == "number" && (n = [n, n]);
-          var r = k(n), l = k(e === "shadow" && i.shadowAnchor || i.iconAnchor || r && r.divideBy(2, !0));
-          t.className = "leaflet-marker-" + e + " " + (i.className || ""), l && (t.style.marginLeft = -l.x + "px", t.style.marginTop = -l.y + "px"), r && (t.style.width = r.x + "px", t.style.height = r.y + "px");
+          var r = k(n), h = k(e === "shadow" && i.shadowAnchor || i.iconAnchor || r && r.divideBy(2, !0));
+          t.className = "leaflet-marker-" + e + " " + (i.className || ""), h && (t.style.marginLeft = -h.x + "px", t.style.marginTop = -h.y + "px"), r && (t.style.width = r.x + "px", t.style.height = r.y + "px");
         },
         _createImg: function(t, e) {
           return e = e || document.createElement("img"), e.src = t, e;
@@ -3880,10 +3880,10 @@ function Hr() {
           return w.retina && this.options[t + "RetinaUrl"] || this.options[t + "Url"];
         }
       });
-      function Ds(t) {
-        return new $t(t);
+      function js(t) {
+        return new Bt(t);
       }
-      var se = $t.extend({
+      var se = Bt.extend({
         options: {
           iconUrl: "marker-icon.png",
           iconRetinaUrl: "marker-icon-2x.png",
@@ -3895,12 +3895,12 @@ function Hr() {
           shadowSize: [41, 41]
         },
         _getIconUrl: function(t) {
-          return typeof se.imagePath != "string" && (se.imagePath = this._detectIconPath()), (this.options.imagePath || se.imagePath) + $t.prototype._getIconUrl.call(this, t);
+          return typeof se.imagePath != "string" && (se.imagePath = this._detectIconPath()), (this.options.imagePath || se.imagePath) + Bt.prototype._getIconUrl.call(this, t);
         },
         _stripUrl: function(t) {
           var e = function(i, n, r) {
-            var l = n.exec(i);
-            return l && l[r];
+            var h = n.exec(i);
+            return h && h[r];
           };
           return t = e(t, /^url\((['"])?(.+)\1\)$/, 2), t && e(t, /^(.*)marker-icon\.png$/, 1);
         },
@@ -3911,7 +3911,7 @@ function Hr() {
           var i = document.querySelector('link[href$="leaflet.css"]');
           return i ? i.href.substring(0, i.href.length - 11 - 1) : "";
         }
-      }), $n = ut.extend({
+      }), Hn = ut.extend({
         initialize: function(t) {
           this._marker = t;
         },
@@ -3922,7 +3922,7 @@ function Hr() {
             predrag: this._onPreDrag,
             drag: this._onDrag,
             dragend: this._onDragEnd
-          }, this).enable(), C(t, "leaflet-marker-draggable");
+          }, this).enable(), E(t, "leaflet-marker-draggable");
         },
         removeHooks: function() {
           this._draggable.off({
@@ -3936,14 +3936,14 @@ function Hr() {
           return this._draggable && this._draggable._moved;
         },
         _adjustPan: function(t) {
-          var e = this._marker, i = e._map, n = this._marker.options.autoPanSpeed, r = this._marker.options.autoPanPadding, l = kt(e._icon), f = i.getPixelBounds(), p = i.getPixelOrigin(), _ = X(
-            f.min._subtract(p).add(r),
-            f.max._subtract(p).subtract(r)
+          var e = this._marker, i = e._map, n = this._marker.options.autoPanSpeed, r = this._marker.options.autoPanPadding, h = kt(e._icon), d = i.getPixelBounds(), p = i.getPixelOrigin(), _ = X(
+            d.min._subtract(p).add(r),
+            d.max._subtract(p).subtract(r)
           );
-          if (!_.contains(l)) {
+          if (!_.contains(h)) {
             var v = k(
-              (Math.max(_.max.x, l.x) - _.max.x) / (f.max.x - _.max.x) - (Math.min(_.min.x, l.x) - _.min.x) / (f.min.x - _.min.x),
-              (Math.max(_.max.y, l.y) - _.max.y) / (f.max.y - _.max.y) - (Math.min(_.min.y, l.y) - _.min.y) / (f.min.y - _.min.y)
+              (Math.max(_.max.x, h.x) - _.max.x) / (d.max.x - _.max.x) - (Math.min(_.min.x, h.x) - _.min.x) / (d.min.x - _.min.x),
+              (Math.max(_.max.y, h.y) - _.max.y) / (d.max.y - _.max.y) - (Math.min(_.min.y, h.y) - _.min.y) / (d.min.y - _.min.y)
             ).multiplyBy(n);
             i.panBy(v, { animate: !1 }), this._draggable._newPos._add(v), this._draggable._startPos._add(v), U(e._icon, this._draggable._newPos), this._onDrag(t), this._panRequest = J(this._adjustPan.bind(this, t));
           }
@@ -4082,18 +4082,18 @@ function Hr() {
         },
         _initIcon: function() {
           var t = this.options, e = "leaflet-zoom-" + (this._zoomAnimated ? "animated" : "hide"), i = t.icon.createIcon(this._icon), n = !1;
-          i !== this._icon && (this._icon && this._removeIcon(), n = !0, t.title && (i.title = t.title), i.tagName === "IMG" && (i.alt = t.alt || "")), C(i, e), t.keyboard && (i.tabIndex = "0", i.setAttribute("role", "button")), this._icon = i, t.riseOnHover && this.on({
+          i !== this._icon && (this._icon && this._removeIcon(), n = !0, t.title && (i.title = t.title), i.tagName === "IMG" && (i.alt = t.alt || "")), E(i, e), t.keyboard && (i.tabIndex = "0", i.setAttribute("role", "button")), this._icon = i, t.riseOnHover && this.on({
             mouseover: this._bringToFront,
             mouseout: this._resetZIndex
           }), this.options.autoPanOnFocus && A(i, "focus", this._panOnFocus, this);
-          var r = t.icon.createShadow(this._shadow), l = !1;
-          r !== this._shadow && (this._removeShadow(), l = !0), r && (C(r, e), r.alt = ""), this._shadow = r, t.opacity < 1 && this._updateOpacity(), n && this.getPane().appendChild(this._icon), this._initInteraction(), r && l && this.getPane(t.shadowPane).appendChild(this._shadow);
+          var r = t.icon.createShadow(this._shadow), h = !1;
+          r !== this._shadow && (this._removeShadow(), h = !0), r && (E(r, e), r.alt = ""), this._shadow = r, t.opacity < 1 && this._updateOpacity(), n && this.getPane().appendChild(this._icon), this._initInteraction(), r && h && this.getPane(t.shadowPane).appendChild(this._shadow);
         },
         _removeIcon: function() {
           this.options.riseOnHover && this.off({
             mouseover: this._bringToFront,
             mouseout: this._resetZIndex
-          }), this.options.autoPanOnFocus && N(this._icon, "focus", this._panOnFocus, this), F(this._icon), this.removeInteractiveTarget(this._icon), this._icon = null;
+          }), this.options.autoPanOnFocus && D(this._icon, "focus", this._panOnFocus, this), F(this._icon), this.removeInteractiveTarget(this._icon), this._icon = null;
         },
         _removeShadow: function() {
           this._shadow && F(this._shadow), this._shadow = null;
@@ -4109,9 +4109,9 @@ function Hr() {
           this._setPos(e);
         },
         _initInteraction: function() {
-          if (this.options.interactive && (C(this._icon, "leaflet-interactive"), this.addInteractiveTarget(this._icon), $n)) {
+          if (this.options.interactive && (E(this._icon, "leaflet-interactive"), this.addInteractiveTarget(this._icon), Hn)) {
             var t = this.options.draggable;
-            this.dragging && (t = this.dragging.enabled(), this.dragging.disable()), this.dragging = new $n(this), t && this.dragging.enable();
+            this.dragging && (t = this.dragging.enabled(), this.dragging.disable()), this.dragging = new Hn(this), t && this.dragging.enable();
           }
         },
         // @method setOpacity(opacity: Number): this
@@ -4146,7 +4146,7 @@ function Hr() {
           return this.options.icon.options.tooltipAnchor;
         }
       });
-      function Hs(t, e) {
+      function Ws(t, e) {
         return new Oe(t, e);
       }
       var xt = lt.extend({
@@ -4235,7 +4235,7 @@ function Hr() {
         _clickTolerance: function() {
           return (this.options.stroke ? this.options.weight / 2 : 0) + (this._renderer.options.tolerance || 0);
         }
-      }), Re = xt.extend({
+      }), Ie = xt.extend({
         // @section
         // @aka CircleMarker options
         options: {
@@ -4293,10 +4293,10 @@ function Hr() {
           return t.distanceTo(this._point) <= this._radius + this._clickTolerance();
         }
       });
-      function Fs(t, e) {
-        return new Re(t, e);
+      function Us(t, e) {
+        return new Ie(t, e);
       }
-      var Ai = Re.extend({
+      var Ci = Ie.extend({
         initialize: function(t, e, i) {
           if (typeof e == "number" && (e = a({}, i, { radius: e })), O(this, e), this._latlng = M(t), isNaN(this.options.radius))
             throw new Error("Circle radius cannot be NaN");
@@ -4325,8 +4325,8 @@ function Hr() {
         _project: function() {
           var t = this._latlng.lng, e = this._latlng.lat, i = this._map, n = i.options.crs;
           if (n.distance === bt.distance) {
-            var r = Math.PI / 180, l = this._mRadius / bt.R / r, f = i.project([e + l, t]), p = i.project([e - l, t]), _ = f.add(p).divideBy(2), v = i.unproject(_).lat, y = Math.acos((Math.cos(l * r) - Math.sin(e * r) * Math.sin(v * r)) / (Math.cos(e * r) * Math.cos(v * r))) / r;
-            (isNaN(y) || y === 0) && (y = l / Math.cos(Math.PI / 180 * e)), this._point = _.subtract(i.getPixelOrigin()), this._radius = isNaN(y) ? 0 : _.x - i.project([v, t - y]).x, this._radiusY = _.y - f.y;
+            var r = Math.PI / 180, h = this._mRadius / bt.R / r, d = i.project([e + h, t]), p = i.project([e - h, t]), _ = d.add(p).divideBy(2), v = i.unproject(_).lat, y = Math.acos((Math.cos(h * r) - Math.sin(e * r) * Math.sin(v * r)) / (Math.cos(e * r) * Math.cos(v * r))) / r;
+            (isNaN(y) || y === 0) && (y = h / Math.cos(Math.PI / 180 * e)), this._point = _.subtract(i.getPixelOrigin()), this._radius = isNaN(y) ? 0 : _.x - i.project([v, t - y]).x, this._radiusY = _.y - d.y;
           } else {
             var x = n.unproject(n.project(this._latlng).subtract([this._mRadius, 0]));
             this._point = i.latLngToLayerPoint(this._latlng), this._radius = this._point.x - i.latLngToLayerPoint(x).x;
@@ -4334,10 +4334,10 @@ function Hr() {
           this._updateBounds();
         }
       });
-      function js(t, e, i) {
-        return new Ai(t, e, i);
+      function Vs(t, e, i) {
+        return new Ci(t, e, i);
       }
-      var mt = xt.extend({
+      var gt = xt.extend({
         // @section
         // @aka Polyline options
         options: {
@@ -4370,11 +4370,11 @@ function Hr() {
         // @method closestLayerPoint(p: Point): Point
         // Returns the point closest to `p` on the Polyline.
         closestLayerPoint: function(t) {
-          for (var e = 1 / 0, i = null, n = oe, r, l, f = 0, p = this._parts.length; f < p; f++)
-            for (var _ = this._parts[f], v = 1, y = _.length; v < y; v++) {
-              r = _[v - 1], l = _[v];
-              var x = n(t, r, l, !0);
-              x < e && (e = x, i = n(t, r, l));
+          for (var e = 1 / 0, i = null, n = oe, r, h, d = 0, p = this._parts.length; d < p; d++)
+            for (var _ = this._parts[d], v = 1, y = _.length; v < y; v++) {
+              r = _[v - 1], h = _[v];
+              var x = n(t, r, h, !0);
+              x < e && (e = x, i = n(t, r, h));
             }
           return i && (i.distance = Math.sqrt(e)), i;
         },
@@ -4383,7 +4383,7 @@ function Hr() {
         getCenter: function() {
           if (!this._map)
             throw new Error("Must add layer to map before using getCenter()");
-          return In(this._defaultShape(), this._map.options.crs);
+          return Nn(this._defaultShape(), this._map.options.crs);
         },
         // @method getBounds(): LatLngBounds
         // Returns the `LatLngBounds` of the path.
@@ -4422,14 +4422,14 @@ function Hr() {
         },
         // recursively turns latlngs into a set of rings with projected coordinates
         _projectLatlngs: function(t, e, i) {
-          var n = t[0] instanceof B, r = t.length, l, f;
+          var n = t[0] instanceof B, r = t.length, h, d;
           if (n) {
-            for (f = [], l = 0; l < r; l++)
-              f[l] = this._map.latLngToLayerPoint(t[l]), i.extend(f[l]);
-            e.push(f);
+            for (d = [], h = 0; h < r; h++)
+              d[h] = this._map.latLngToLayerPoint(t[h]), i.extend(d[h]);
+            e.push(d);
           } else
-            for (l = 0; l < r; l++)
-              this._projectLatlngs(t[l], e, i);
+            for (h = 0; h < r; h++)
+              this._projectLatlngs(t[h], e, i);
         },
         // clip polyline by renderer bounds so that we have less to render for performance
         _clipPoints: function() {
@@ -4439,16 +4439,16 @@ function Hr() {
               this._parts = this._rings;
               return;
             }
-            var e = this._parts, i, n, r, l, f, p, _;
-            for (i = 0, r = 0, l = this._rings.length; i < l; i++)
-              for (_ = this._rings[i], n = 0, f = _.length; n < f - 1; n++)
-                p = On(_[n], _[n + 1], t, n, !0), p && (e[r] = e[r] || [], e[r].push(p[0]), (p[1] !== _[n + 1] || n === f - 2) && (e[r].push(p[1]), r++));
+            var e = this._parts, i, n, r, h, d, p, _;
+            for (i = 0, r = 0, h = this._rings.length; i < h; i++)
+              for (_ = this._rings[i], n = 0, d = _.length; n < d - 1; n++)
+                p = $n(_[n], _[n + 1], t, n, !0), p && (e[r] = e[r] || [], e[r].push(p[0]), (p[1] !== _[n + 1] || n === d - 2) && (e[r].push(p[1]), r++));
           }
         },
         // simplify each clipped part of the polyline for performance
         _simplifyPoints: function() {
           for (var t = this._parts, e = this.options.smoothFactor, i = 0, n = t.length; i < n; i++)
-            t[i] = En(t[i], e);
+            t[i] = In(t[i], e);
         },
         _update: function() {
           this._map && (this._clipPoints(), this._simplifyPoints(), this._updatePath());
@@ -4458,21 +4458,21 @@ function Hr() {
         },
         // Needed by the `Canvas` renderer for interactivity
         _containsPoint: function(t, e) {
-          var i, n, r, l, f, p, _ = this._clickTolerance();
+          var i, n, r, h, d, p, _ = this._clickTolerance();
           if (!this._pxBounds || !this._pxBounds.contains(t))
             return !1;
-          for (i = 0, l = this._parts.length; i < l; i++)
-            for (p = this._parts[i], n = 0, f = p.length, r = f - 1; n < f; r = n++)
-              if (!(!e && n === 0) && Mn(t, p[r], p[n]) <= _)
+          for (i = 0, h = this._parts.length; i < h; i++)
+            for (p = this._parts[i], n = 0, d = p.length, r = d - 1; n < d; r = n++)
+              if (!(!e && n === 0) && Rn(t, p[r], p[n]) <= _)
                 return !0;
           return !1;
         }
       });
-      function Ws(t, e) {
-        return new mt(t, e);
+      function qs(t, e) {
+        return new gt(t, e);
       }
-      mt._flat = Rn;
-      var Bt = mt.extend({
+      gt._flat = Bn;
+      var Nt = gt.extend({
         options: {
           fill: !0
         },
@@ -4484,14 +4484,14 @@ function Hr() {
         getCenter: function() {
           if (!this._map)
             throw new Error("Must add layer to map before using getCenter()");
-          return Cn(this._defaultShape(), this._map.options.crs);
+          return On(this._defaultShape(), this._map.options.crs);
         },
         _convertLatLngs: function(t) {
-          var e = mt.prototype._convertLatLngs.call(this, t), i = e.length;
+          var e = gt.prototype._convertLatLngs.call(this, t), i = e.length;
           return i >= 2 && e[0] instanceof B && e[0].equals(e[i - 1]) && e.pop(), e;
         },
         _setLatLngs: function(t) {
-          mt.prototype._setLatLngs.call(this, t), ot(this._latlngs) && (this._latlngs = [this._latlngs]);
+          gt.prototype._setLatLngs.call(this, t), ot(this._latlngs) && (this._latlngs = [this._latlngs]);
         },
         _defaultShape: function() {
           return ot(this._latlngs[0]) ? this._latlngs[0] : this._latlngs[0][0];
@@ -4503,8 +4503,8 @@ function Hr() {
               this._parts = this._rings;
               return;
             }
-            for (var n = 0, r = this._rings.length, l; n < r; n++)
-              l = An(this._rings[n], t, !0), l.length && this._parts.push(l);
+            for (var n = 0, r = this._rings.length, h; n < r; n++)
+              h = zn(this._rings[n], t, !0), h.length && this._parts.push(h);
           }
         },
         _updatePath: function() {
@@ -4512,19 +4512,19 @@ function Hr() {
         },
         // Needed by the `Canvas` renderer for interactivity
         _containsPoint: function(t) {
-          var e = !1, i, n, r, l, f, p, _, v;
+          var e = !1, i, n, r, h, d, p, _, v;
           if (!this._pxBounds || !this._pxBounds.contains(t))
             return !1;
-          for (l = 0, _ = this._parts.length; l < _; l++)
-            for (i = this._parts[l], f = 0, v = i.length, p = v - 1; f < v; p = f++)
-              n = i[f], r = i[p], n.y > t.y != r.y > t.y && t.x < (r.x - n.x) * (t.y - n.y) / (r.y - n.y) + n.x && (e = !e);
-          return e || mt.prototype._containsPoint.call(this, t, !0);
+          for (h = 0, _ = this._parts.length; h < _; h++)
+            for (i = this._parts[h], d = 0, v = i.length, p = v - 1; d < v; p = d++)
+              n = i[d], r = i[p], n.y > t.y != r.y > t.y && t.x < (r.x - n.x) * (t.y - n.y) / (r.y - n.y) + n.x && (e = !e);
+          return e || gt.prototype._containsPoint.call(this, t, !0);
         }
       });
-      function Us(t, e) {
-        return new Bt(t, e);
+      function Gs(t, e) {
+        return new Nt(t, e);
       }
-      var gt = _t.extend({
+      var vt = mt.extend({
         /* @section
          * @aka GeoJSON options
          *
@@ -4586,11 +4586,11 @@ function Hr() {
               r = e[i], (r.geometries || r.geometry || r.features || r.coordinates) && this.addData(r);
             return this;
           }
-          var l = this.options;
-          if (l.filter && !l.filter(t))
+          var h = this.options;
+          if (h.filter && !h.filter(t))
             return this;
-          var f = Ie(t, l);
-          return f ? (f.feature = Be(t), f.defaultOptions = f.options, this.resetStyle(f), l.onEachFeature && l.onEachFeature(t, f), this.addLayer(f)) : this;
+          var d = Re(t, h);
+          return d ? (d.feature = Be(t), d.defaultOptions = d.options, this.resetStyle(d), h.onEachFeature && h.onEachFeature(t, d), this.addLayer(d)) : this;
         },
         // @method resetStyle( <Path> layer? ): this
         // Resets the given vector layer's style to the original GeoJSON style, useful for resetting style after hover events.
@@ -4609,63 +4609,63 @@ function Hr() {
           t.setStyle && (typeof e == "function" && (e = e(t.feature)), t.setStyle(e));
         }
       });
-      function Ie(t, e) {
-        var i = t.type === "Feature" ? t.geometry : t, n = i ? i.coordinates : null, r = [], l = e && e.pointToLayer, f = e && e.coordsToLatLng || Ci, p, _, v, y;
+      function Re(t, e) {
+        var i = t.type === "Feature" ? t.geometry : t, n = i ? i.coordinates : null, r = [], h = e && e.pointToLayer, d = e && e.coordsToLatLng || Mi, p, _, v, y;
         if (!n && !i)
           return null;
         switch (i.type) {
           case "Point":
-            return p = f(n), Bn(l, t, p, e);
+            return p = d(n), Fn(h, t, p, e);
           case "MultiPoint":
             for (v = 0, y = n.length; v < y; v++)
-              p = f(n[v]), r.push(Bn(l, t, p, e));
-            return new _t(r);
+              p = d(n[v]), r.push(Fn(h, t, p, e));
+            return new mt(r);
           case "LineString":
           case "MultiLineString":
-            return _ = Ze(n, i.type === "LineString" ? 0 : 1, f), new mt(_, e);
+            return _ = Ze(n, i.type === "LineString" ? 0 : 1, d), new gt(_, e);
           case "Polygon":
           case "MultiPolygon":
-            return _ = Ze(n, i.type === "Polygon" ? 1 : 2, f), new Bt(_, e);
+            return _ = Ze(n, i.type === "Polygon" ? 1 : 2, d), new Nt(_, e);
           case "GeometryCollection":
             for (v = 0, y = i.geometries.length; v < y; v++) {
-              var x = Ie({
+              var x = Re({
                 geometry: i.geometries[v],
                 type: "Feature",
                 properties: t.properties
               }, e);
               x && r.push(x);
             }
-            return new _t(r);
+            return new mt(r);
           case "FeatureCollection":
             for (v = 0, y = i.features.length; v < y; v++) {
-              var E = Ie(i.features[v], e);
-              E && r.push(E);
+              var C = Re(i.features[v], e);
+              C && r.push(C);
             }
-            return new _t(r);
+            return new mt(r);
           default:
             throw new Error("Invalid GeoJSON object.");
         }
       }
-      function Bn(t, e, i, n) {
+      function Fn(t, e, i, n) {
         return t ? t(e, i) : new Oe(i, n && n.markersInheritOptions && n);
       }
-      function Ci(t) {
+      function Mi(t) {
         return new B(t[1], t[0], t[2]);
       }
       function Ze(t, e, i) {
-        for (var n = [], r = 0, l = t.length, f; r < l; r++)
-          f = e ? Ze(t[r], e - 1, i) : (i || Ci)(t[r]), n.push(f);
+        for (var n = [], r = 0, h = t.length, d; r < h; r++)
+          d = e ? Ze(t[r], e - 1, i) : (i || Mi)(t[r]), n.push(d);
         return n;
       }
-      function Ei(t, e) {
-        return t = M(t), t.alt !== void 0 ? [D(t.lng, e), D(t.lat, e), D(t.alt, e)] : [D(t.lng, e), D(t.lat, e)];
+      function zi(t, e) {
+        return t = M(t), t.alt !== void 0 ? [N(t.lng, e), N(t.lat, e), N(t.alt, e)] : [N(t.lng, e), N(t.lat, e)];
       }
       function $e(t, e, i, n) {
-        for (var r = [], l = 0, f = t.length; l < f; l++)
-          r.push(e ? $e(t[l], ot(t[l]) ? 0 : e - 1, i, n) : Ei(t[l], n));
+        for (var r = [], h = 0, d = t.length; h < d; h++)
+          r.push(e ? $e(t[h], ot(t[h]) ? 0 : e - 1, i, n) : zi(t[h], n));
         return !e && i && r.length > 0 && r.push(r[0].slice()), r;
       }
-      function Nt(t, e) {
+      function Dt(t, e) {
         return t.feature ? a({}, t.feature, { geometry: e }) : Be(e);
       }
       function Be(t) {
@@ -4675,36 +4675,36 @@ function Hr() {
           geometry: t
         };
       }
-      var Mi = {
+      var Oi = {
         toGeoJSON: function(t) {
-          return Nt(this, {
+          return Dt(this, {
             type: "Point",
-            coordinates: Ei(this.getLatLng(), t)
+            coordinates: zi(this.getLatLng(), t)
           });
         }
       };
-      Oe.include(Mi), Ai.include(Mi), Re.include(Mi), mt.include({
+      Oe.include(Oi), Ci.include(Oi), Ie.include(Oi), gt.include({
         toGeoJSON: function(t) {
           var e = !ot(this._latlngs), i = $e(this._latlngs, e ? 1 : 0, !1, t);
-          return Nt(this, {
+          return Dt(this, {
             type: (e ? "Multi" : "") + "LineString",
             coordinates: i
           });
         }
-      }), Bt.include({
+      }), Nt.include({
         toGeoJSON: function(t) {
           var e = !ot(this._latlngs), i = e && !ot(this._latlngs[0]), n = $e(this._latlngs, i ? 2 : e ? 1 : 0, !0, t);
-          return e || (n = [n]), Nt(this, {
+          return e || (n = [n]), Dt(this, {
             type: (i ? "Multi" : "") + "Polygon",
             coordinates: n
           });
         }
-      }), Zt.include({
+      }), $t.include({
         toMultiPoint: function(t) {
           var e = [];
           return this.eachLayer(function(i) {
             e.push(i.toGeoJSON(t).geometry.coordinates);
-          }), Nt(this, {
+          }), Dt(this, {
             type: "MultiPoint",
             coordinates: e
           });
@@ -4719,15 +4719,15 @@ function Hr() {
           var i = e === "GeometryCollection", n = [];
           return this.eachLayer(function(r) {
             if (r.toGeoJSON) {
-              var l = r.toGeoJSON(t);
+              var h = r.toGeoJSON(t);
               if (i)
-                n.push(l.geometry);
+                n.push(h.geometry);
               else {
-                var f = Be(l);
-                f.type === "FeatureCollection" ? n.push.apply(n, f.features) : n.push(f);
+                var d = Be(h);
+                d.type === "FeatureCollection" ? n.push.apply(n, d.features) : n.push(d);
               }
             }
-          }), i ? Nt(this, {
+          }), i ? Dt(this, {
             geometries: n,
             type: "GeometryCollection"
           }) : {
@@ -4736,10 +4736,10 @@ function Hr() {
           };
         }
       });
-      function Nn(t, e) {
-        return new gt(t, e);
+      function jn(t, e) {
+        return new vt(t, e);
       }
-      var Vs = Nn, Ne = lt.extend({
+      var Ks = jn, Ne = lt.extend({
         // @section
         // @aka ImageOverlay options
         options: {
@@ -4771,7 +4771,7 @@ function Hr() {
           this._url = t, this._bounds = W(e), O(this, i);
         },
         onAdd: function() {
-          this._image || (this._initImage(), this.options.opacity < 1 && this._updateOpacity()), this.options.interactive && (C(this._image, "leaflet-interactive"), this.addInteractiveTarget(this._image)), this.getPane().appendChild(this._image), this._reset();
+          this._image || (this._initImage(), this.options.opacity < 1 && this._updateOpacity()), this.options.interactive && (E(this._image, "leaflet-interactive"), this.addInteractiveTarget(this._image)), this.getPane().appendChild(this._image), this._reset();
         },
         onRemove: function() {
           F(this._image), this.options.interactive && this.removeInteractiveTarget(this._image);
@@ -4792,7 +4792,7 @@ function Hr() {
         // @method bringToBack(): this
         // Brings the layer to the bottom of all overlays.
         bringToBack: function() {
-          return this._map && It(this._image), this;
+          return this._map && Zt(this._image), this;
         },
         // @method setUrl(url: String): this
         // Changes the URL of the image.
@@ -4829,7 +4829,7 @@ function Hr() {
         },
         _initImage: function() {
           var t = this._url.tagName === "IMG", e = this._image = t ? this._url : R("img");
-          if (C(e, "leaflet-image-layer"), this._zoomAnimated && C(e, "leaflet-zoom-animated"), this.options.className && C(e, this.options.className), e.onselectstart = b, e.onmousemove = b, e.onload = d(this.fire, this, "load"), e.onerror = d(this._overlayOnError, this, "error"), (this.options.crossOrigin || this.options.crossOrigin === "") && (e.crossOrigin = this.options.crossOrigin === !0 ? "" : this.options.crossOrigin), this.options.zIndex && this._updateZIndex(), t) {
+          if (E(e, "leaflet-image-layer"), this._zoomAnimated && E(e, "leaflet-zoom-animated"), this.options.className && E(e, this.options.className), e.onselectstart = b, e.onmousemove = b, e.onload = f(this.fire, this, "load"), e.onerror = f(this._overlayOnError, this, "error"), (this.options.crossOrigin || this.options.crossOrigin === "") && (e.crossOrigin = this.options.crossOrigin === !0 ? "" : this.options.crossOrigin), this.options.zIndex && this._updateZIndex(), t) {
             this._url = e.src;
             return;
           }
@@ -4862,9 +4862,9 @@ function Hr() {
         getCenter: function() {
           return this._bounds.getCenter();
         }
-      }), qs = function(t, e, i) {
+      }), Ys = function(t, e, i) {
         return new Ne(t, e, i);
-      }, Dn = Ne.extend({
+      }, Wn = Ne.extend({
         // @section
         // @aka VideoOverlay options
         options: {
@@ -4888,36 +4888,36 @@ function Hr() {
         },
         _initImage: function() {
           var t = this._url.tagName === "VIDEO", e = this._image = t ? this._url : R("video");
-          if (C(e, "leaflet-image-layer"), this._zoomAnimated && C(e, "leaflet-zoom-animated"), this.options.className && C(e, this.options.className), e.onselectstart = b, e.onmousemove = b, e.onloadeddata = d(this.fire, this, "load"), t) {
+          if (E(e, "leaflet-image-layer"), this._zoomAnimated && E(e, "leaflet-zoom-animated"), this.options.className && E(e, this.options.className), e.onselectstart = b, e.onmousemove = b, e.onloadeddata = f(this.fire, this, "load"), t) {
             for (var i = e.getElementsByTagName("source"), n = [], r = 0; r < i.length; r++)
               n.push(i[r].src);
             this._url = i.length > 0 ? n : [e.src];
             return;
           }
           rt(this._url) || (this._url = [this._url]), !this.options.keepAspectRatio && Object.prototype.hasOwnProperty.call(e.style, "objectFit") && (e.style.objectFit = "fill"), e.autoplay = !!this.options.autoplay, e.loop = !!this.options.loop, e.muted = !!this.options.muted, e.playsInline = !!this.options.playsInline;
-          for (var l = 0; l < this._url.length; l++) {
-            var f = R("source");
-            f.src = this._url[l], e.appendChild(f);
+          for (var h = 0; h < this._url.length; h++) {
+            var d = R("source");
+            d.src = this._url[h], e.appendChild(d);
           }
         }
         // @method getElement(): HTMLVideoElement
         // Returns the instance of [`HTMLVideoElement`](https://developer.mozilla.org/docs/Web/API/HTMLVideoElement)
         // used by this overlay.
       });
-      function Gs(t, e, i) {
-        return new Dn(t, e, i);
+      function Js(t, e, i) {
+        return new Wn(t, e, i);
       }
-      var Hn = Ne.extend({
+      var Un = Ne.extend({
         _initImage: function() {
           var t = this._image = this._url;
-          C(t, "leaflet-image-layer"), this._zoomAnimated && C(t, "leaflet-zoom-animated"), this.options.className && C(t, this.options.className), t.onselectstart = b, t.onmousemove = b;
+          E(t, "leaflet-image-layer"), this._zoomAnimated && E(t, "leaflet-zoom-animated"), this.options.className && E(t, this.options.className), t.onselectstart = b, t.onmousemove = b;
         }
         // @method getElement(): SVGElement
         // Returns the instance of [`SVGElement`](https://developer.mozilla.org/docs/Web/API/SVGElement)
         // used by this overlay.
       });
-      function Ks(t, e, i) {
-        return new Hn(t, e, i);
+      function Xs(t, e, i) {
+        return new Un(t, e, i);
       }
       var dt = lt.extend({
         // @section
@@ -4964,10 +4964,10 @@ function Hr() {
           return this._map ? this.close() : (arguments.length ? this._source = t : t = this._source, this._prepareOpen(), this.openOn(t._map)), this;
         },
         onAdd: function(t) {
-          this._zoomAnimated = t._zoomAnimated, this._container || this._initLayout(), t._fadeAnimated && nt(this._container, 0), clearTimeout(this._removeTimeout), this.getPane().appendChild(this._container), this.update(), t._fadeAnimated && nt(this._container, 1), this.bringToFront(), this.options.interactive && (C(this._container, "leaflet-interactive"), this.addInteractiveTarget(this._container));
+          this._zoomAnimated = t._zoomAnimated, this._container || this._initLayout(), t._fadeAnimated && nt(this._container, 0), clearTimeout(this._removeTimeout), this.getPane().appendChild(this._container), this.update(), t._fadeAnimated && nt(this._container, 1), this.bringToFront(), this.options.interactive && (E(this._container, "leaflet-interactive"), this.addInteractiveTarget(this._container));
         },
         onRemove: function(t) {
-          t._fadeAnimated ? (nt(this._container, 0), this._removeTimeout = setTimeout(d(F, void 0, this._container), 200)) : F(this._container), this.options.interactive && (j(this._container, "leaflet-interactive"), this.removeInteractiveTarget(this._container));
+          t._fadeAnimated ? (nt(this._container, 0), this._removeTimeout = setTimeout(f(F, void 0, this._container), 200)) : F(this._container), this.options.interactive && (j(this._container, "leaflet-interactive"), this.removeInteractiveTarget(this._container));
         },
         // @namespace DivOverlay
         // @method getLatLng: LatLng
@@ -5021,14 +5021,14 @@ function Hr() {
         // @method bringToBack: this
         // Brings this overlay to the back of other overlays (in the same map pane).
         bringToBack: function() {
-          return this._map && It(this._container), this;
+          return this._map && Zt(this._container), this;
         },
         // prepare bound overlay to open: update latlng pos / content source (for FeatureGroup)
         _prepareOpen: function(t) {
           var e = this._source;
           if (!e._map)
             return !1;
-          if (e instanceof _t) {
+          if (e instanceof mt) {
             e = null;
             var i = this._source._layers;
             for (var n in i)
@@ -5168,7 +5168,7 @@ function Hr() {
             "div",
             t + " " + (this.options.className || "") + " leaflet-zoom-animated"
           ), i = this._wrapper = R("div", t + "-content-wrapper", e);
-          if (this._contentNode = R("div", t + "-content", i), ie(e), bi(this._contentNode), A(e, "contextmenu", St), this._tipContainer = R("div", t + "-tip-container", e), this._tip = R("div", t + "-tip", this._tipContainer), this.options.closeButton) {
+          if (this._contentNode = R("div", t + "-content", i), ie(e), xi(this._contentNode), A(e, "contextmenu", St), this._tipContainer = R("div", t + "-tip-container", e), this._tip = R("div", t + "-tip", this._tipContainer), this.options.closeButton) {
             var n = this._closeButton = R("a", t + "-close-button", e);
             n.setAttribute("role", "button"), n.setAttribute("aria-label", "Close popup"), n.href = "#close", n.innerHTML = '<span aria-hidden="true">&#215;</span>', A(n, "click", function(r) {
               G(r), this.close();
@@ -5180,8 +5180,8 @@ function Hr() {
           e.width = "", e.whiteSpace = "nowrap";
           var i = t.offsetWidth;
           i = Math.min(i, this.options.maxWidth), i = Math.max(i, this.options.minWidth), e.width = i + 1 + "px", e.whiteSpace = "", e.height = "";
-          var n = t.offsetHeight, r = this.options.maxHeight, l = "leaflet-popup-scrolled";
-          r && n > r ? (e.height = r + "px", C(t, l)) : j(t, l), this._containerWidth = this._container.offsetWidth;
+          var n = t.offsetHeight, r = this.options.maxHeight, h = "leaflet-popup-scrolled";
+          r && n > r ? (e.height = r + "px", E(t, h)) : j(t, h), this._containerWidth = this._container.offsetWidth;
         },
         _animateZoom: function(t) {
           var e = this._map._latLngToNewLayerPoint(this._latlng, t.zoom, t.center), i = this._getAnchor();
@@ -5195,14 +5195,14 @@ function Hr() {
             }
             var t = this._map, e = parseInt(Xt(this._container, "marginBottom"), 10) || 0, i = this._container.offsetHeight + e, n = this._containerWidth, r = new S(this._containerLeft, -i - this._containerBottom);
             r._add(kt(this._container));
-            var l = t.layerPointToContainerPoint(r), f = k(this.options.autoPanPadding), p = k(this.options.autoPanPaddingTopLeft || f), _ = k(this.options.autoPanPaddingBottomRight || f), v = t.getSize(), y = 0, x = 0;
-            l.x + n + _.x > v.x && (y = l.x + n - v.x + _.x), l.x - y - p.x < 0 && (y = l.x - p.x), l.y + i + _.y > v.y && (x = l.y + i - v.y + _.y), l.y - x - p.y < 0 && (x = l.y - p.y), (y || x) && (this.options.keepInView && (this._autopanning = !0), t.fire("autopanstart").panBy([y, x]));
+            var h = t.layerPointToContainerPoint(r), d = k(this.options.autoPanPadding), p = k(this.options.autoPanPaddingTopLeft || d), _ = k(this.options.autoPanPaddingBottomRight || d), v = t.getSize(), y = 0, x = 0;
+            h.x + n + _.x > v.x && (y = h.x + n - v.x + _.x), h.x - y - p.x < 0 && (y = h.x - p.x), h.y + i + _.y > v.y && (x = h.y + i - v.y + _.y), h.y - x - p.y < 0 && (x = h.y - p.y), (y || x) && (this.options.keepInView && (this._autopanning = !0), t.fire("autopanstart").panBy([y, x]));
           }
         },
         _getAnchor: function() {
           return k(this._source && this._source._getPopupAnchor ? this._source._getPopupAnchor() : [0, 0]);
         }
-      }), Ys = function(t, e) {
+      }), Qs = function(t, e) {
         return new De(t, e);
       };
       z.mergeOptions({
@@ -5247,7 +5247,7 @@ function Hr() {
         // @method openPopup(latlng?: LatLng): this
         // Opens the bound popup at the specified `latlng` or at the default popup anchor if no `latlng` is passed.
         openPopup: function(t) {
-          return this._popup && (this instanceof _t || (this._popup._source = this), this._popup._prepareOpen(t || this._latlng) && this._popup.openOn(this._map)), this;
+          return this._popup && (this instanceof mt || (this._popup._source = this), this._popup._prepareOpen(t || this._latlng) && this._popup.openOn(this._map)), this;
         },
         // @method closePopup(): this
         // Closes the popup bound to this layer if it is open.
@@ -5337,8 +5337,8 @@ function Hr() {
         _adjustPan: function() {
         },
         _setPosition: function(t) {
-          var e, i, n = this._map, r = this._container, l = n.latLngToContainerPoint(n.getCenter()), f = n.layerPointToContainerPoint(t), p = this.options.direction, _ = r.offsetWidth, v = r.offsetHeight, y = k(this.options.offset), x = this._getAnchor();
-          p === "top" ? (e = _ / 2, i = v) : p === "bottom" ? (e = _ / 2, i = 0) : p === "center" ? (e = _ / 2, i = v / 2) : p === "right" ? (e = 0, i = v / 2) : p === "left" ? (e = _, i = v / 2) : f.x < l.x ? (p = "right", e = 0, i = v / 2) : (p = "left", e = _ + (y.x + x.x) * 2, i = v / 2), t = t.subtract(k(e, i, !0)).add(y).add(x), j(r, "leaflet-tooltip-right"), j(r, "leaflet-tooltip-left"), j(r, "leaflet-tooltip-top"), j(r, "leaflet-tooltip-bottom"), C(r, "leaflet-tooltip-" + p), U(r, t);
+          var e, i, n = this._map, r = this._container, h = n.latLngToContainerPoint(n.getCenter()), d = n.layerPointToContainerPoint(t), p = this.options.direction, _ = r.offsetWidth, v = r.offsetHeight, y = k(this.options.offset), x = this._getAnchor();
+          p === "top" ? (e = _ / 2, i = v) : p === "bottom" ? (e = _ / 2, i = 0) : p === "center" ? (e = _ / 2, i = v / 2) : p === "right" ? (e = 0, i = v / 2) : p === "left" ? (e = _, i = v / 2) : d.x < h.x ? (p = "right", e = 0, i = v / 2) : (p = "left", e = _ + (y.x + x.x) * 2, i = v / 2), t = t.subtract(k(e, i, !0)).add(y).add(x), j(r, "leaflet-tooltip-right"), j(r, "leaflet-tooltip-left"), j(r, "leaflet-tooltip-top"), j(r, "leaflet-tooltip-bottom"), E(r, "leaflet-tooltip-" + p), U(r, t);
         },
         _updatePosition: function() {
           var t = this._map.latLngToLayerPoint(this._latlng);
@@ -5354,7 +5354,7 @@ function Hr() {
         _getAnchor: function() {
           return k(this._source && this._source._getTooltipAnchor && !this.options.sticky ? this._source._getTooltipAnchor() : [0, 0]);
         }
-      }), Js = function(t, e) {
+      }), tr = function(t, e) {
         return new He(t, e);
       };
       z.include({
@@ -5396,7 +5396,7 @@ function Hr() {
         // @method openTooltip(latlng?: LatLng): this
         // Opens the bound tooltip at the specified `latlng` or at the default tooltip anchor if no `latlng` is passed.
         openTooltip: function(t) {
-          return this._tooltip && (this instanceof _t || (this._tooltip._source = this), this._tooltip._prepareOpen(t) && (this._tooltip.openOn(this._map), this.getElement ? this._setAriaDescribedByOnLayer(this) : this.eachLayer && this.eachLayer(this._setAriaDescribedByOnLayer, this))), this;
+          return this._tooltip && (this instanceof mt || (this._tooltip._source = this), this._tooltip._prepareOpen(t) && (this._tooltip.openOn(this._map), this.getElement ? this._setAriaDescribedByOnLayer(this) : this.eachLayer && this.eachLayer(this._setAriaDescribedByOnLayer, this))), this;
         },
         // @method closeTooltip(): this
         // Closes the tooltip bound to this layer if it is open.
@@ -5455,7 +5455,7 @@ function Hr() {
           this._tooltip.options.sticky && t.originalEvent && (i = this._map.mouseEventToContainerPoint(t.originalEvent), n = this._map.containerPointToLayerPoint(i), e = this._map.layerPointToLatLng(n)), this._tooltip.setLatLng(e);
         }
       });
-      var Fn = $t.extend({
+      var Vn = Bt.extend({
         options: {
           // @section
           // @aka DivIcon options
@@ -5484,10 +5484,10 @@ function Hr() {
           return null;
         }
       });
-      function Xs(t) {
-        return new Fn(t);
+      function er(t) {
+        return new Vn(t);
       }
-      $t.Default = se;
+      Bt.Default = se;
       var re = lt.extend({
         // @section
         // @aka GridLayer options
@@ -5569,7 +5569,7 @@ function Hr() {
         // @method bringToBack: this
         // Brings the tile layer to the bottom of all tile layers.
         bringToBack: function() {
-          return this._map && (It(this._container), this._setAutoZIndex(Math.min)), this;
+          return this._map && (Zt(this._container), this._setAutoZIndex(Math.min)), this;
         },
         // @method getContainer: HTMLElement
         // Returns the HTML element that contains the tiles for this layer.
@@ -5630,8 +5630,8 @@ function Hr() {
           this._container && this.options.zIndex !== void 0 && this.options.zIndex !== null && (this._container.style.zIndex = this.options.zIndex);
         },
         _setAutoZIndex: function(t) {
-          for (var e = this.getPane().children, i = -t(-1 / 0, 1 / 0), n = 0, r = e.length, l; n < r; n++)
-            l = e[n].style.zIndex, e[n] !== this._container && l && (i = t(i, +l));
+          for (var e = this.getPane().children, i = -t(-1 / 0, 1 / 0), n = 0, r = e.length, h; n < r; n++)
+            h = e[n].style.zIndex, e[n] !== this._container && h && (i = t(i, +h));
           isFinite(i) && (this.options.zIndex = i + t(-1, 1), this._updateZIndex());
         },
         _updateOpacity: function() {
@@ -5641,8 +5641,8 @@ function Hr() {
             for (var n in this._tiles) {
               var r = this._tiles[n];
               if (!(!r.current || !r.loaded)) {
-                var l = Math.min(1, (t - r.loaded) / 200);
-                nt(r.el, l), l < 1 ? e = !0 : (r.active ? i = !0 : this._onOpaqueTile(r), r.active = !0);
+                var h = Math.min(1, (t - r.loaded) / 200);
+                nt(r.el, h), h < 1 ? e = !0 : (r.active ? i = !0 : this._onOpaqueTile(r), r.active = !0);
               }
             }
             i && !this._noPrune && this._pruneTiles(), e && (it(this._fadeFrame), this._fadeFrame = J(this._updateOpacity, this));
@@ -5696,22 +5696,22 @@ function Hr() {
           this._removeAllTiles(), this._tileZoom = void 0;
         },
         _retainParent: function(t, e, i, n) {
-          var r = Math.floor(t / 2), l = Math.floor(e / 2), f = i - 1, p = new S(+r, +l);
-          p.z = +f;
+          var r = Math.floor(t / 2), h = Math.floor(e / 2), d = i - 1, p = new S(+r, +h);
+          p.z = +d;
           var _ = this._tileCoordsToKey(p), v = this._tiles[_];
-          return v && v.active ? (v.retain = !0, !0) : (v && v.loaded && (v.retain = !0), f > n ? this._retainParent(r, l, f, n) : !1);
+          return v && v.active ? (v.retain = !0, !0) : (v && v.loaded && (v.retain = !0), d > n ? this._retainParent(r, h, d, n) : !1);
         },
         _retainChildren: function(t, e, i, n) {
           for (var r = 2 * t; r < 2 * t + 2; r++)
-            for (var l = 2 * e; l < 2 * e + 2; l++) {
-              var f = new S(r, l);
-              f.z = i + 1;
-              var p = this._tileCoordsToKey(f), _ = this._tiles[p];
+            for (var h = 2 * e; h < 2 * e + 2; h++) {
+              var d = new S(r, h);
+              d.z = i + 1;
+              var p = this._tileCoordsToKey(d), _ = this._tiles[p];
               if (_ && _.active) {
                 _.retain = !0;
                 continue;
               } else _ && _.loaded && (_.retain = !0);
-              i + 1 < n && this._retainChildren(r, l, i + 1, n);
+              i + 1 < n && this._retainChildren(r, h, i + 1, n);
             }
         },
         _resetView: function(t) {
@@ -5728,8 +5728,8 @@ function Hr() {
         _setView: function(t, e, i, n) {
           var r = Math.round(e);
           this.options.maxZoom !== void 0 && r > this.options.maxZoom || this.options.minZoom !== void 0 && r < this.options.minZoom ? r = void 0 : r = this._clampZoom(r);
-          var l = this.options.updateWhenZooming && r !== this._tileZoom;
-          (!n || l) && (this._tileZoom = r, this._abortLoading && this._abortLoading(), this._updateLevels(), this._resetGrid(), r !== void 0 && this._update(t), i || this._pruneTiles(), this._noPrune = !!i), this._setZoomTransforms(t, e);
+          var h = this.options.updateWhenZooming && r !== this._tileZoom;
+          (!n || h) && (this._tileZoom = r, this._abortLoading && this._abortLoading(), this._updateLevels(), this._resetGrid(), r !== void 0 && this._update(t), i || this._pruneTiles(), this._noPrune = !!i), this._setZoomTransforms(t, e);
         },
         _setZoomTransforms: function(t, e) {
           for (var i in this._levels)
@@ -5753,8 +5753,8 @@ function Hr() {
           !this._map || this._map._animatingZoom || this._update();
         },
         _getTiledPixelBounds: function(t) {
-          var e = this._map, i = e._animatingZoom ? Math.max(e._animateToZoom, e.getZoom()) : e.getZoom(), n = e.getZoomScale(i, this._tileZoom), r = e.project(t, this._tileZoom).floor(), l = e.getSize().divideBy(n * 2);
-          return new H(r.subtract(l), r.add(l));
+          var e = this._map, i = e._animatingZoom ? Math.max(e._animateToZoom, e.getZoom()) : e.getZoom(), n = e.getZoomScale(i, this._tileZoom), r = e.project(t, this._tileZoom).floor(), h = e.getSize().divideBy(n * 2);
+          return new H(r.subtract(h), r.add(h));
         },
         // Private method to load tiles in the grid's active zoom level according to map bounds
         _update: function(t) {
@@ -5762,7 +5762,7 @@ function Hr() {
           if (e) {
             var i = this._clampZoom(e.getZoom());
             if (t === void 0 && (t = e.getCenter()), this._tileZoom !== void 0) {
-              var n = this._getTiledPixelBounds(t), r = this._pxBoundsToTileRange(n), l = r.getCenter(), f = [], p = this.options.keepBuffer, _ = new H(
+              var n = this._getTiledPixelBounds(t), r = this._pxBoundsToTileRange(n), h = r.getCenter(), d = [], p = this.options.keepBuffer, _ = new H(
                 r.getBottomLeft().subtract([p, -p]),
                 r.getTopRight().add([p, -p])
               );
@@ -5777,20 +5777,20 @@ function Hr() {
                 return;
               }
               for (var x = r.min.y; x <= r.max.y; x++)
-                for (var E = r.min.x; E <= r.max.x; E++) {
-                  var Y = new S(E, x);
+                for (var C = r.min.x; C <= r.max.x; C++) {
+                  var Y = new S(C, x);
                   if (Y.z = this._tileZoom, !!this._isValidTile(Y)) {
                     var q = this._tiles[this._tileCoordsToKey(Y)];
-                    q ? q.current = !0 : f.push(Y);
+                    q ? q.current = !0 : d.push(Y);
                   }
                 }
-              if (f.sort(function(tt, Ht) {
-                return tt.distanceTo(l) - Ht.distanceTo(l);
-              }), f.length !== 0) {
+              if (d.sort(function(tt, Ft) {
+                return tt.distanceTo(h) - Ft.distanceTo(h);
+              }), d.length !== 0) {
                 this._loading || (this._loading = !0, this.fire("loading"));
                 var st = document.createDocumentFragment();
-                for (E = 0; E < f.length; E++)
-                  this._addTile(f[E], st);
+                for (C = 0; C < d.length; C++)
+                  this._addTile(d[C], st);
                 this._level.el.appendChild(st);
               }
             }
@@ -5812,8 +5812,8 @@ function Hr() {
           return this._tileCoordsToBounds(this._keyToTileCoords(t));
         },
         _tileCoordsToNwSe: function(t) {
-          var e = this._map, i = this.getTileSize(), n = t.scaleBy(i), r = n.add(i), l = e.unproject(n, t.z), f = e.unproject(r, t.z);
-          return [l, f];
+          var e = this._map, i = this.getTileSize(), n = t.scaleBy(i), r = n.add(i), h = e.unproject(n, t.z), d = e.unproject(r, t.z);
+          return [h, d];
         },
         // converts tile coordinates to its geographical bounds
         _tileCoordsToBounds: function(t) {
@@ -5837,13 +5837,13 @@ function Hr() {
           }));
         },
         _initTile: function(t) {
-          C(t, "leaflet-tile");
+          E(t, "leaflet-tile");
           var e = this.getTileSize();
           t.style.width = e.x + "px", t.style.height = e.y + "px", t.onselectstart = b, t.onmousemove = b, w.ielt9 && this.options.opacity < 1 && nt(t, this.options.opacity);
         },
         _addTile: function(t, e) {
-          var i = this._getTilePos(t), n = this._tileCoordsToKey(t), r = this.createTile(this._wrapCoords(t), d(this._tileReady, this, t));
-          this._initTile(r), this.createTile.length < 2 && J(d(this._tileReady, this, t, null, r)), U(r, i), this._tiles[n] = {
+          var i = this._getTilePos(t), n = this._tileCoordsToKey(t), r = this.createTile(this._wrapCoords(t), f(this._tileReady, this, t));
+          this._initTile(r), this.createTile.length < 2 && J(f(this._tileReady, this, t, null, r)), U(r, i), this._tiles[n] = {
             el: r,
             coords: t,
             current: !0
@@ -5859,10 +5859,10 @@ function Hr() {
             coords: t
           });
           var n = this._tileCoordsToKey(t);
-          i = this._tiles[n], i && (i.loaded = +/* @__PURE__ */ new Date(), this._map._fadeAnimated ? (nt(i.el, 0), it(this._fadeFrame), this._fadeFrame = J(this._updateOpacity, this)) : (i.active = !0, this._pruneTiles()), e || (C(i.el, "leaflet-tile-loaded"), this.fire("tileload", {
+          i = this._tiles[n], i && (i.loaded = +/* @__PURE__ */ new Date(), this._map._fadeAnimated ? (nt(i.el, 0), it(this._fadeFrame), this._fadeFrame = J(this._updateOpacity, this)) : (i.active = !0, this._pruneTiles()), e || (E(i.el, "leaflet-tile-loaded"), this.fire("tileload", {
             tile: i.el,
             coords: t
-          })), this._noTilesToLoad() && (this._loading = !1, this.fire("load"), w.ielt9 || !this._map._fadeAnimated ? J(this._pruneTiles, this) : setTimeout(d(this._pruneTiles, this), 250)));
+          })), this._noTilesToLoad() && (this._loading = !1, this.fire("load"), w.ielt9 || !this._map._fadeAnimated ? J(this._pruneTiles, this) : setTimeout(f(this._pruneTiles, this), 250)));
         },
         _getTilePos: function(t) {
           return t.scaleBy(this.getTileSize()).subtract(this._level.origin);
@@ -5888,10 +5888,10 @@ function Hr() {
           return !0;
         }
       });
-      function Qs(t) {
+      function ir(t) {
         return new re(t);
       }
-      var Dt = re.extend({
+      var Ht = re.extend({
         // @section
         // @aka TileLayer options
         options: {
@@ -5948,7 +5948,7 @@ function Hr() {
         // callback is called when the tile has been loaded.
         createTile: function(t, e) {
           var i = document.createElement("img");
-          return A(i, "load", d(this._tileOnLoad, this, e, i)), A(i, "error", d(this._tileOnError, this, e, i)), (this.options.crossOrigin || this.options.crossOrigin === "") && (i.crossOrigin = this.options.crossOrigin === !0 ? "" : this.options.crossOrigin), typeof this.options.referrerPolicy == "string" && (i.referrerPolicy = this.options.referrerPolicy), i.alt = "", i.src = this.getTileUrl(t), i;
+          return A(i, "load", f(this._tileOnLoad, this, e, i)), A(i, "error", f(this._tileOnError, this, e, i)), (this.options.crossOrigin || this.options.crossOrigin === "") && (i.crossOrigin = this.options.crossOrigin === !0 ? "" : this.options.crossOrigin), typeof this.options.referrerPolicy == "string" && (i.referrerPolicy = this.options.referrerPolicy), i.alt = "", i.src = this.getTileUrl(t), i;
         },
         // @section Extension methods
         // @uninheritable
@@ -5968,10 +5968,10 @@ function Hr() {
             var i = this._globalTileRange.max.y - t.y;
             this.options.tms && (e.y = i), e["-y"] = i;
           }
-          return ji(this._url, a(e, this.options));
+          return qi(this._url, a(e, this.options));
         },
         _tileOnLoad: function(t, e) {
-          w.ielt9 ? setTimeout(d(t, this, null, e), 0) : t(null, e);
+          w.ielt9 ? setTimeout(f(t, this, null, e), 0) : t(null, e);
         },
         _tileOnError: function(t, e, i) {
           var n = this.options.errorTileUrl;
@@ -6011,10 +6011,10 @@ function Hr() {
             return re.prototype._tileReady.call(this, t, e, i);
         }
       });
-      function jn(t, e) {
-        return new Dt(t, e);
+      function qn(t, e) {
+        return new Ht(t, e);
       }
-      var Wn = Dt.extend({
+      var Gn = Ht.extend({
         // @section
         // @aka TileLayer.WMS options
         // If any custom options not documented here are used, they will be sent to the
@@ -6054,17 +6054,17 @@ function Hr() {
           for (var n in e)
             n in this.options || (i[n] = e[n]);
           e = O(this, e);
-          var r = e.detectRetina && w.retina ? 2 : 1, l = this.getTileSize();
-          i.width = l.x * r, i.height = l.y * r, this.wmsParams = i;
+          var r = e.detectRetina && w.retina ? 2 : 1, h = this.getTileSize();
+          i.width = h.x * r, i.height = h.y * r, this.wmsParams = i;
         },
         onAdd: function(t) {
           this._crs = this.options.crs || t.options.crs, this._wmsVersion = parseFloat(this.wmsParams.version);
           var e = this._wmsVersion >= 1.3 ? "crs" : "srs";
-          this.wmsParams[e] = this._crs.code, Dt.prototype.onAdd.call(this, t);
+          this.wmsParams[e] = this._crs.code, Ht.prototype.onAdd.call(this, t);
         },
         getTileUrl: function(t) {
-          var e = this._tileCoordsToNwSe(t), i = this._crs, n = X(i.project(e[0]), i.project(e[1])), r = n.min, l = n.max, f = (this._wmsVersion >= 1.3 && this._crs === Zn ? [r.y, r.x, l.y, l.x] : [r.x, r.y, l.x, l.y]).join(","), p = Dt.prototype.getTileUrl.call(this, t);
-          return p + qt(this.wmsParams, p, this.options.uppercase) + (this.options.uppercase ? "&BBOX=" : "&bbox=") + f;
+          var e = this._tileCoordsToNwSe(t), i = this._crs, n = X(i.project(e[0]), i.project(e[1])), r = n.min, h = n.max, d = (this._wmsVersion >= 1.3 && this._crs === Dn ? [r.y, r.x, h.y, h.x] : [r.x, r.y, h.x, h.y]).join(","), p = Ht.prototype.getTileUrl.call(this, t);
+          return p + qt(this.wmsParams, p, this.options.uppercase) + (this.options.uppercase ? "&BBOX=" : "&bbox=") + d;
         },
         // @method setParams(params: Object, noRedraw?: Boolean): this
         // Merges an object with the new parameters and re-requests tiles on the current screen (unless `noRedraw` was set to true).
@@ -6072,11 +6072,11 @@ function Hr() {
           return a(this.wmsParams, t), e || this.redraw(), this;
         }
       });
-      function tr(t, e) {
-        return new Wn(t, e);
+      function nr(t, e) {
+        return new Gn(t, e);
       }
-      Dt.WMS = Wn, jn.wms = tr;
-      var vt = lt.extend({
+      Ht.WMS = Gn, qn.wms = nr;
+      var yt = lt.extend({
         // @section
         // @aka Renderer options
         options: {
@@ -6089,7 +6089,7 @@ function Hr() {
           O(this, t), g(this), this._layers = this._layers || {};
         },
         onAdd: function() {
-          this._container || (this._initContainer(), C(this._container, "leaflet-zoom-animated")), this.getPane().appendChild(this._container), this._update(), this.on("update", this._updatePaths, this);
+          this._container || (this._initContainer(), E(this._container, "leaflet-zoom-animated")), this.getPane().appendChild(this._container), this._update(), this.on("update", this._updatePaths, this);
         },
         onRemove: function() {
           this.off("update", this._updatePaths, this), this._destroyContainer();
@@ -6110,8 +6110,8 @@ function Hr() {
           this._updateTransform(this._map.getCenter(), this._map.getZoom());
         },
         _updateTransform: function(t, e) {
-          var i = this._map.getZoomScale(e, this._zoom), n = this._map.getSize().multiplyBy(0.5 + this.options.padding), r = this._map.project(this._center, e), l = n.multiplyBy(-i).add(r).subtract(this._map._getNewPixelOrigin(t, e));
-          w.any3d ? Tt(this._container, l, i) : U(this._container, l);
+          var i = this._map.getZoomScale(e, this._zoom), n = this._map.getSize().multiplyBy(0.5 + this.options.padding), r = this._map.project(this._center, e), h = n.multiplyBy(-i).add(r).subtract(this._map._getNewPixelOrigin(t, e));
+          w.any3d ? Tt(this._container, h, i) : U(this._container, h);
         },
         _reset: function() {
           this._update(), this._updateTransform(this._center, this._zoom);
@@ -6130,7 +6130,7 @@ function Hr() {
           var t = this.options.padding, e = this._map.getSize(), i = this._map.containerPointToLayerPoint(e.multiplyBy(-t)).round();
           this._bounds = new H(i, i.add(e.multiplyBy(1 + t * 2)).round()), this._center = this._map.getCenter(), this._zoom = this._map.getZoom();
         }
-      }), Un = vt.extend({
+      }), Kn = yt.extend({
         // @section
         // @aka Canvas options
         options: {
@@ -6139,21 +6139,21 @@ function Hr() {
           tolerance: 0
         },
         getEvents: function() {
-          var t = vt.prototype.getEvents.call(this);
+          var t = yt.prototype.getEvents.call(this);
           return t.viewprereset = this._onViewPreReset, t;
         },
         _onViewPreReset: function() {
           this._postponeUpdatePaths = !0;
         },
         onAdd: function() {
-          vt.prototype.onAdd.call(this), this._draw();
+          yt.prototype.onAdd.call(this), this._draw();
         },
         _initContainer: function() {
           var t = this._container = document.createElement("canvas");
           A(t, "mousemove", this._onMouseMove, this), A(t, "click dblclick mousedown mouseup contextmenu", this._onClick, this), A(t, "mouseout", this._handleMouseOut, this), t._leaflet_disable_events = !0, this._ctx = t.getContext("2d");
         },
         _destroyContainer: function() {
-          it(this._redrawRequest), delete this._ctx, F(this._container), N(this._container), delete this._container;
+          it(this._redrawRequest), delete this._ctx, F(this._container), D(this._container), delete this._container;
         },
         _updatePaths: function() {
           if (!this._postponeUpdatePaths) {
@@ -6166,13 +6166,13 @@ function Hr() {
         },
         _update: function() {
           if (!(this._map._animatingZoom && this._bounds)) {
-            vt.prototype._update.call(this);
+            yt.prototype._update.call(this);
             var t = this._bounds, e = this._container, i = t.getSize(), n = w.retina ? 2 : 1;
             U(e, t.min), e.width = n * i.x, e.height = n * i.y, e.style.width = i.x + "px", e.style.height = i.y + "px", w.retina && this._ctx.scale(2, 2), this._ctx.translate(-t.min.x, -t.min.y), this.fire("update");
           }
         },
         _reset: function() {
-          vt.prototype._reset.call(this), this._postponeUpdatePaths && (this._postponeUpdatePaths = !1, this._updatePaths());
+          yt.prototype._reset.call(this), this._postponeUpdatePaths && (this._postponeUpdatePaths = !1, this._updatePaths());
         },
         _initPath: function(t) {
           this._updateDashArray(t), this._layers[g(t)] = t;
@@ -6241,11 +6241,11 @@ function Hr() {
         },
         _updatePoly: function(t, e) {
           if (this._drawing) {
-            var i, n, r, l, f = t._parts, p = f.length, _ = this._ctx;
+            var i, n, r, h, d = t._parts, p = d.length, _ = this._ctx;
             if (p) {
               for (_.beginPath(), i = 0; i < p; i++) {
-                for (n = 0, r = f[i].length; n < r; n++)
-                  l = f[i][n], _[n ? "lineTo" : "moveTo"](l.x, l.y);
+                for (n = 0, r = d[i].length; n < r; n++)
+                  h = d[i][n], _[n ? "lineTo" : "moveTo"](h.x, h.y);
                 e && _.closePath();
               }
               this._fillStroke(_, t);
@@ -6283,7 +6283,7 @@ function Hr() {
           if (!this._mouseHoverThrottled) {
             for (var i, n, r = this._drawFirst; r; r = r.next)
               i = r.layer, i.options.interactive && i._containsPoint(e) && (n = i);
-            n !== this._hoveredLayer && (this._handleMouseOut(t), n && (C(this._container, "leaflet-interactive"), this._fireEvent([n], t, "mouseover"), this._hoveredLayer = n)), this._fireEvent(this._hoveredLayer ? [this._hoveredLayer] : !1, t), this._mouseHoverThrottled = !0, setTimeout(d(function() {
+            n !== this._hoveredLayer && (this._handleMouseOut(t), n && (E(this._container, "leaflet-interactive"), this._fireEvent([n], t, "mouseover"), this._hoveredLayer = n)), this._fireEvent(this._hoveredLayer ? [this._hoveredLayer] : !1, t), this._mouseHoverThrottled = !0, setTimeout(f(function() {
               this._mouseHoverThrottled = !1;
             }, this), 32);
           }
@@ -6314,8 +6314,8 @@ function Hr() {
           }
         }
       });
-      function Vn(t) {
-        return w.canvas ? new Un(t) : null;
+      function Yn(t) {
+        return w.canvas ? new Kn(t) : null;
       }
       var ae = (function() {
         try {
@@ -6327,16 +6327,16 @@ function Hr() {
         return function(t) {
           return document.createElement("<" + t + ' xmlns="urn:schemas-microsoft.com:vml" class="lvml">');
         };
-      })(), er = {
+      })(), or = {
         _initContainer: function() {
           this._container = R("div", "leaflet-vml-container");
         },
         _update: function() {
-          this._map._animatingZoom || (vt.prototype._update.call(this), this.fire("update"));
+          this._map._animatingZoom || (yt.prototype._update.call(this), this.fire("update"));
         },
         _initPath: function(t) {
           var e = t._container = ae("shape");
-          C(e, "leaflet-vml-shape " + (this.options.className || "")), e.coordsize = "1 1", t._path = ae("path"), e.appendChild(t._path), this._updateStyle(t), this._layers[g(t)] = t;
+          E(e, "leaflet-vml-shape " + (this.options.className || "")), e.coordsize = "1 1", t._path = ae("path"), e.appendChild(t._path), this._updateStyle(t), this._layers[g(t)] = t;
         },
         _addPath: function(t) {
           var e = t._container;
@@ -6361,18 +6361,18 @@ function Hr() {
           Rt(t._container);
         },
         _bringToBack: function(t) {
-          It(t._container);
+          Zt(t._container);
         }
-      }, Fe = w.vml ? ae : Ki, le = vt.extend({
+      }, Fe = w.vml ? ae : Qi, le = yt.extend({
         _initContainer: function() {
           this._container = Fe("svg"), this._container.setAttribute("pointer-events", "none"), this._rootGroup = Fe("g"), this._container.appendChild(this._rootGroup);
         },
         _destroyContainer: function() {
-          F(this._container), N(this._container), delete this._container, delete this._rootGroup, delete this._svgSize;
+          F(this._container), D(this._container), delete this._container, delete this._rootGroup, delete this._svgSize;
         },
         _update: function() {
           if (!(this._map._animatingZoom && this._bounds)) {
-            vt.prototype._update.call(this);
+            yt.prototype._update.call(this);
             var t = this._bounds, e = t.getSize(), i = this._container;
             (!this._svgSize || !this._svgSize.equals(e)) && (this._svgSize = e, i.setAttribute("width", e.x), i.setAttribute("height", e.y)), U(i, t.min), i.setAttribute("viewBox", [t.min.x, t.min.y, e.x, e.y].join(" ")), this.fire("update");
           }
@@ -6380,7 +6380,7 @@ function Hr() {
         // methods below are called by vector layers implementations
         _initPath: function(t) {
           var e = t._path = Fe("path");
-          t.options.className && C(e, t.options.className), t.options.interactive && C(e, "leaflet-interactive"), this._updateStyle(t), this._layers[g(t)] = t;
+          t.options.className && E(e, t.options.className), t.options.interactive && E(e, "leaflet-interactive"), this._updateStyle(t), this._layers[g(t)] = t;
         },
         _addPath: function(t) {
           this._rootGroup || this._initContainer(), this._rootGroup.appendChild(t._path), t.addInteractiveTarget(t._path);
@@ -6396,11 +6396,11 @@ function Hr() {
           e && (i.stroke ? (e.setAttribute("stroke", i.color), e.setAttribute("stroke-opacity", i.opacity), e.setAttribute("stroke-width", i.weight), e.setAttribute("stroke-linecap", i.lineCap), e.setAttribute("stroke-linejoin", i.lineJoin), i.dashArray ? e.setAttribute("stroke-dasharray", i.dashArray) : e.removeAttribute("stroke-dasharray"), i.dashOffset ? e.setAttribute("stroke-dashoffset", i.dashOffset) : e.removeAttribute("stroke-dashoffset")) : e.setAttribute("stroke", "none"), i.fill ? (e.setAttribute("fill", i.fillColor || i.color), e.setAttribute("fill-opacity", i.fillOpacity), e.setAttribute("fill-rule", i.fillRule || "evenodd")) : e.setAttribute("fill", "none"));
         },
         _updatePoly: function(t, e) {
-          this._setPath(t, Yi(t._parts, e));
+          this._setPath(t, tn(t._parts, e));
         },
         _updateCircle: function(t) {
-          var e = t._point, i = Math.max(Math.round(t._radius), 1), n = Math.max(Math.round(t._radiusY), 1) || i, r = "a" + i + "," + n + " 0 1,0 ", l = t._empty() ? "M0 0" : "M" + (e.x - i) + "," + e.y + r + i * 2 + ",0 " + r + -i * 2 + ",0 ";
-          this._setPath(t, l);
+          var e = t._point, i = Math.max(Math.round(t._radius), 1), n = Math.max(Math.round(t._radiusY), 1) || i, r = "a" + i + "," + n + " 0 1,0 ", h = t._empty() ? "M0 0" : "M" + (e.x - i) + "," + e.y + r + i * 2 + ",0 " + r + -i * 2 + ",0 ";
+          this._setPath(t, h);
         },
         _setPath: function(t, e) {
           t._path.setAttribute("d", e);
@@ -6410,11 +6410,11 @@ function Hr() {
           Rt(t._path);
         },
         _bringToBack: function(t) {
-          It(t._path);
+          Zt(t._path);
         }
       });
-      w.vml && le.include(er);
-      function qn(t) {
+      w.vml && le.include(or);
+      function Jn(t) {
         return w.svg || w.vml ? new le(t) : null;
       }
       z.include({
@@ -6433,12 +6433,12 @@ function Hr() {
           return e === void 0 && (e = this._createRenderer({ pane: t }), this._paneRenderers[t] = e), e;
         },
         _createRenderer: function(t) {
-          return this.options.preferCanvas && Vn(t) || qn(t);
+          return this.options.preferCanvas && Yn(t) || Jn(t);
         }
       });
-      var Gn = Bt.extend({
+      var Xn = Nt.extend({
         initialize: function(t, e) {
-          Bt.prototype.initialize.call(this, this._boundsToLatLngs(t), e);
+          Nt.prototype.initialize.call(this, this._boundsToLatLngs(t), e);
         },
         // @method setBounds(latLngBounds: LatLngBounds): this
         // Redraws the rectangle with the passed bounds.
@@ -6454,16 +6454,16 @@ function Hr() {
           ];
         }
       });
-      function ir(t, e) {
-        return new Gn(t, e);
+      function sr(t, e) {
+        return new Xn(t, e);
       }
-      le.create = Fe, le.pointsToPath = Yi, gt.geometryToLayer = Ie, gt.coordsToLatLng = Ci, gt.coordsToLatLngs = Ze, gt.latLngToCoords = Ei, gt.latLngsToCoords = $e, gt.getFeature = Nt, gt.asFeature = Be, z.mergeOptions({
+      le.create = Fe, le.pointsToPath = tn, vt.geometryToLayer = Re, vt.coordsToLatLng = Mi, vt.coordsToLatLngs = Ze, vt.latLngToCoords = zi, vt.latLngsToCoords = $e, vt.getFeature = Dt, vt.asFeature = Be, z.mergeOptions({
         // @option boxZoom: Boolean = true
         // Whether the map can be zoomed to a rectangular area specified by
         // dragging the mouse while pressing the shift key.
         boxZoom: !0
       });
-      var Kn = ut.extend({
+      var Qn = ut.extend({
         initialize: function(t) {
           this._map = t, this._container = t._container, this._pane = t._panes.overlayPane, this._resetStateTimeout = 0, t.on("unload", this._destroy, this);
         },
@@ -6471,7 +6471,7 @@ function Hr() {
           A(this._container, "mousedown", this._onMouseDown, this);
         },
         removeHooks: function() {
-          N(this._container, "mousedown", this._onMouseDown, this);
+          D(this._container, "mousedown", this._onMouseDown, this);
         },
         moved: function() {
           return this._moved;
@@ -6488,7 +6488,7 @@ function Hr() {
         _onMouseDown: function(t) {
           if (!t.shiftKey || t.which !== 1 && t.button !== 1)
             return !1;
-          this._clearDeferredResetState(), this._resetState(), Qt(), di(), this._startPoint = this._map.mouseEventToContainerPoint(t), A(document, {
+          this._clearDeferredResetState(), this._resetState(), Qt(), pi(), this._startPoint = this._map.mouseEventToContainerPoint(t), A(document, {
             contextmenu: At,
             mousemove: this._onMouseMove,
             mouseup: this._onMouseUp,
@@ -6496,12 +6496,12 @@ function Hr() {
           }, this);
         },
         _onMouseMove: function(t) {
-          this._moved || (this._moved = !0, this._box = R("div", "leaflet-zoom-box", this._container), C(this._container, "leaflet-crosshair"), this._map.fire("boxzoomstart")), this._point = this._map.mouseEventToContainerPoint(t);
+          this._moved || (this._moved = !0, this._box = R("div", "leaflet-zoom-box", this._container), E(this._container, "leaflet-crosshair"), this._map.fire("boxzoomstart")), this._point = this._map.mouseEventToContainerPoint(t);
           var e = new H(this._point, this._startPoint), i = e.getSize();
           U(this._box, e.min), this._box.style.width = i.x + "px", this._box.style.height = i.y + "px";
         },
         _finish: function() {
-          this._moved && (F(this._box), j(this._container, "leaflet-crosshair")), te(), fi(), N(document, {
+          this._moved && (F(this._box), j(this._container, "leaflet-crosshair")), te(), _i(), D(document, {
             contextmenu: At,
             mousemove: this._onMouseMove,
             mouseup: this._onMouseUp,
@@ -6510,7 +6510,7 @@ function Hr() {
         },
         _onMouseUp: function(t) {
           if (!(t.which !== 1 && t.button !== 1) && (this._finish(), !!this._moved)) {
-            this._clearDeferredResetState(), this._resetStateTimeout = setTimeout(d(this._resetState, this), 0);
+            this._clearDeferredResetState(), this._resetStateTimeout = setTimeout(f(this._resetState, this), 0);
             var e = new Q(
               this._map.containerPointToLatLng(this._startPoint),
               this._map.containerPointToLatLng(this._point)
@@ -6522,7 +6522,7 @@ function Hr() {
           t.keyCode === 27 && (this._finish(), this._clearDeferredResetState(), this._resetState());
         }
       });
-      z.addInitHook("addHandler", "boxZoom", Kn), z.mergeOptions({
+      z.addInitHook("addHandler", "boxZoom", Qn), z.mergeOptions({
         // @option doubleClickZoom: Boolean|String = true
         // Whether the map can be zoomed in by double clicking on it and
         // zoomed out by double clicking while holding shift. If passed
@@ -6530,7 +6530,7 @@ function Hr() {
         //  view regardless of where the mouse was.
         doubleClickZoom: !0
       });
-      var Yn = ut.extend({
+      var to = ut.extend({
         addHooks: function() {
           this._map.on("dblclick", this._onDoubleClick, this);
         },
@@ -6542,7 +6542,7 @@ function Hr() {
           e.options.doubleClickZoom === "center" ? e.setZoom(r) : e.setZoomAround(t.containerPoint, r);
         }
       });
-      z.addInitHook("addHandler", "doubleClickZoom", Yn), z.mergeOptions({
+      z.addInitHook("addHandler", "doubleClickZoom", to), z.mergeOptions({
         // @option dragging: Boolean = true
         // Whether the map is draggable with mouse/touch or not.
         dragging: !0,
@@ -6577,7 +6577,7 @@ function Hr() {
         // solid, preventing the user from dragging outside the bounds.
         maxBoundsViscosity: 0
       });
-      var Jn = ut.extend({
+      var eo = ut.extend({
         addHooks: function() {
           if (!this._draggable) {
             var t = this._map;
@@ -6587,7 +6587,7 @@ function Hr() {
               dragend: this._onDragEnd
             }, this), this._draggable.on("predrag", this._onPreDragLimit, this), t.options.worldCopyJump && (this._draggable.on("predrag", this._onPreDragWrap, this), t.on("zoomend", this._onZoomEnd, this), t.whenReady(this._onZoomEnd, this));
           }
-          C(this._map._container, "leaflet-grab leaflet-touch-drag"), this._draggable.enable(), this._positions = [], this._times = [];
+          E(this._map._container, "leaflet-grab leaflet-touch-drag"), this._draggable.enable(), this._positions = [], this._times = [];
         },
         removeHooks: function() {
           j(this._map._container, "leaflet-grab"), j(this._map._container, "leaflet-touch-drag"), this._draggable.disable();
@@ -6635,8 +6635,8 @@ function Hr() {
           }
         },
         _onPreDragWrap: function() {
-          var t = this._worldWidth, e = Math.round(t / 2), i = this._initialWorldOffset, n = this._draggable._newPos.x, r = (n - e + i) % t + e - i, l = (n + e + i) % t - e - i, f = Math.abs(r + i) < Math.abs(l + i) ? r : l;
-          this._draggable._absPos = this._draggable._newPos.clone(), this._draggable._newPos.x = f;
+          var t = this._worldWidth, e = Math.round(t / 2), i = this._initialWorldOffset, n = this._draggable._newPos.x, r = (n - e + i) % t + e - i, h = (n + e + i) % t - e - i, d = Math.abs(r + i) < Math.abs(h + i) ? r : h;
+          this._draggable._absPos = this._draggable._newPos.clone(), this._draggable._newPos.x = d;
         },
         _onDragEnd: function(t) {
           var e = this._map, i = e.options, n = !i.inertia || t.noInertia || this._times.length < 2;
@@ -6644,11 +6644,11 @@ function Hr() {
             e.fire("moveend");
           else {
             this._prunePositions(+/* @__PURE__ */ new Date());
-            var r = this._lastPos.subtract(this._positions[0]), l = (this._lastTime - this._times[0]) / 1e3, f = i.easeLinearity, p = r.multiplyBy(f / l), _ = p.distanceTo([0, 0]), v = Math.min(i.inertiaMaxSpeed, _), y = p.multiplyBy(v / _), x = v / (i.inertiaDeceleration * f), E = y.multiplyBy(-x / 2).round();
-            !E.x && !E.y ? e.fire("moveend") : (E = e._limitOffset(E, e.options.maxBounds), J(function() {
-              e.panBy(E, {
+            var r = this._lastPos.subtract(this._positions[0]), h = (this._lastTime - this._times[0]) / 1e3, d = i.easeLinearity, p = r.multiplyBy(d / h), _ = p.distanceTo([0, 0]), v = Math.min(i.inertiaMaxSpeed, _), y = p.multiplyBy(v / _), x = v / (i.inertiaDeceleration * d), C = y.multiplyBy(-x / 2).round();
+            !C.x && !C.y ? e.fire("moveend") : (C = e._limitOffset(C, e.options.maxBounds), J(function() {
+              e.panBy(C, {
                 duration: x,
-                easeLinearity: f,
+                easeLinearity: d,
                 noMoveStart: !0,
                 animate: !0
               });
@@ -6656,7 +6656,7 @@ function Hr() {
           }
         }
       });
-      z.addInitHook("addHandler", "dragging", Jn), z.mergeOptions({
+      z.addInitHook("addHandler", "dragging", eo), z.mergeOptions({
         // @option keyboard: Boolean = true
         // Makes the map focusable and allows users to navigate the map with keyboard
         // arrows and `+`/`-` keys.
@@ -6665,7 +6665,7 @@ function Hr() {
         // Amount of pixels to pan when pressing an arrow key.
         keyboardPanDelta: 80
       });
-      var Xn = ut.extend({
+      var io = ut.extend({
         keyCodes: {
           left: [37],
           right: [39],
@@ -6689,7 +6689,7 @@ function Hr() {
           }, this);
         },
         removeHooks: function() {
-          this._removeHooks(), N(this._map._container, {
+          this._removeHooks(), D(this._map._container, {
             focus: this._onFocus,
             blur: this._onBlur,
             mousedown: this._onMouseDown
@@ -6732,7 +6732,7 @@ function Hr() {
           A(document, "keydown", this._onKeyDown, this);
         },
         _removeHooks: function() {
-          N(document, "keydown", this._onKeyDown, this);
+          D(document, "keydown", this._onKeyDown, this);
         },
         _onKeyDown: function(t) {
           if (!(t.altKey || t.ctrlKey || t.metaKey)) {
@@ -6754,7 +6754,7 @@ function Hr() {
           }
         }
       });
-      z.addInitHook("addHandler", "keyboard", Xn), z.mergeOptions({
+      z.addInitHook("addHandler", "keyboard", io), z.mergeOptions({
         // @section Mouse wheel options
         // @option scrollWheelZoom: Boolean|String = true
         // Whether the map can be zoomed by using the mouse wheel. If passed `'center'`,
@@ -6770,28 +6770,28 @@ function Hr() {
         // faster (and vice versa).
         wheelPxPerZoomLevel: 60
       });
-      var Qn = ut.extend({
+      var no = ut.extend({
         addHooks: function() {
           A(this._map._container, "wheel", this._onWheelScroll, this), this._delta = 0;
         },
         removeHooks: function() {
-          N(this._map._container, "wheel", this._onWheelScroll, this);
+          D(this._map._container, "wheel", this._onWheelScroll, this);
         },
         _onWheelScroll: function(t) {
-          var e = Pn(t), i = this._map.options.wheelDebounceTime;
+          var e = Sn(t), i = this._map.options.wheelDebounceTime;
           this._delta += e, this._lastMousePos = this._map.mouseEventToContainerPoint(t), this._startTime || (this._startTime = +/* @__PURE__ */ new Date());
           var n = Math.max(i - (+/* @__PURE__ */ new Date() - this._startTime), 0);
-          clearTimeout(this._timer), this._timer = setTimeout(d(this._performZoom, this), n), At(t);
+          clearTimeout(this._timer), this._timer = setTimeout(f(this._performZoom, this), n), At(t);
         },
         _performZoom: function() {
           var t = this._map, e = t.getZoom(), i = this._map.options.zoomSnap || 0;
           t._stop();
-          var n = this._delta / (this._map.options.wheelPxPerZoomLevel * 4), r = 4 * Math.log(2 / (1 + Math.exp(-Math.abs(n)))) / Math.LN2, l = i ? Math.ceil(r / i) * i : r, f = t._limitZoom(e + (this._delta > 0 ? l : -l)) - e;
-          this._delta = 0, this._startTime = null, f && (t.options.scrollWheelZoom === "center" ? t.setZoom(e + f) : t.setZoomAround(this._lastMousePos, e + f));
+          var n = this._delta / (this._map.options.wheelPxPerZoomLevel * 4), r = 4 * Math.log(2 / (1 + Math.exp(-Math.abs(n)))) / Math.LN2, h = i ? Math.ceil(r / i) * i : r, d = t._limitZoom(e + (this._delta > 0 ? h : -h)) - e;
+          this._delta = 0, this._startTime = null, d && (t.options.scrollWheelZoom === "center" ? t.setZoom(e + d) : t.setZoomAround(this._lastMousePos, e + d));
         }
       });
-      z.addInitHook("addHandler", "scrollWheelZoom", Qn);
-      var nr = 600;
+      z.addInitHook("addHandler", "scrollWheelZoom", no);
+      var rr = 600;
       z.mergeOptions({
         // @section Touch interaction options
         // @option tapHold: Boolean
@@ -6802,26 +6802,26 @@ function Hr() {
         // for it to be considered a valid tap.
         tapTolerance: 15
       });
-      var to = ut.extend({
+      var oo = ut.extend({
         addHooks: function() {
           A(this._map._container, "touchstart", this._onDown, this);
         },
         removeHooks: function() {
-          N(this._map._container, "touchstart", this._onDown, this);
+          D(this._map._container, "touchstart", this._onDown, this);
         },
         _onDown: function(t) {
           if (clearTimeout(this._holdTimeout), t.touches.length === 1) {
             var e = t.touches[0];
-            this._startPos = this._newPos = new S(e.clientX, e.clientY), this._holdTimeout = setTimeout(d(function() {
+            this._startPos = this._newPos = new S(e.clientX, e.clientY), this._holdTimeout = setTimeout(f(function() {
               this._cancel(), this._isTapValid() && (A(document, "touchend", G), A(document, "touchend touchcancel", this._cancelClickPrevent), this._simulateEvent("contextmenu", e));
-            }, this), nr), A(document, "touchend touchcancel contextmenu", this._cancel, this), A(document, "touchmove", this._onMove, this);
+            }, this), rr), A(document, "touchend touchcancel contextmenu", this._cancel, this), A(document, "touchmove", this._onMove, this);
           }
         },
         _cancelClickPrevent: function t() {
-          N(document, "touchend", G), N(document, "touchend touchcancel", t);
+          D(document, "touchend", G), D(document, "touchend touchcancel", t);
         },
         _cancel: function() {
-          clearTimeout(this._holdTimeout), N(document, "touchend touchcancel contextmenu", this._cancel, this), N(document, "touchmove", this._onMove, this);
+          clearTimeout(this._holdTimeout), D(document, "touchend touchcancel contextmenu", this._cancel, this), D(document, "touchmove", this._onMove, this);
         },
         _onMove: function(t) {
           var e = t.touches[0];
@@ -6846,7 +6846,7 @@ function Hr() {
           i._simulated = !0, e.target.dispatchEvent(i);
         }
       });
-      z.addInitHook("addHandler", "tapHold", to), z.mergeOptions({
+      z.addInitHook("addHandler", "tapHold", oo), z.mergeOptions({
         // @section Touch interaction options
         // @option touchZoom: Boolean|String = *
         // Whether the map can be zoomed by touch-dragging with two fingers. If
@@ -6859,12 +6859,12 @@ function Hr() {
         // and then bounce back when pinch-zooming.
         bounceAtZoomLimits: !0
       });
-      var eo = ut.extend({
+      var so = ut.extend({
         addHooks: function() {
-          C(this._map._container, "leaflet-touch-zoom"), A(this._map._container, "touchstart", this._onTouchStart, this);
+          E(this._map._container, "leaflet-touch-zoom"), A(this._map._container, "touchstart", this._onTouchStart, this);
         },
         removeHooks: function() {
-          j(this._map._container, "leaflet-touch-zoom"), N(this._map._container, "touchstart", this._onTouchStart, this);
+          j(this._map._container, "leaflet-touch-zoom"), D(this._map._container, "touchstart", this._onTouchStart, this);
         },
         _onTouchStart: function(t) {
           var e = this._map;
@@ -6880,14 +6880,14 @@ function Hr() {
               if (this._center = this._startLatLng, r === 1)
                 return;
             } else {
-              var l = i._add(n)._divideBy(2)._subtract(this._centerPoint);
-              if (r === 1 && l.x === 0 && l.y === 0)
+              var h = i._add(n)._divideBy(2)._subtract(this._centerPoint);
+              if (r === 1 && h.x === 0 && h.y === 0)
                 return;
-              this._center = e.unproject(e.project(this._pinchStartLatLng, this._zoom).subtract(l), this._zoom);
+              this._center = e.unproject(e.project(this._pinchStartLatLng, this._zoom).subtract(h), this._zoom);
             }
             this._moved || (e._moveStart(!0, !1), this._moved = !0), it(this._animRequest);
-            var f = d(e._move, e, this._center, this._zoom, { pinch: !0, round: !1 }, void 0);
-            this._animRequest = J(f, this, !0), G(t);
+            var d = f(e._move, e, this._center, this._zoom, { pinch: !0, round: !1 }, void 0);
+            this._animRequest = J(d, this, !0), G(t);
           }
         },
         _onTouchEnd: function() {
@@ -6895,19 +6895,33 @@ function Hr() {
             this._zooming = !1;
             return;
           }
-          this._zooming = !1, it(this._animRequest), N(document, "touchmove", this._onTouchMove, this), N(document, "touchend touchcancel", this._onTouchEnd, this), this._map.options.zoomAnimation ? this._map._animateZoom(this._center, this._map._limitZoom(this._zoom), !0, this._map.options.zoomSnap) : this._map._resetView(this._center, this._map._limitZoom(this._zoom));
+          this._zooming = !1, it(this._animRequest), D(document, "touchmove", this._onTouchMove, this), D(document, "touchend touchcancel", this._onTouchEnd, this), this._map.options.zoomAnimation ? this._map._animateZoom(this._center, this._map._limitZoom(this._zoom), !0, this._map.options.zoomSnap) : this._map._resetView(this._center, this._map._limitZoom(this._zoom));
         }
       });
-      z.addInitHook("addHandler", "touchZoom", eo), z.BoxZoom = Kn, z.DoubleClickZoom = Yn, z.Drag = Jn, z.Keyboard = Xn, z.ScrollWheelZoom = Qn, z.TapHold = to, z.TouchZoom = eo, s.Bounds = H, s.Browser = w, s.CRS = pt, s.Canvas = Un, s.Circle = Ai, s.CircleMarker = Re, s.Class = ft, s.Control = at, s.DivIcon = Fn, s.DivOverlay = dt, s.DomEvent = ws, s.DomUtil = ys, s.Draggable = wt, s.Evented = Gt, s.FeatureGroup = _t, s.GeoJSON = gt, s.GridLayer = re, s.Handler = ut, s.Icon = $t, s.ImageOverlay = Ne, s.LatLng = B, s.LatLngBounds = Q, s.Layer = lt, s.LayerGroup = Zt, s.LineUtil = Rs, s.Map = z, s.Marker = Oe, s.Mixin = As, s.Path = xt, s.Point = S, s.PolyUtil = Cs, s.Polygon = Bt, s.Polyline = mt, s.Popup = De, s.PosAnimation = Ln, s.Projection = Is, s.Rectangle = Gn, s.Renderer = vt, s.SVG = le, s.SVGOverlay = Hn, s.TileLayer = Dt, s.Tooltip = He, s.Transformation = ti, s.Util = Ho, s.VideoOverlay = Dn, s.bind = d, s.bounds = X, s.canvas = Vn, s.circle = js, s.circleMarker = Fs, s.control = ne, s.divIcon = Xs, s.extend = a, s.featureGroup = Ns, s.geoJSON = Nn, s.geoJson = Vs, s.gridLayer = Qs, s.icon = Ds, s.imageOverlay = qs, s.latLng = M, s.latLngBounds = W, s.layerGroup = Bs, s.map = xs, s.marker = Hs, s.point = k, s.polygon = Us, s.polyline = Ws, s.popup = Ys, s.rectangle = ir, s.setOptions = O, s.stamp = g, s.svg = qn, s.svgOverlay = Ks, s.tileLayer = jn, s.tooltip = Js, s.transformation = Kt, s.version = h, s.videoOverlay = Gs;
-      var or = window.L;
+      z.addInitHook("addHandler", "touchZoom", so), z.BoxZoom = Qn, z.DoubleClickZoom = to, z.Drag = eo, z.Keyboard = io, z.ScrollWheelZoom = no, z.TapHold = oo, z.TouchZoom = so, s.Bounds = H, s.Browser = w, s.CRS = _t, s.Canvas = Kn, s.Circle = Ci, s.CircleMarker = Ie, s.Class = pt, s.Control = at, s.DivIcon = Vn, s.DivOverlay = dt, s.DomEvent = Ls, s.DomUtil = xs, s.Draggable = wt, s.Evented = Gt, s.FeatureGroup = mt, s.GeoJSON = vt, s.GridLayer = re, s.Handler = ut, s.Icon = Bt, s.ImageOverlay = Ne, s.LatLng = B, s.LatLngBounds = Q, s.Layer = lt, s.LayerGroup = $t, s.LineUtil = $s, s.Map = z, s.Marker = Oe, s.Mixin = Ms, s.Path = xt, s.Point = S, s.PolyUtil = zs, s.Polygon = Nt, s.Polyline = gt, s.Popup = De, s.PosAnimation = An, s.Projection = Bs, s.Rectangle = Xn, s.Renderer = yt, s.SVG = le, s.SVGOverlay = Un, s.TileLayer = Ht, s.Tooltip = He, s.Transformation = ii, s.Util = Wo, s.VideoOverlay = Wn, s.bind = f, s.bounds = X, s.canvas = Yn, s.circle = Vs, s.circleMarker = Us, s.control = ne, s.divIcon = er, s.extend = a, s.featureGroup = Fs, s.geoJSON = jn, s.geoJson = Ks, s.gridLayer = ir, s.icon = js, s.imageOverlay = Ys, s.latLng = M, s.latLngBounds = W, s.layerGroup = Hs, s.map = Ts, s.marker = Ws, s.point = k, s.polygon = Gs, s.polyline = qs, s.popup = Qs, s.rectangle = sr, s.setOptions = O, s.stamp = g, s.svg = Jn, s.svgOverlay = Xs, s.tileLayer = qn, s.tooltip = tr, s.transformation = Kt, s.version = l, s.videoOverlay = Js;
+      var ar = window.L;
       s.noConflict = function() {
-        return window.L = or, this;
+        return window.L = ar, this;
       }, window.L = s;
     }));
   })(de, de.exports)), de.exports;
 }
-var Fr = Hr();
-const yt = /* @__PURE__ */ Nr(Fr), bo = {
+var Ur = Wr();
+const ft = /* @__PURE__ */ Fr(Ur), Ve = {
+  show_counter: !0,
+  wrap: !1,
+  keyboard: !0
+}, Wi = {
+  height: 280,
+  padding_pct: 10,
+  gestures: "locked",
+  tile_provider: "auto",
+  zoom_to_fit: !1
+}, qe = {
+  color_by: "solid",
+  weight: 4,
+  opacity: 0.9
+}, We = {
   openstreetmap: {
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attributionShort: '© <a href="https://www.openstreetmap.org/copyright">OSM</a>'
@@ -6921,50 +6935,50 @@ const yt = /* @__PURE__ */ Nr(Fr), bo = {
     attributionShort: '© <a href="https://www.openstreetmap.org/copyright">OSM</a>, © <a href="https://carto.com/attributions">CARTO</a>'
   }
 };
-function fe(c, o) {
+function _e(c, o) {
   return c.tile_provider && c.tile_provider !== "auto" ? c.tile_provider : o ? "carto-dark-matter" : "openstreetmap";
 }
-const wo = {
+const Lo = {
   ev: "#1d8cf8",
   ice: "#f6a800",
   overspeed: "#e63946",
   highway: "#7b2cbf",
   solid: "#e63946"
-}, jr = {
+}, Vr = {
   ev: "--journey-viewer-polyline-ev",
   ice: "--journey-viewer-polyline-ice",
   overspeed: "--journey-viewer-polyline-overspeed",
   highway: "--journey-viewer-polyline-highway",
   solid: "--journey-viewer-polyline-solid"
 };
-function Wr(c, o) {
-  const s = getComputedStyle(c), h = {};
-  for (const a of Object.keys(wo)) {
+function qr(c, o) {
+  const s = getComputedStyle(c), l = {};
+  for (const a of Object.keys(Lo)) {
     const u = o?.[a];
     if (u) {
-      h[a] = u;
+      l[a] = u;
       continue;
     }
-    const d = jr[a];
-    if (d) {
-      const m = s.getPropertyValue(d).trim();
+    const f = Vr[a];
+    if (f) {
+      const m = s.getPropertyValue(f).trim();
       if (m) {
-        h[a] = m;
+        l[a] = m;
         continue;
       }
     }
-    h[a] = wo[a];
+    l[a] = Lo[a];
   }
-  return h;
+  return l;
 }
-class Ur {
-  constructor(o, s, h = !1) {
-    this.container = o, this.cfg = s, this.dark = h, this.lastSize = { w: 0, h: 0 }, this.resizeObserver = new ResizeObserver(([a]) => this.onResize(a)), this.resizeObserver.observe(o);
+class Gr {
+  constructor(o, s, l = !1) {
+    this.container = o, this.cfg = s, this.dark = l, this.pendingTimeouts = /* @__PURE__ */ new Set(), this.pendingFrames = /* @__PURE__ */ new Set(), this.lastSize = { w: 0, h: 0 }, this.resizeObserver = new ResizeObserver(([a]) => this.onResize(a)), this.resizeObserver.observe(o);
   }
   onResize(o) {
     if (!o) return;
-    const { width: s, height: h } = o.contentRect;
-    if (s === 0 || h === 0) {
+    const { width: s, height: l } = o.contentRect;
+    if (s === 0 || l === 0) {
       this.lastSize = { w: 0, h: 0 };
       return;
     }
@@ -6973,10 +6987,24 @@ class Ur {
       return;
     }
     this.map.invalidateSize();
-    const a = Math.abs(s - this.lastSize.w) > 1 || Math.abs(h - this.lastSize.h) > 1;
-    this.lastSize = { w: s, h }, a && this.lastTrip && requestAnimationFrame(() => {
+    const a = Math.abs(s - this.lastSize.w) > 1 || Math.abs(l - this.lastSize.h) > 1;
+    this.lastSize = { w: s, h: l }, a && this.lastTrip && this.deferFrame(() => {
       this.lastTrip && this.render(this.lastTrip);
     });
+  }
+  /** Track a macrotask-deferred callback so destroy() can cancel it. */
+  deferTimeout(o) {
+    const s = setTimeout(() => {
+      this.pendingTimeouts.delete(s), o();
+    }, 0);
+    this.pendingTimeouts.add(s);
+  }
+  /** Track a frame-deferred callback so destroy() can cancel it. */
+  deferFrame(o) {
+    const s = requestAnimationFrame(() => {
+      this.pendingFrames.delete(s), o();
+    });
+    this.pendingFrames.add(s);
   }
   /**
    * Init Leaflet once the container has real dimensions.
@@ -6994,7 +7022,7 @@ class Ur {
     if (this.map) return this.map;
     const o = this.container.getBoundingClientRect();
     if (o.width === 0 || o.height === 0) return;
-    const s = fe(this.cfg, this.dark), h = bo[s] ?? bo.openstreetmap, a = this.cfg.gestures !== "enabled", u = yt.map(this.container, {
+    const s = _e(this.cfg, this.dark), l = We[s] ?? We.openstreetmap, a = this.cfg.gestures !== "enabled", u = ft.map(this.container, {
       zoomControl: !0,
       // Attribution stays on per OSM / CARTO usage-policy requirements. Style
       // makes it tiny + low-contrast (see card.ts .leaflet-control-attribution
@@ -7007,21 +7035,33 @@ class Ur {
       boxZoom: !a,
       keyboard: !a
     });
-    return u.attributionControl.setPrefix(!1), yt.tileLayer(h.url, {
-      attribution: h.attributionShort,
+    return u.attributionControl.setPrefix(!1), this.tiles = ft.tileLayer(l.url, {
+      attribution: l.attributionShort,
       maxZoom: 19
-    }).addTo(u), this.map = u, setTimeout(() => {
-      this.map === u && u.invalidateSize();
-    }, 0), requestAnimationFrame(() => {
-      this.map === u && u.invalidateSize();
-    }), u;
+    }).addTo(u), this.map = u, this.deferTimeout(() => u.invalidateSize()), this.deferFrame(() => u.invalidateSize()), u;
+  }
+  /** Update theme darkness. When that changes the effective tile provider
+   *  (unset/"auto" only), swap just the tile layer — viewport, polyline, and
+   *  markers stay intact, no full map rebuild needed. Replacing the layer
+   *  (rather than setUrl) keeps the attribution control in sync too, since
+   *  OSM and CARTO require different attributions. */
+  setDark(o) {
+    const s = _e(this.cfg, this.dark);
+    this.dark = o;
+    const l = _e(this.cfg, o);
+    if (s === l || !this.map || !this.tiles) return;
+    const a = We[l] ?? We.openstreetmap;
+    this.tiles.remove(), this.tiles = ft.tileLayer(a.url, {
+      attribution: a.attributionShort,
+      maxZoom: 19
+    }).addTo(this.map);
   }
   /** Replace all trip-specific layers with this trip's data. */
   render(o) {
     this.lastTrip = o;
     const s = this.ensure();
     if (s) {
-      if (this.layer && this.layer.remove(), this.layer = yt.layerGroup().addTo(s), !o.route?.length) {
+      if (this.layer && this.layer.remove(), this.layer = ft.layerGroup().addTo(s), !o.route?.length) {
         this.dropEndpoints(o), this.fitAndSettle(s, this.collectCoords(o));
         return;
       }
@@ -7038,34 +7078,34 @@ class Ur {
    * land at the right time across the timing variations we've observed.
    */
   fitAndSettle(o, s) {
-    o.invalidateSize(), this.fitToBounds(o, s), setTimeout(() => {
-      this.map === o && (o.invalidateSize(), this.fitToBounds(o, s));
-    }, 0), requestAnimationFrame(() => {
-      this.map === o && (o.invalidateSize(), this.fitToBounds(o, s));
-    });
+    o.invalidateSize(), this.fitToBounds(o, s);
+    const l = () => {
+      o.invalidateSize(), this.fitToBounds(o, s);
+    };
+    this.deferTimeout(l), this.deferFrame(l);
   }
   // ─── Polyline ─────────────────────────────────────────────────────────────
   drawPolyline(o) {
-    const s = this.cfg.polyline ?? {}, h = s.color_by ?? "solid", a = Wr(this.container, s.palette), u = s.weight ?? 4, d = s.opacity ?? 0.9, m = o.route ?? [];
-    if (h === "solid") {
+    const s = this.cfg.polyline ?? {}, l = s.color_by ?? qe.color_by, a = qr(this.container, s.palette), u = s.weight ?? qe.weight, f = s.opacity ?? qe.opacity, m = o.route ?? [];
+    if (l === "solid") {
       const P = m.map((T) => [T.lat, T.lon]);
-      yt.polyline(P, { color: a.solid, weight: u, opacity: d }).addTo(this.layer);
+      ft.polyline(P, { color: a.solid, weight: u, opacity: f }).addTo(this.layer);
       return;
     }
-    const g = Vr(m, h, a);
+    const g = Kr(m, l, a);
     for (const P of g)
-      yt.polyline(P.coords, { color: P.color, weight: u, opacity: d }).addTo(this.layer);
+      ft.polyline(P.coords, { color: P.color, weight: u, opacity: f }).addTo(this.layer);
   }
   // ─── Endpoint pins ────────────────────────────────────────────────────────
   dropEndpoints(o) {
-    const s = this.cfg.markers ?? {}, h = s.start?.color ?? "#2a9d8f", a = s.end?.color ?? "#e63946";
-    ue(o.start) && yt.circleMarker([o.start.lat, o.start.lon], {
+    const s = this.cfg.markers ?? {}, l = s.start?.color ?? "#2a9d8f", a = s.end?.color ?? "#e63946";
+    ue(o.start) && ft.circleMarker([o.start.lat, o.start.lon], {
       radius: 8,
       color: "#fff",
       weight: 2,
-      fillColor: h,
+      fillColor: l,
       fillOpacity: 1
-    }).bindTooltip("Start").addTo(this.layer), ue(o.end) && yt.circleMarker([o.end.lat, o.end.lon], {
+    }).bindTooltip("Start").addTo(this.layer), ue(o.end) && ft.circleMarker([o.end.lat, o.end.lon], {
       radius: 8,
       color: "#fff",
       weight: 2,
@@ -7077,25 +7117,25 @@ class Ur {
   dropBehaviours(o) {
     const s = this.cfg.markers?.behaviours;
     if (!s?.enabled || !o.behaviours?.length) return;
-    const h = s.style?.good ?? { color: "#2a9d8f", radius: 6 }, a = s.style?.bad ?? { color: "#e63946", radius: 8 }, u = s.tooltip ?? "{type} severity={severity}";
-    for (const d of o.behaviours) {
-      if (!ue(d)) continue;
-      const m = d.good ? h : a;
-      yt.circleMarker([d.lat, d.lon], {
+    const l = s.style?.good ?? { color: "#2a9d8f", radius: 6 }, a = s.style?.bad ?? { color: "#e63946", radius: 8 }, u = s.tooltip ?? "{type} severity={severity}";
+    for (const f of o.behaviours) {
+      if (!ue(f)) continue;
+      const m = f.good ? l : a;
+      ft.circleMarker([f.lat, f.lon], {
         radius: m.radius ?? 5,
         color: "#fff",
         weight: 1,
         fillColor: m.color ?? "#000",
         fillOpacity: 0.9
       }).bindTooltip(
-        u.replace("{type}", String(d.type ?? "?")).replace("{severity}", String(d.severity ?? "?")).replace("{ts}", String(d.ts ?? ""))
+        u.replace("{type}", String(f.type ?? "?")).replace("{severity}", String(f.severity ?? "?")).replace("{ts}", String(f.ts ?? ""))
       ).addTo(this.layer);
     }
   }
   // ─── Bounds ───────────────────────────────────────────────────────────────
   collectCoords(o) {
     const s = (o.route ?? []).map(
-      (h) => [h.lat, h.lon]
+      (l) => [l.lat, l.lon]
     );
     return ue(o.start) && s.push([o.start.lat, o.start.lon]), ue(o.end) && s.push([o.end.lat, o.end.lon]), s;
   }
@@ -7108,82 +7148,85 @@ class Ur {
       o.setView(s[0], 14);
       return;
     }
-    const h = Math.round(this.cfg.padding_pct ?? 10), a = yt.latLngBounds(s);
-    o.fitBounds(a, { padding: [h, h], maxZoom: 17 });
+    const l = Math.round(this.cfg.padding_pct ?? Wi.padding_pct), a = ft.latLngBounds(s);
+    o.fitBounds(a, { padding: [l, l], maxZoom: 17 });
   }
   /** Re-layout after container resize (e.g. dashboard resize). */
   invalidateSize() {
     this.map?.invalidateSize();
   }
   destroy() {
-    this.resizeObserver?.disconnect(), this.resizeObserver = void 0, this.map?.remove(), this.map = void 0, this.layer = void 0, this.lastTrip = void 0, this.lastSize = { w: 0, h: 0 };
+    for (const o of this.pendingTimeouts) clearTimeout(o);
+    this.pendingTimeouts.clear();
+    for (const o of this.pendingFrames) cancelAnimationFrame(o);
+    this.pendingFrames.clear(), this.resizeObserver?.disconnect(), this.resizeObserver = void 0, this.map?.remove(), this.map = void 0, this.tiles = void 0, this.layer = void 0, this.lastTrip = void 0, this.lastSize = { w: 0, h: 0 };
   }
 }
 function ue(c) {
   return !!c && typeof c.lat == "number" && typeof c.lon == "number";
 }
-function Vr(c, o, s) {
-  const h = [];
+function Kr(c, o, s) {
+  const l = [];
   let a;
-  const u = (d) => {
-    if (o === "ev") return d.isEv ? s.ev : s.ice;
-    if (o === "overspeed") return d.overspeed ? s.overspeed : s.solid;
-    if (o === "highway") return d.highway ? s.highway : s.solid;
+  const u = (f) => {
+    if (o === "ev") return f.isEv ? s.ev : s.ice;
+    if (o === "overspeed") return f.overspeed ? s.overspeed : s.solid;
+    if (o === "highway") return f.highway ? s.highway : s.solid;
     if (o === "mode") {
-      const m = `mode_${d.mode ?? 0}`;
+      const m = `mode_${f.mode ?? 0}`;
       return s[m] ?? s.solid;
     }
     return s.solid;
   };
-  for (const d of c) {
-    const m = u(d);
-    (!a || a.color !== m) && (a && a.coords.length ? (h.push(a), a = { color: m, coords: [a.coords[a.coords.length - 1]] }) : a = { color: m, coords: [] }), a.coords.push([d.lat, d.lon]);
+  for (const f of c) {
+    const m = u(f);
+    (!a || a.color !== m) && (a && a.coords.length ? (l.push(a), a = { color: m, coords: [a.coords[a.coords.length - 1]] }) : a = { color: m, coords: [] }), a.coords.push([f.lat, f.lon]);
   }
-  return a && a.coords.length && h.push(a), h;
+  return a && a.coords.length && l.push(a), l;
 }
 const ye = (c, o = 2) => String(c).padStart(o, "0");
-function qr(c) {
+function Yr(c) {
   if (!c) return "—";
   const o = new Date(c);
   if (Number.isNaN(o.getTime())) return "—";
   const s = /* @__PURE__ */ new Date();
   s.setHours(0, 0, 0, 0);
-  const h = new Date(o);
-  h.setHours(0, 0, 0, 0);
-  const a = Math.round((s.getTime() - h.getTime()) / 864e5);
+  const l = new Date(o);
+  l.setHours(0, 0, 0, 0);
+  const a = Math.round((s.getTime() - l.getTime()) / 864e5);
   return a === 0 ? "Today" : a === 1 ? "Yesterday" : a < 7 ? o.toLocaleDateString(void 0, { weekday: "short" }) : o.toLocaleDateString(void 0, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit"
   });
 }
-function xo(c) {
+function To(c) {
   if (!c) return "—";
   const o = new Date(c);
   return Number.isNaN(o.getTime()) ? "—" : `${ye(o.getHours())}:${ye(o.getMinutes())}`;
 }
-function $o(c) {
+function Do(c) {
   return c == null ? "—" : c < 1e3 ? `${Math.round(c)} m` : `${(c / 1e3).toFixed(2)} km`;
 }
-function Bo(c) {
+function Ho(c) {
   if (c == null) return "—";
   const o = Math.round(c);
   if (o < 60) return `${o}s`;
-  const s = Math.floor(o / 60), h = o % 60;
-  if (s < 60) return `${s}:${ye(h)}`;
+  const s = Math.floor(o / 60), l = o % 60;
+  if (s < 60) return `${s}:${ye(l)}`;
   const a = Math.floor(s / 60), u = s % 60;
   return `${a}h ${ye(u)}m`;
 }
-function Gr(c, o = 3) {
+function Jr(c, o = 3) {
   return c == null ? "—" : `${(c / 1e3).toFixed(o)} L`;
 }
-function Kr(c) {
+function Xr(c) {
   if (c == null || !Number.isFinite(c) || c <= 0)
     return "—";
   const o = Math.round(c);
   return `${Math.floor(o / 60)}:${ye(o % 60)} /km`;
 }
-const No = [
+const Fo = [
   "{relative_day}",
   "{start_time}",
   "{end_time}",
@@ -7193,26 +7236,39 @@ const No = [
   "{activity_type}",
   "{source}"
 ];
-function Yr(c) {
-  const o = new Set(No), s = c.match(/\{[^}]+\}/g) ?? [];
-  return Array.from(new Set(s.filter((h) => !o.has(h))));
+function Qr(c) {
+  const o = new Set(Fo), s = c.match(/\{[^}]+\}/g) ?? [];
+  return Array.from(new Set(s.filter((l) => !o.has(l))));
 }
-function Jr(c, o) {
-  return c.replaceAll("{relative_day}", qr(o.start_ts)).replaceAll("{start_time}", xo(o.start_ts)).replaceAll("{end_time}", xo(o.end_ts)).replaceAll("{distance}", $o(o.stats.distance_m)).replaceAll("{duration}", Bo(o.stats.duration_s)).replaceAll("{label}", o.label ?? "").replaceAll("{activity_type}", o.activity_type ?? "").replaceAll("{source}", o.source ?? "").replace(/\s{2,}/g, " ").trim();
+function ta(c, o) {
+  const s = {
+    "{relative_day}": Yr(o.start_ts),
+    "{start_time}": To(o.start_ts),
+    "{end_time}": To(o.end_ts),
+    "{distance}": Do(o.stats.distance_m),
+    "{duration}": Ho(o.stats.duration_s),
+    "{label}": o.label ?? "",
+    "{activity_type}": o.activity_type ?? "",
+    "{source}": o.source ?? ""
+  };
+  return c.replace(/\{[a-z_]+\}/g, (a) => {
+    const u = s[a];
+    return u === void 0 ? a : u === "" ? "\0" : u;
+  }).replace(/\s*\0+\s*/g, (a) => /\s/.test(a) ? " " : "").trim();
 }
-function Po(c, o, s) {
+function ko(c, o, s) {
   if (c == null || typeof c != "number" && typeof c != "string" && typeof c != "boolean")
     return "—";
-  const h = typeof c == "number" ? c : Number(c), a = Number.isFinite(h);
-  return o === "km" ? a ? $o(h) : "—" : o === "L" ? a ? Gr(h, s ?? 3) : "—" : o === "duration" ? a ? Bo(h) : "—" : o === "pace" ? a ? Kr(h) : "—" : o && o.includes("{v") ? a ? o.replace(/\{v:\.0%\}/g, `${Math.round(h * 100)}%`).replace(/\{v:\.(\d+)f\}/g, (u, d) => h.toFixed(Number(d))).replace(/\{v\}/g, String(h)) : "—" : s != null && a ? h.toFixed(s) : String(c);
+  const l = typeof c == "number" ? c : Number(c), a = Number.isFinite(l);
+  return o === "km" ? a ? Do(l) : "—" : o === "L" ? a ? Jr(l, s ?? 3) : "—" : o === "duration" ? a ? Ho(l) : "—" : o === "pace" ? a ? Xr(l) : "—" : o && o.includes("{v") ? a ? o.replace(/\{v:\.0%\}/g, `${Math.round(l * 100)}%`).replace(/\{v:\.(\d+)f\}/g, (u, f) => l.toFixed(Number(f))).replace(/\{v\}/g, String(l)) : "—" : s != null && a ? l.toFixed(s) : String(c);
 }
-function pe(c, o) {
-  return o.split(".").reduce((s, h) => {
-    if (s != null && typeof s == "object" && h in s)
-      return s[h];
+function fe(c, o) {
+  return o.split(".").reduce((s, l) => {
+    if (s != null && typeof s == "object" && l in s)
+      return s[l];
   }, c);
 }
-function Xr(c) {
+function ea(c) {
   if (Array.isArray(c)) return c;
   if (c && typeof c == "object" && "trips" in c) {
     const o = c.trips;
@@ -7220,24 +7276,24 @@ function Xr(c) {
   }
   return [];
 }
-function Qr(c, o) {
+function ia(c, o) {
   if (!c?.states) return [];
   const s = [];
-  for (const h of o) {
-    if (!h.entity) continue;
-    const a = c.states[h.entity];
+  for (const l of o) {
+    if (!l.entity) continue;
+    const a = c.states[l.entity];
     if (!a?.attributes) continue;
-    const u = Xr(a.attributes.trips);
-    for (const d of u)
-      s.push({ ...d, source: d.source ?? h.name, source_entity: h.entity });
+    const u = ea(a.attributes.trips);
+    for (const f of u)
+      s.push({ ...f, source: f.source ?? l.name, source_entity: l.entity });
   }
   return s;
 }
-function ta(c, o) {
+function na(c, o) {
   const s = c.slice();
-  return s.sort((h, a) => {
-    const u = h.start_ts ? Date.parse(h.start_ts) : 0, d = a.start_ts ? Date.parse(a.start_ts) : 0;
-    return o === "newest_first" ? d - u : u - d;
+  return s.sort((l, a) => {
+    const u = l.start_ts ? Date.parse(l.start_ts) : 0, f = a.start_ts ? Date.parse(a.start_ts) : 0;
+    return o === "newest_first" ? f - u : u - f;
   }), s;
 }
 /**
@@ -7245,15 +7301,15 @@ function ta(c, o) {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ea = (c) => (...o) => ({ _$litDirective$: c, values: o });
-class ia {
+const oa = (c) => (...o) => ({ _$litDirective$: c, values: o });
+class sa {
   constructor(o) {
   }
   get _$AU() {
     return this._$AM._$AU;
   }
-  _$AT(o, s, h) {
-    this._$Ct = o, this._$AM = s, this._$Ci = h;
+  _$AT(o, s, l) {
+    this._$Ct = o, this._$AM = s, this._$Ci = l;
   }
   _$AS(o, s) {
     return this.update(o, s);
@@ -7262,62 +7318,62 @@ class ia {
     return this.render(...s);
   }
 }
-class na extends ia {
+class ra extends sa {
   update(o, [s]) {
-    const h = oa();
-    return typeof h.bind == "function" && h.bind(o.element, s), Lt;
+    const l = aa();
+    return typeof l.bind == "function" && l.bind(o.element, s), Lt;
   }
   render(o) {
     return Lt;
   }
 }
-function oa() {
+function aa() {
   const c = document.body.querySelector("action-handler");
   if (c) return c;
   const o = document.createElement("action-handler");
   return document.body.appendChild(o), o;
 }
-const sa = ea(
-  class extends na {
+const la = oa(
+  class extends ra {
     update(c, o) {
-      const [s] = o, h = c.element;
-      return h.actionHandler = h.actionHandler ?? { options: {} }, h.actionHandler.options = s ?? {}, super.update(c, o);
+      const [s] = o, l = c.element;
+      return l.actionHandler = l.actionHandler ?? { options: {} }, l.actionHandler.options = s ?? {}, super.update(c, o);
     }
   }
 );
-function ra(c, o) {
+function ha(c, o) {
   if (c == null || !o?.length) return;
   let s;
-  for (const h of o)
-    c >= h.value && (s = h);
+  for (const l of o)
+    c >= l.value && (s = l);
   return s;
 }
-function aa(c, o) {
+function ca(c, o) {
   if (c == null || !o?.length) return;
-  let s, h;
-  for (const d of o)
-    d.value <= c ? s = d : h || (h = d);
+  let s, l;
+  for (const f of o)
+    f.value <= c ? s = f : l || (l = f);
   if (!s) return o[0]?.color;
-  if (!h) return s.color;
-  if (!s.color || !h.color) return s.color ?? h.color;
-  const a = h.value - s.value;
+  if (!l) return s.color;
+  if (!s.color || !l.color) return s.color ?? l.color;
+  const a = l.value - s.value;
   if (a <= 0) return s.color;
   const u = (c - s.value) / a;
-  return `color-mix(in srgb, ${s.color} ${(1 - u) * 100}%, ${h.color})`;
+  return `color-mix(in srgb, ${s.color} ${(1 - u) * 100}%, ${l.color})`;
 }
-function la(c, o) {
+function ua(c, o) {
   if (c == null) return;
   if (typeof c == "number") return c;
-  const s = pe(o, c);
+  const s = fe(o, c);
   return typeof s == "number" ? s : void 0;
 }
-function ha(c, o) {
+function da(c, o) {
   return !Number.isFinite(c) || !Number.isFinite(o) || o <= 0 ? 0 : Math.max(0, Math.min(100, c / o * 100));
 }
-function ca(c, o, s) {
+function fa(c, o, s) {
   if (c == null || o == null) return;
-  const h = c - o, a = h > 0 ? "up" : h < 0 ? "down" : "flat";
-  return { direction: a, delta: h, sentiment: a === "flat" ? "neutral" : s ? (
+  const l = c - o, a = l > 0 ? "up" : l < 0 ? "down" : "flat";
+  return { direction: a, delta: l, sentiment: a === "flat" ? "neutral" : s ? (
     // Lower is better: down = good, up = bad
     a === "down" ? "good" : "bad"
   ) : (
@@ -7325,29 +7381,172 @@ function ca(c, o, s) {
     a === "up" ? "good" : "bad"
   ) };
 }
-var ua = Object.defineProperty, xe = (c, o, s, h) => {
-  for (var a = void 0, u = c.length - 1, d; u >= 0; u--)
-    (d = c[u]) && (a = d(o, s, a) || a);
-  return a && ua(o, s, a), a;
+const zt = [
+  // Distance / time
+  {
+    id: "distance",
+    label: "Distance",
+    description: "Total distance travelled",
+    key: "stats.distance_m",
+    defaultFormat: "km",
+    defaultIcon: "mdi:map-marker-distance",
+    defaultDecimals: 2
+  },
+  {
+    id: "duration",
+    label: "Duration",
+    description: "Trip duration",
+    key: "stats.duration_s",
+    defaultFormat: "duration",
+    defaultIcon: "mdi:timer-outline"
+  },
+  // Speed
+  {
+    id: "avg_speed",
+    label: "Avg speed",
+    description: "Average speed across the trip",
+    key: "stats.average_speed_kmh",
+    defaultFormat: "{v:.1f} km/h",
+    defaultIcon: "mdi:speedometer-medium"
+  },
+  {
+    id: "max_speed",
+    label: "Max speed",
+    description: "Peak speed during the trip",
+    key: "stats.max_speed_kmh",
+    defaultFormat: "{v} km/h",
+    defaultIcon: "mdi:speedometer"
+  },
+  // Fuel
+  {
+    id: "fuel",
+    label: "Fuel",
+    description: "Fuel consumed (litres)",
+    key: "stats.fuel_consumption_ml",
+    defaultFormat: "L",
+    defaultIcon: "mdi:gas-station",
+    defaultDecimals: 3
+  },
+  // Scores
+  {
+    id: "score_global",
+    label: "Score (global)",
+    key: "scores.global",
+    defaultFormat: "{v} / 100",
+    defaultIcon: "mdi:medal"
+  },
+  {
+    id: "score_accel",
+    label: "Score (acceleration)",
+    key: "scores.acceleration",
+    defaultFormat: "{v} / 100"
+  },
+  {
+    id: "score_brake",
+    label: "Score (braking)",
+    key: "scores.braking",
+    defaultFormat: "{v} / 100"
+  },
+  // Sport / fitness (producers supply these; see the README data contract's
+  // optional sport-stat keys)
+  {
+    id: "pace",
+    label: "Pace",
+    description: "Seconds per km, shown as m:ss /km",
+    key: "stats.pace_s_per_km",
+    defaultFormat: "pace",
+    defaultIcon: "mdi:run-fast"
+  },
+  {
+    id: "elevation_gain",
+    label: "Elevation gain",
+    description: "Total ascent",
+    key: "stats.elevation_gain_m",
+    defaultFormat: "{v:.0f} m",
+    defaultIcon: "mdi:trending-up"
+  },
+  {
+    id: "avg_heartrate",
+    label: "Avg heart rate",
+    key: "stats.average_heartrate_bpm",
+    defaultFormat: "{v:.0f} bpm",
+    defaultIcon: "mdi:heart-pulse"
+  },
+  {
+    id: "calories",
+    label: "Calories",
+    key: "stats.calories_kcal",
+    defaultFormat: "{v:.0f} kcal",
+    defaultIcon: "mdi:fire"
+  },
+  // Ratios (used to be `computed`)
+  {
+    id: "ev_ratio",
+    label: "EV ratio",
+    description: "EV km ÷ total km",
+    key: "stats.ev_distance_m",
+    ratio_of: "stats.distance_m",
+    defaultFormat: "{v:.0%}",
+    defaultIcon: "mdi:lightning-bolt"
+  },
+  {
+    id: "eco_ratio",
+    label: "Eco ratio",
+    description: "Eco km ÷ total km",
+    key: "stats.eco_distance_m",
+    ratio_of: "stats.distance_m",
+    defaultFormat: "{v:.0%}",
+    defaultIcon: "mdi:leaf"
+  },
+  {
+    id: "highway_ratio",
+    label: "Highway ratio",
+    description: "Highway km ÷ total km",
+    key: "stats.length_highway_m",
+    ratio_of: "stats.distance_m",
+    defaultFormat: "{v:.0%}",
+    defaultIcon: "mdi:highway"
+  },
+  // Escape hatch
+  {
+    id: "__custom__",
+    label: "Custom path…",
+    description: "Specify any dot-path manually",
+    key: ""
+  }
+];
+function So(c, o) {
+  if (c) {
+    const s = zt.find(
+      (l) => l.key === c && (l.ratio_of ?? "") === (o ?? "")
+    );
+    if (s) return s;
+  }
+  return zt[zt.length - 1];
+}
+var pa = Object.defineProperty, xe = (c, o, s, l) => {
+  for (var a = void 0, u = c.length - 1, f; u >= 0; u--)
+    (f = c[u]) && (a = f(o, s, a) || a);
+  return a && pa(o, s, a), a;
 };
-const da = "0.2.0", fa = 60, Lo = 50, To = 4, ko = 280;
-function pa(c, o, s) {
+const _a = "0.2.1", ma = 60, Ao = 50, Eo = 4, Co = Wi.height;
+function ga(c, o, s) {
   if (!c) return !0;
   if (!o) return !1;
-  for (const h of s)
-    if (c.states[h] !== o.states[h]) return !0;
+  for (const l of s)
+    if (c.states[l] !== o.states[l]) return !0;
   return !1;
 }
-const _a = "{relative_day} {start_time} ({distance} / {duration})";
-class Vt extends jt {
+const va = "{relative_day} {start_time} ({distance} / {duration})";
+class Vt extends Wt {
   constructor() {
     super(...arguments), this.index = 0, this.trips = [], this.mapDark = !1, this.routeCache = /* @__PURE__ */ new Map(), this.routeFetchInFlight = /* @__PURE__ */ new Set(), this.warnedNoDevice = /* @__PURE__ */ new Set(), this.keyboardListenerActive = !1, this.prev = (o) => {
       o?.stopPropagation();
-      const s = this.config?.pagination?.wrap ?? !1;
+      const s = this.config?.pagination?.wrap ?? Ve.wrap;
       this.index > 0 ? this.index -= 1 : s && (this.index = this.trips.length - 1);
     }, this.next = (o) => {
       o?.stopPropagation();
-      const s = this.config?.pagination?.wrap ?? !1;
+      const s = this.config?.pagination?.wrap ?? Ve.wrap;
       this.index < this.trips.length - 1 ? this.index += 1 : s && (this.index = 0);
     }, this.swallowPointer = (o) => {
       o.stopPropagation();
@@ -7356,56 +7555,41 @@ class Vt extends jt {
       s instanceof HTMLElement && (s.tagName === "INPUT" || s.tagName === "TEXTAREA" || s.tagName === "SELECT" || s.isContentEditable) || (o.key === "ArrowLeft" && this.prev(), o.key === "ArrowRight" && this.next());
     }, this.handleAction = (o) => {
       if (!this.hass || !this.config || !o.detail?.action) return;
-      const s = o.detail.action, h = this.config, a = h.sources?.[0]?.entity, u = {
-        ...h,
+      const s = o.detail.action, l = this.config, a = l.sources?.[0]?.entity, u = {
+        ...l,
         entity: a,
-        tap_action: h.tap_action ?? { action: "more-info" },
-        hold_action: h.hold_action ?? { action: "none" },
-        double_tap_action: h.double_tap_action ?? { action: "none" }
-      }, d = new Event("hass-action", { bubbles: !0, composed: !0 });
-      d.detail = {
+        tap_action: l.tap_action ?? { action: "more-info" },
+        hold_action: l.hold_action ?? { action: "none" },
+        double_tap_action: l.double_tap_action ?? { action: "none" }
+      }, f = new Event("hass-action", { bubbles: !0, composed: !0 });
+      f.detail = {
         config: u,
         action: s
-      }, this.dispatchEvent(d);
+      }, this.dispatchEvent(f);
     };
   }
   // ─── Lovelace lifecycle ────────────────────────────────────────────────
   /** The visual editor lives in its own ESM bundle. Lazy-load it the first
    *  time a user opens the edit dialog; keeps the main card bundle small. */
   static async getConfigElement() {
-    return await Promise.resolve().then(() => Ra), document.createElement("journey-viewer-card-editor");
+    return await Promise.resolve().then(() => Ha), document.createElement("journey-viewer-card-editor");
   }
   static getStubConfig() {
+    const o = ["distance", "duration"].map((s) => {
+      const l = zt.find((u) => u.id === s), a = { key: l.key, label: l.label };
+      return l.defaultFormat && (a.format = l.defaultFormat), l.defaultIcon && (a.icon = l.defaultIcon), l.defaultDecimals != null && (a.decimals = l.defaultDecimals), a;
+    });
     return {
       type: "custom:journey-viewer-card",
       sources: [{ name: "Journeys", entity: "" }],
-      // Seed the two universal stats so a fresh card isn't map-only. Values
-      // mirror the editor catalogue's Distance / Duration entries (the
-      // catalogue lives in the lazy-loaded editor bundle, so no import here).
-      stats_grid: {
-        rows: [
-          {
-            key: "stats.distance_m",
-            label: "Distance",
-            format: "km",
-            icon: "mdi:map-marker-distance",
-            decimals: 2
-          },
-          {
-            key: "stats.duration_s",
-            label: "Duration",
-            format: "duration",
-            icon: "mdi:timer-outline"
-          }
-        ]
-      }
+      stats_grid: { rows: o }
     };
   }
   setConfig(o) {
     if (!o?.sources?.length)
       throw new Error("journey-viewer-card: 'sources' is required");
     if (o.label?.template) {
-      const s = Yr(o.label.template);
+      const s = Qr(o.label.template);
       if (s.length)
         throw new Error(
           `journey-viewer-card: unknown label template token(s): ${s.join(", ")}`
@@ -7418,9 +7602,9 @@ class Vt extends jt {
     this.tripMap && JSON.stringify(this.config?.map ?? {}) !== JSON.stringify(o.map ?? {}) && (this.tripMap.destroy(), this.tripMap = void 0), this.config = o, this.index = o.default_index ?? 0, this.rowCache = void 0;
   }
   getCardSize() {
-    const o = this.config?.stats_grid?.rows?.length ?? 0, s = this.config?.map?.height ?? ko, h = Math.ceil(o / To) * Lo;
+    const o = this.config?.stats_grid?.rows?.length ?? 0, s = this.config?.map?.height ?? Co, l = Math.ceil(o / Eo) * Ao;
     return Math.ceil(
-      (s + fa + h) / Lo
+      (s + ma + l) / Ao
     );
   }
   /** Sections-view layout hints (HA 2024.7+). `rows: "auto"` lets HA's
@@ -7438,10 +7622,10 @@ class Vt extends jt {
       return !0;
     if (o.has("hass")) {
       const s = this.config.map ?? {};
-      if (fe(s, this.mapDark) !== fe(s, this.isDark()))
+      if (_e(s, this.mapDark) !== _e(s, this.isDark()))
         return !0;
-      const h = o.get("hass"), a = (this.config.sources ?? []).map((u) => u.entity).filter((u) => !!u);
-      return pa(h, this.hass, a);
+      const l = o.get("hass"), a = (this.config.sources ?? []).map((u) => u.entity).filter((u) => !!u);
+      return ga(l, this.hass, a);
     }
     return !1;
   }
@@ -7457,10 +7641,10 @@ class Vt extends jt {
     o && !this.keyboardListenerActive ? (document.addEventListener("keydown", this.handleKey), this.keyboardListenerActive = !0) : !o && this.keyboardListenerActive && (document.removeEventListener("keydown", this.handleKey), this.keyboardListenerActive = !1);
   }
   updated(o) {
-    const s = this.config?.map ?? {}, h = this.isDark();
-    this.tripMap && fe(s, this.mapDark) !== fe(s, h) && (this.tripMap.destroy(), this.tripMap = void 0), this.mapDark = h, this.ensureMap();
-    const a = this.currentTrip;
-    this.tripMap && a && (this.tripMap.render(this.resolveTrip(a)), this.maybeLoadRoute(a));
+    const s = this.isDark();
+    this.tripMap?.setDark(s), this.mapDark = s, this.ensureMap();
+    const l = this.currentTrip;
+    this.tripMap && l && (this.tripMap.render(this.resolveTrip(l)), this.maybeLoadRoute(l));
   }
   /** Cache key for a trip's lazy-loaded route. Includes the source entity so
    *  two sources whose integrations use overlapping trip-id spaces can't
@@ -7489,12 +7673,12 @@ class Vt extends jt {
     if (o.route?.length || !o.route_point_count) return;
     const s = this.routeKey(o);
     if (!o.id || this.routeCache.has(s) || this.routeFetchInFlight.has(s) || !this.hass || !this.config) return;
-    const h = this.config.sources ?? [], a = h.find(($) => $.entity && $.entity === o.source_entity) ?? h.find(($) => ($.name ?? null) === o.source);
+    const l = this.config.sources ?? [], a = l.find(($) => $.entity && $.entity === o.source_entity) ?? l.find(($) => ($.name ?? null) === o.source);
     if (!a?.entity) return;
     const u = a.route_service === void 0 ? "toyota.get_trip_route" : a.route_service;
     if (!u) return;
-    const [d, m] = u.split(".");
-    if (!d || !m) return;
+    const [f, m] = u.split(".");
+    if (!f || !m) return;
     const g = a.route_service_data ?? {
       device_id: "$device_id",
       trip_id: "$trip_id"
@@ -7507,12 +7691,12 @@ class Vt extends jt {
       ));
       return;
     }
-    const D = {};
+    const N = {};
     for (const [$, O] of Object.entries(g))
-      D[$] = typeof O == "string" ? O.replace("$trip_id", String(o.id)).replace("$device_id", b ?? "") : O;
+      O === "$trip_id" ? N[$] = o.id : typeof O == "string" ? N[$] = O.replace("$trip_id", String(o.id)).replace("$device_id", b ?? "") : N[$] = O;
     this.routeFetchInFlight.add(s);
     const K = this.hass.callService;
-    K(d, m, D, void 0, !1, !0).then(($) => {
+    K(f, m, N, void 0, !1, !0).then(($) => {
       const O = $?.response?.route ?? [];
       this.routeCache.set(s, O), this.tripMap && this.currentTrip?.id === o.id && this.tripMap.render(this.resolveTrip(o));
     }).catch(($) => {
@@ -7526,8 +7710,8 @@ class Vt extends jt {
   }
   refreshTrips() {
     if (!this.config) return;
-    const o = Qr(this.hass, this.config.sources ?? []);
-    this.trips = ta(o, this.config.order ?? "newest_first"), this.index = Math.max(0, Math.min(this.index, this.trips.length - 1)), this.rowCache = void 0;
+    const o = ia(this.hass, this.config.sources ?? []);
+    this.trips = na(o, this.config.order ?? "newest_first"), this.index = Math.max(0, Math.min(this.index, this.trips.length - 1)), this.rowCache = void 0;
   }
   /** hass.themes.darkMode is set by the frontend at runtime but missing from
    *  custom-card-helpers' Themes type. */
@@ -7535,7 +7719,7 @@ class Vt extends jt {
     return this.hass?.themes?.darkMode ?? !1;
   }
   ensureMap() {
-    !this.mapEl || this.tripMap || (this.mapDark = this.isDark(), this.tripMap = new Ur(this.mapEl, this.config?.map ?? {}, this.mapDark));
+    !this.mapEl || this.tripMap || (this.mapDark = this.isDark(), this.tripMap = new Gr(this.mapEl, this.config?.map ?? {}, this.mapDark));
   }
   disconnectedCallback() {
     super.disconnectedCallback(), this.tripMap?.destroy(), this.tripMap = void 0, document.removeEventListener("keydown", this.handleKey), this.keyboardListenerActive = !1;
@@ -7566,23 +7750,23 @@ class Vt extends jt {
           <hui-warning>Entity not found: ${a.join(", ")}</hui-warning>
         </ha-card>` : this.renderEmpty();
     }
-    const o = this.currentTrip, s = this.config, h = this.hasAnyAction();
+    const o = this.currentTrip, s = this.config, l = this.hasAnyAction();
     return Z`<ha-card
-      class=${h ? "tv-actionable" : ""}
-      .actionHandler=${h ? sa({
+      class=${l ? "tv-actionable" : ""}
+      .actionHandler=${l ? la({
       hasHold: ce(s?.hold_action),
       hasDoubleClick: ce(s?.double_tap_action)
     }) : void 0}
-      @action=${h ? this.handleAction : void 0}
+      @action=${l ? this.handleAction : void 0}
     >
       ${this.config?.title ? Z`<div class="tv-title">${this.config.title}</div>` : I}
       <div class="tv-header">
-        <div class="tv-label">${Jr(this.config?.label?.template ?? _a, o)}</div>
+        <div class="tv-label">${ta(this.config?.label?.template ?? va, o)}</div>
         ${this.renderPager()}
       </div>
       <div
         class="tv-map-wrap"
-        style=${`height: ${this.config?.map?.height ?? ko}px;`}
+        style=${`height: ${this.config?.map?.height ?? Co}px;`}
       >
         <div class="tv-map"></div>
         ${this.renderLegend()}
@@ -7599,15 +7783,15 @@ class Vt extends jt {
   renderLegend() {
     const o = this.config?.map?.polyline, s = o?.color_by ?? "solid";
     if (s === "solid") return I;
-    const h = o?.palette ?? {}, a = (d, m) => {
-      const g = h[d];
-      return g || `var(--journey-viewer-polyline-${d}, ${m})`;
+    const l = o?.palette ?? {}, a = (f, m) => {
+      const g = l[f];
+      return g || `var(--journey-viewer-polyline-${f}, ${m})`;
     }, u = [];
     return s === "ev" ? (u.push({ color: a("ev", "#1d8cf8"), label: "EV" }), u.push({ color: a("ice", "#f6a800"), label: "ICE" })) : s === "overspeed" ? (u.push({ color: a("overspeed", "#e63946"), label: "Overspeed" }), u.push({ color: a("solid", "#e63946"), label: "Normal" })) : s === "highway" && (u.push({ color: a("highway", "#7b2cbf"), label: "Highway" }), u.push({ color: a("solid", "#e63946"), label: "City" })), u.length ? Z`<div class="tv-legend">
       ${u.map(
-      (d) => Z`<div class="tv-legend-item">
-          <span class="tv-legend-dot" style=${`background: ${d.color};`}></span>
-          <span>${d.label}</span>
+      (f) => Z`<div class="tv-legend-item">
+          <span class="tv-legend-dot" style=${`background: ${f.color};`}></span>
+          <span>${f.label}</span>
         </div>`
     )}
     </div>` : I;
@@ -7617,18 +7801,18 @@ class Vt extends jt {
     return this.hass ? (this.config?.sources ?? []).map((o) => o.entity).filter((o) => !!o).filter((o) => !this.hass.states[o]) : [];
   }
   renderEmpty() {
-    const o = this.config?.empty_state ?? {}, s = !(this.config?.sources ?? []).some((u) => u.entity), h = o.title ?? (s ? "No source configured" : "No trips"), a = o.body ?? (s ? "Pick a source entity in the card editor to get started." : "No trip data available.");
+    const o = this.config?.empty_state ?? {}, s = !(this.config?.sources ?? []).some((f) => f.entity), l = o.title ?? (s ? "No source configured" : "No trips"), a = o.body ?? (s ? "Pick a source entity in the card editor to get started." : "No trip data available."), u = o.icon === "" ? void 0 : o.icon ?? "mdi:map-marker-off";
     return Z`<ha-card>
       <div class="tv-empty">
-        <ha-icon icon=${o.icon ?? "mdi:map-marker-off"}></ha-icon>
-        <div class="tv-empty-title">${h}</div>
+        ${u ? Z`<ha-icon icon=${u}></ha-icon>` : I}
+        <div class="tv-empty-title">${l}</div>
         <div class="tv-empty-body">${a}</div>
       </div>
     </ha-card>`;
   }
   renderPager() {
     if (!this.trips.length) return I;
-    const o = this.config?.pagination ?? {}, s = o.show_counter !== !1, h = o.wrap ?? !1, a = !h && this.index === 0, u = !h && this.index === this.trips.length - 1;
+    const o = this.config?.pagination ?? {}, s = o.show_counter !== !1, l = o.wrap ?? Ve.wrap, a = !l && this.index === 0, u = !l && this.index === this.trips.length - 1;
     return Z`<div
       class="tv-pager"
       @pointerdown=${this.swallowPointer}
@@ -7658,10 +7842,10 @@ class Vt extends jt {
   renderStats(o) {
     const s = this.config?.stats_grid;
     if (!s?.rows?.length) return I;
-    const h = s.columns_default ?? To, a = s.columns_mobile ?? 2, u = (b) => Math.min(1, Math.max(0, b)), d = s.tile_bg_alpha != null ? u(s.tile_bg_alpha) : 1, m = [
-      `--tv-cols: ${h}`,
+    const l = s.columns_default ?? Eo, a = s.columns_mobile ?? 2, u = (b) => Math.min(1, Math.max(0, b)), f = s.tile_bg_alpha != null ? u(s.tile_bg_alpha) : 1, m = [
+      `--tv-cols: ${l}`,
       `--tv-cols-mobile: ${a}`,
-      `--jv-tile-bg-alpha: ${d}`
+      `--jv-tile-bg-alpha: ${f}`
     ];
     s.tile_bg_color && m.push(`--jv-tile-bg-color: ${s.tile_bg_color}`);
     const P = (this.config?.order ?? "newest_first") === "newest_first" ? this.index + 1 : this.index - 1, T = this.trips[P];
@@ -7674,43 +7858,43 @@ class Vt extends jt {
    *  feed the threshold/bar/trend computations. They diverge only when
    *  ratio_of is set + the denominator is missing → both null. */
   computeRowValue(o, s) {
-    let h = o.key ? pe(s, o.key) : void 0, a = typeof h == "number" ? h : h == null ? null : Number(h);
+    let l = o.key ? fe(s, o.key) : void 0, a = typeof l == "number" ? l : l == null ? null : Number(l);
     if (o.ratio_of && a != null && Number.isFinite(a)) {
-      const u = pe(s, o.ratio_of), d = typeof u == "number" ? u : Number(u);
-      Number.isFinite(d) && d !== 0 ? (a = a / d, h = a) : (a = null, h = null);
+      const u = fe(s, o.ratio_of), f = typeof u == "number" ? u : Number(u);
+      Number.isFinite(f) && f !== 0 ? (a = a / f, l = a) : (a = null, l = null);
     }
-    return { display: h, numeric: a };
+    return { display: l, numeric: a };
   }
   /** Resolve the bar background gradient layer for a row. Returns undefined
    *  when no bar is configured or the value is missing/non-finite. */
-  computeBarLayer(o, s, h, a) {
+  computeBarLayer(o, s, l, a) {
     const u = o.bar;
-    if (!u || h == null || !Number.isFinite(h)) return;
-    const d = la(u.max, s);
-    if (d == null) return;
-    const m = ha(h, d), P = (u.color && u.color !== "auto" ? u.color : null) ?? a ?? // Fall back to primary if `auto` was set but no thresholds resolved.
+    if (!u || l == null || !Number.isFinite(l)) return;
+    const f = ua(u.max, s);
+    if (f == null) return;
+    const m = da(l, f), P = (u.color && u.color !== "auto" ? u.color : null) ?? a ?? // Fall back to primary if `auto` was set but no thresholds resolved.
     "var(--primary-color, #03a9f4)", T = u.track ?? "transparent";
     return `linear-gradient(to right, ${P} ${m}%, ${T} ${m}%)`;
   }
   /** Compute trend info for a row, including ratio_of-aware previous value. */
-  computeRowTrend(o, s, h) {
+  computeRowTrend(o, s, l) {
     if (!o.trend || !s || !o.key) return;
-    const a = pe(s, o.key);
+    const a = fe(s, o.key);
     let u = typeof a == "number" ? a : a == null ? null : Number(a);
     if (o.ratio_of && u != null && Number.isFinite(u)) {
-      const d = pe(s, o.ratio_of), m = typeof d == "number" ? d : Number(d);
+      const f = fe(s, o.ratio_of), m = typeof f == "number" ? f : Number(f);
       u = Number.isFinite(m) && m !== 0 ? u / m : null;
     }
-    return ca(h, u, o.trend.invert ?? !1);
+    return fa(l, u, o.trend.invert ?? !1);
   }
   /** Build (or reuse) the cached set of computed decorations for one row. */
-  getRowComputed(o, s, h) {
+  getRowComputed(o, s, l) {
     const a = this.rowCache, u = a.rows.get(o);
     if (u) return u;
-    const { display: d, numeric: m } = this.computeRowValue(o, s), g = Po(d, o.format, o.decimals), P = ra(m, o.thresholds), T = (o.color_mode ?? "solid") === "gradient" ? aa(m, o.thresholds) : P?.color, b = o.color_target ?? "value", D = P?.icon ?? o.icon, K = !!o.bar && (!o.bar.color || o.bar.color === "auto"), $ = this.computeBarLayer(o, s, m, T), O = this.computeRowTrend(o, h, m), qt = {
+    const { display: f, numeric: m } = this.computeRowValue(o, s), g = ko(f, o.format, o.decimals), P = ha(m, o.thresholds), T = (o.color_mode ?? "solid") === "gradient" ? ca(m, o.thresholds) : P?.color, b = o.color_target ?? "value", N = P?.icon ?? o.icon, K = !!o.bar && (!o.bar.color || o.bar.color === "auto"), $ = this.computeBarLayer(o, s, m, T), O = this.computeRowTrend(o, l, m), qt = {
       formatted: g,
       decorationColor: T,
-      effectiveIcon: D,
+      effectiveIcon: N,
       colorTarget: b,
       barBgLayer: $,
       barUsesAuto: K,
@@ -7718,11 +7902,11 @@ class Vt extends jt {
     };
     return a.rows.set(o, qt), qt;
   }
-  renderStatTile(o, s, h) {
-    const a = this.getRowComputed(o, s, h), u = a.barUsesAuto ? void 0 : a.decorationColor, d = [], m = ["tv-tile"];
-    return u && (a.colorTarget === "value" ? d.push(`--jv-row-color: ${u}`) : d.push(`--jv-tile-bg-color: ${u}`)), a.barBgLayer && (d.push(`--jv-bar-layer: ${a.barBgLayer}`), m.push("has-bar")), a.colorTarget === "value" && u && m.push("colored-value"), Z`<div
+  renderStatTile(o, s, l) {
+    const a = this.getRowComputed(o, s, l), u = a.barUsesAuto ? void 0 : a.decorationColor, f = [], m = ["tv-tile"];
+    return u && (a.colorTarget === "value" ? f.push(`--jv-row-color: ${u}`) : f.push(`--jv-tile-bg-color: ${u}`)), a.barBgLayer && (f.push(`--jv-bar-layer: ${a.barBgLayer}`), m.push("has-bar")), a.colorTarget === "value" && u && m.push("colored-value"), Z`<div
       class=${m.join(" ")}
-      style=${d.join("; ")}
+      style=${f.join("; ")}
     >
       <div class="tv-tile-label">
         ${a.effectiveIcon ? o.trend?.position === "replace_icon" && a.trendInfo ? this.renderTrendIcon(a.trendInfo, o.trend.show_delta ?? !1) : Z`<ha-icon icon=${a.effectiveIcon}></ha-icon>` : I}
@@ -7735,17 +7919,17 @@ class Vt extends jt {
       </div>
     </div>`;
   }
-  renderTrend(o, s, h) {
-    const a = o.direction === "up" ? "↑" : o.direction === "down" ? "↓" : "→", u = `tv-trend tv-trend-${o.sentiment}`, d = h.trend?.format, m = ["km", "L", "duration"].includes(h.format ?? ""), g = d ?? (m ? h.format : void 0), P = h.decimals ?? (Number.isInteger(o.delta) ? 0 : 2), T = s && o.direction !== "flat" ? ` ${Po(Math.abs(o.delta), g, P)}` : "";
+  renderTrend(o, s, l) {
+    const a = o.direction === "up" ? "↑" : o.direction === "down" ? "↓" : "→", u = `tv-trend tv-trend-${o.sentiment}`, f = l.trend?.format, m = ["km", "L", "duration"].includes(l.format ?? ""), g = f ?? (m ? l.format : void 0), P = l.decimals ?? (Number.isInteger(o.delta) ? 0 : 2), T = s && o.direction !== "flat" ? ` ${ko(Math.abs(o.delta), g, P)}` : "";
     return Z`<span class=${u}>${a}${T}</span>`;
   }
   renderTrendIcon(o, s) {
-    const h = o.direction === "up" ? "mdi:trending-up" : o.direction === "down" ? "mdi:trending-down" : "mdi:trending-neutral", a = `tv-trend tv-trend-${o.sentiment}`;
-    return Z`<ha-icon class=${a} icon=${h}></ha-icon>`;
+    const l = o.direction === "up" ? "mdi:trending-up" : o.direction === "down" ? "mdi:trending-down" : "mdi:trending-neutral", a = `tv-trend tv-trend-${o.sentiment}`;
+    return Z`<ha-icon class=${a} icon=${l}></ha-icon>`;
   }
   static {
-    this.styles = zo`
-    ${Mo(Br)}
+    this.styles = Ro`
+    ${Io(Hr)}
 
     /*
      * Theme tokens. Every value below cascades from HA theme variables when
@@ -8004,7 +8188,7 @@ class Vt extends jt {
   }
 }
 xe([
-  Hi({ attribute: !1 })
+  ji({ attribute: !1 })
 ], Vt.prototype, "hass");
 xe([
   we()
@@ -8016,7 +8200,7 @@ xe([
   we()
 ], Vt.prototype, "trips");
 xe([
-  $r(".tv-map")
+  Dr(".tv-map")
 ], Vt.prototype, "mapEl");
 customElements.get("journey-viewer-card") || (customElements.define("journey-viewer-card", Vt), window.customCards = window.customCards || [], window.customCards.push({
   type: "journey-viewer-card",
@@ -8024,11 +8208,11 @@ customElements.get("journey-viewer-card") || (customElements.define("journey-vie
   description: "Paginated GPS journey viewer. Drive, ride, run, hike. Toyota, Strava, Garmin, Komoot, generic.",
   preview: !0
 }), console.info(
-  `%c JOURNEY-VIEWER-CARD %c v${da} `,
+  `%c JOURNEY-VIEWER-CARD %c v${_a} `,
   "color: white; background: #1d8cf8; font-weight: 700;",
   "color: #1d8cf8; background: white; font-weight: 700;"
 ));
-function Ri(c, o) {
+function Zi(c, o) {
   c.dispatchEvent(
     new CustomEvent("config-changed", {
       detail: { config: o },
@@ -8037,7 +8221,7 @@ function Ri(c, o) {
     })
   );
 }
-const ma = [
+const ya = [
   { name: "title", selector: { text: {} } },
   {
     type: "grid",
@@ -8056,7 +8240,7 @@ const ma = [
       { name: "default_index", selector: { number: { min: 0, mode: "box" } } }
     ]
   }
-], ga = [
+], ba = [
   {
     type: "grid",
     schema: [
@@ -8065,9 +8249,9 @@ const ma = [
       { name: "keyboard", selector: { boolean: {} } }
     ]
   }
-], va = [
+], wa = [
   { name: "template", selector: { text: {} } }
-], ya = [
+], xa = [
   {
     type: "grid",
     schema: [
@@ -8106,7 +8290,7 @@ const ma = [
       { name: "zoom_to_fit", selector: { boolean: {} } }
     ]
   }
-], ba = [
+], Pa = [
   {
     type: "grid",
     schema: [
@@ -8134,7 +8318,7 @@ const ma = [
       }
     ]
   }
-], wa = [
+], La = [
   {
     type: "grid",
     schema: [
@@ -8152,7 +8336,7 @@ const ma = [
       }
     ]
   }
-], xa = [
+], Ta = [
   {
     type: "grid",
     schema: [
@@ -8160,7 +8344,7 @@ const ma = [
       { name: "ratio_of", selector: { text: {} } }
     ]
   }
-], Pa = [
+], ka = [
   {
     type: "grid",
     schema: [
@@ -8188,7 +8372,7 @@ const ma = [
       }
     ]
   }
-], La = [
+], Sa = [
   {
     type: "grid",
     schema: [
@@ -8203,7 +8387,7 @@ const ma = [
       { name: "icon", selector: { icon: {} } }
     ]
   }
-], Ta = [
+], Aa = [
   { name: "max", selector: { text: {} } },
   {
     type: "grid",
@@ -8212,7 +8396,7 @@ const ma = [
       { name: "track", selector: { text: {} } }
     ]
   }
-], ka = [
+], Ea = [
   {
     type: "grid",
     schema: [
@@ -8249,7 +8433,7 @@ const ma = [
       }
     }
   }
-], Sa = [
+], Ca = [
   // Entity first: it's the one required action for a working card.
   { name: "entity", selector: { entity: {} } },
   {
@@ -8261,7 +8445,7 @@ const ma = [
   },
   // Plain text so CSS vars / named colors survive round-tripping.
   { name: "color", selector: { text: {} } }
-], So = [
+], Ui = [
   {
     id: "toyota",
     label: "Toyota (ha_toyota fork)"
@@ -8283,29 +8467,31 @@ const ma = [
     label: "Custom service…"
   }
 ];
-function Ao(c) {
-  return c === null || c === "" ? "none" : c === void 0 || c === "toyota.get_trip_route" ? "toyota" : c === "ha_strava.get_activity_route" ? "strava" : "custom";
+function Ma(c, o) {
+  const s = Object.keys(c ?? {}), l = Object.keys(o ?? {});
+  return s.length === l.length && s.every((a) => c[a] === o?.[a]);
 }
-const Aa = [
+function Mo(c) {
+  const o = c.route_service === "toyota.get_trip_route" ? void 0 : c.route_service === "" ? null : c.route_service;
+  for (const s of Ui)
+    if (s.id !== "custom" && s.route_service === o && Ma(s.route_service_data, c.route_service_data))
+      return s.id;
+  return "custom";
+}
+const za = [
   { name: "route_service", selector: { text: {} } }
-], Ca = [
+], Oa = [
   { name: "title", selector: { text: {} } },
   { name: "body", selector: { text: { multiline: !0 } } },
   { name: "icon", selector: { icon: {} } }
-], We = {
-  pagination: { show_counter: !0, wrap: !1, keyboard: !0 },
-  map: {
-    height: 280,
-    padding_pct: 10,
-    gestures: "locked",
-    tile_provider: "auto",
-    zoom_to_fit: !1
-  },
-  "map.polyline": { color_by: "solid", weight: 4, opacity: 0.9 }
-}, Ea = {
-  template: `Tokens: ${No.join(" ")}`,
+], zo = {
+  pagination: Ve,
+  map: Wi,
+  "map.polyline": qe
+}, Ia = {
+  template: `Tokens: ${Fo.join(" ")}`,
   route_service: "Blank falls back to the default Toyota service; pick the None preset to disable route loading."
-}, Ma = {
+}, Ra = {
   title: "Title",
   order: "Trip order",
   default_index: "Default trip index",
@@ -8342,205 +8528,84 @@ const Aa = [
   track: "Track colour",
   show_delta: "Show numeric delta",
   invert: "Invert (lower = better)"
-}, Wt = [
-  // Distance / time
-  {
-    id: "distance",
-    label: "Distance",
-    description: "Total distance travelled",
-    key: "stats.distance_m",
-    defaultFormat: "km",
-    defaultIcon: "mdi:map-marker-distance",
-    defaultDecimals: 2
-  },
-  {
-    id: "duration",
-    label: "Duration",
-    description: "Trip duration",
-    key: "stats.duration_s",
-    defaultFormat: "duration",
-    defaultIcon: "mdi:timer-outline"
-  },
-  // Speed
-  {
-    id: "avg_speed",
-    label: "Avg speed",
-    description: "Average speed across the trip",
-    key: "stats.average_speed_kmh",
-    defaultFormat: "{v:.1f} km/h",
-    defaultIcon: "mdi:speedometer-medium"
-  },
-  {
-    id: "max_speed",
-    label: "Max speed",
-    description: "Peak speed during the trip",
-    key: "stats.max_speed_kmh",
-    defaultFormat: "{v} km/h",
-    defaultIcon: "mdi:speedometer"
-  },
-  // Fuel
-  {
-    id: "fuel",
-    label: "Fuel",
-    description: "Fuel consumed (litres)",
-    key: "stats.fuel_consumption_ml",
-    defaultFormat: "L",
-    defaultIcon: "mdi:gas-station",
-    defaultDecimals: 3
-  },
-  // Scores
-  {
-    id: "score_global",
-    label: "Score (global)",
-    key: "scores.global",
-    defaultFormat: "{v} / 100",
-    defaultIcon: "mdi:medal"
-  },
-  {
-    id: "score_accel",
-    label: "Score (acceleration)",
-    key: "scores.acceleration",
-    defaultFormat: "{v} / 100"
-  },
-  {
-    id: "score_brake",
-    label: "Score (braking)",
-    key: "scores.braking",
-    defaultFormat: "{v} / 100"
-  },
-  // Sport / fitness (producers supply these; see the README data contract's
-  // optional sport-stat keys)
-  {
-    id: "pace",
-    label: "Pace",
-    description: "Seconds per km, shown as m:ss /km",
-    key: "stats.pace_s_per_km",
-    defaultFormat: "pace",
-    defaultIcon: "mdi:run-fast"
-  },
-  {
-    id: "elevation_gain",
-    label: "Elevation gain",
-    description: "Total ascent",
-    key: "stats.elevation_gain_m",
-    defaultFormat: "{v:.0f} m",
-    defaultIcon: "mdi:trending-up"
-  },
-  {
-    id: "avg_heartrate",
-    label: "Avg heart rate",
-    key: "stats.average_heartrate_bpm",
-    defaultFormat: "{v:.0f} bpm",
-    defaultIcon: "mdi:heart-pulse"
-  },
-  {
-    id: "calories",
-    label: "Calories",
-    key: "stats.calories_kcal",
-    defaultFormat: "{v:.0f} kcal",
-    defaultIcon: "mdi:fire"
-  },
-  // Ratios (used to be `computed`)
-  {
-    id: "ev_ratio",
-    label: "EV ratio",
-    description: "EV km ÷ total km",
-    key: "stats.ev_distance_m",
-    ratio_of: "stats.distance_m",
-    defaultFormat: "{v:.0%}",
-    defaultIcon: "mdi:lightning-bolt"
-  },
-  {
-    id: "eco_ratio",
-    label: "Eco ratio",
-    description: "Eco km ÷ total km",
-    key: "stats.eco_distance_m",
-    ratio_of: "stats.distance_m",
-    defaultFormat: "{v:.0%}",
-    defaultIcon: "mdi:leaf"
-  },
-  {
-    id: "highway_ratio",
-    label: "Highway ratio",
-    description: "Highway km ÷ total km",
-    key: "stats.length_highway_m",
-    ratio_of: "stats.distance_m",
-    defaultFormat: "{v:.0%}",
-    defaultIcon: "mdi:highway"
-  },
-  // Escape hatch
-  {
-    id: "__custom__",
-    label: "Custom path…",
-    description: "Specify any dot-path manually",
-    key: ""
-  }
-];
-function Co(c, o) {
-  if (c) {
-    const s = Wt.find(
-      (h) => h.key === c && (h.ratio_of ?? "") === (o ?? "")
-    );
-    if (s) return s;
-  }
-  return Wt[Wt.length - 1];
-}
-var za = Object.defineProperty, Fi = (c, o, s, h) => {
-  for (var a = void 0, u = c.length - 1, d; u >= 0; u--)
-    (d = c[u]) && (a = d(o, s, a) || a);
-  return a && za(o, s, a), a;
 };
-function Oa() {
+var Za = Object.defineProperty, Vi = (c, o, s, l) => {
+  for (var a = void 0, u = c.length - 1, f; u >= 0; u--)
+    (f = c[u]) && (a = f(o, s, a) || a);
+  return a && Za(o, s, a), a;
+};
+function $a() {
   (!customElements.get("ha-form") || !customElements.get("hui-card-features-editor")) && customElements.get("hui-tile-card")?.getConfigElement?.(), customElements.get("ha-entity-picker") || customElements.get("hui-entities-card")?.getConfigElement?.();
 }
-class Pe extends jt {
+const Ba = [
+  {
+    name: "route_preset",
+    selector: {
+      select: {
+        mode: "dropdown",
+        options: Ui.map((c) => ({ value: c.id, label: c.label }))
+      }
+    }
+  }
+], Na = [
+  {
+    name: "stat_id",
+    selector: {
+      select: {
+        mode: "dropdown",
+        options: zt.map((c) => ({ value: c.id, label: c.label }))
+      }
+    }
+  }
+], Da = ["route_service", "route_service_data"];
+class Pe extends Wt {
   constructor() {
     super(...arguments), this._customRouteRows = /* @__PURE__ */ new Set(), this._onSectionChange = (o) => (s) => {
       if (!this._config) return;
-      const h = s.detail?.value ?? {}, a = this._mergeAtPath(this._config, o, h);
-      this._config = a, Ri(this, a);
-    }, this._computeLabel = (o) => Ma[o.name] ?? o.name, this._computeHelper = (o) => Ea[o.name], this._onSourcePresetChange = (o, s) => {
+      const l = s.detail?.value ?? {}, a = this._mergeAtPath(this._config, o, l);
+      this._config = a, Zi(this, a);
+    }, this._computeLabel = (o) => Ra[o.name] ?? o.name, this._computeHelper = (o) => Ia[o.name], this._onSourcePresetChange = (o, s) => {
       if (!this._config) return;
-      const h = s.detail?.value ?? {}, a = So.find((g) => g.id === h.route_preset);
+      const l = s.detail?.value ?? {}, a = Ui.find((g) => g.id === l.route_preset);
       if (!a) return;
-      const u = [...this._config.sources ?? []], d = { ...u[o] }, m = new Set(this._customRouteRows);
-      a.id === "custom" ? (m.add(o), Ao(d.route_service) !== "custom" && delete d.route_service, delete d.route_service_data) : (m.delete(o), a.route_service !== void 0 ? d.route_service = a.route_service : delete d.route_service, a.route_service_data ? d.route_service_data = a.route_service_data : delete d.route_service_data), this._customRouteRows = m, u[o] = d, this._updateSources(u);
+      const u = [...this._config.sources ?? []], f = { ...u[o] }, m = new Set(this._customRouteRows);
+      a.id === "custom" ? (m.add(o), Mo(f) !== "custom" && delete f.route_service, delete f.route_service_data) : (m.delete(o), a.route_service !== void 0 ? f.route_service = a.route_service : delete f.route_service, a.route_service_data ? f.route_service_data = a.route_service_data : delete f.route_service_data), this._customRouteRows = m, u[o] = f, this._updateSources(u);
     }, this._onSourceRouteServiceChange = (o, s) => {
       if (!this._config) return;
-      const h = s.detail?.value ?? {}, a = [...this._config.sources ?? []], u = { ...a[o] };
-      h.route_service ? u.route_service = h.route_service : delete u.route_service, a[o] = u, this._updateSources(a);
+      const l = s.detail?.value ?? {}, a = [...this._config.sources ?? []], u = { ...a[o] };
+      l.route_service ? u.route_service = l.route_service : delete u.route_service, a[o] = u, this._updateSources(a);
     }, this._onSourceChange = (o, s) => {
       if (!this._config) return;
-      const h = s.detail?.value ?? {}, a = [...this._config.sources ?? []], u = a[o] ?? {}, d = this._stripEmpty({
+      const l = s.detail?.value ?? {}, a = [...this._config.sources ?? []], u = a[o] ?? {}, f = this._stripEmpty({
         ...u,
-        ...h
+        ...l
       });
-      "route_service" in u ? d.route_service = u.route_service : delete d.route_service, u.route_service_data ? d.route_service_data = u.route_service_data : delete d.route_service_data, a[o] = d, this._updateSources(a);
+      for (const m of Da)
+        m in u ? f[m] = u[m] : delete f[m];
+      a[o] = f, this._updateSources(a);
     }, this._addSource = () => {
       if (!this._config) return;
       const o = [...this._config.sources ?? []];
       o.push({ name: `Source ${o.length + 1}` }), this._updateSources(o);
-    }, this._computeStatHelper = (o) => {
-      o.name;
     }, this._onRowStatChange = (o, s) => {
       if (!this._config) return;
-      const h = s.detail?.value ?? {};
-      if (!h.stat_id) return;
-      const a = Wt.find((T) => T.id === h.stat_id);
+      const l = s.detail?.value ?? {};
+      if (!l.stat_id) return;
+      const a = zt.find((T) => T.id === l.stat_id);
       if (!a) return;
-      const u = [...this._config.stats_grid?.rows ?? []], d = u[o] ?? { label: "" }, m = { ...d }, g = Co(d.key, d.ratio_of);
+      const u = [...this._config.stats_grid?.rows ?? []], f = u[o] ?? { label: "" }, m = { ...f }, g = So(f.key, f.ratio_of);
       a.id === "__custom__" || (m.key = a.key, a.ratio_of ? m.ratio_of = a.ratio_of : delete m.ratio_of);
       const P = (T, b) => T == null || T === "" || T === b;
       P(m.label, g.label) && (m.label = a.label), P(m.format, g.defaultFormat) && (a.defaultFormat ? m.format = a.defaultFormat : delete m.format), P(m.icon, g.defaultIcon) && (a.defaultIcon ? m.icon = a.defaultIcon : delete m.icon), P(m.decimals, g.defaultDecimals) && (a.defaultDecimals != null ? m.decimals = a.defaultDecimals : delete m.decimals), u[o] = m, this._updateRows(u);
     }, this._onRowFieldsChange = (o, s) => {
       if (!this._config) return;
-      const h = s.detail?.value ?? {}, a = [...this._config.stats_grid?.rows ?? []], d = { ...a[o] ?? { label: "" }, ...this._stripEmpty(h) };
+      const l = s.detail?.value ?? {}, a = [...this._config.stats_grid?.rows ?? []], f = { ...a[o] ?? { label: "" }, ...this._stripEmpty(l) };
       for (const m of ["icon", "format", "decimals", "ratio_of"])
-        (h[m] === "" || h[m] === null || h[m] === void 0) && delete d[m];
-      a[o] = d, this._updateRows(a);
+        (l[m] === "" || l[m] === null || l[m] === void 0) && delete f[m];
+      a[o] = f, this._updateRows(a);
     }, this._addRow = () => {
       if (!this._config) return;
-      const o = [...this._config.stats_grid?.rows ?? []], s = Wt[0];
+      const o = [...this._config.stats_grid?.rows ?? []], s = zt[0];
       o.push({
         key: s.key,
         label: s.label,
@@ -8551,52 +8616,56 @@ class Pe extends jt {
     };
   }
   connectedCallback() {
-    super.connectedCallback(), Oa();
+    super.connectedCallback(), $a();
   }
   setConfig(o) {
     this._config = o;
   }
-  _mergeAtPath(o, s, h) {
-    const a = this._stripEmpty(h), u = (g) => {
-      const P = We[s];
+  _mergeAtPath(o, s, l) {
+    const a = this._stripEmpty(l), u = (g) => {
+      const P = zo[s];
       if (P)
         for (const [T, b] of Object.entries(P))
           g[T] === b && delete g[T];
       return g;
-    }, d = o;
+    }, f = o;
     let m;
     if (s === "top")
-      m = { ...d, ...a };
+      m = { ...f, ...a };
     else if (s === "map.polyline") {
-      const g = { ...d.map ?? {} }, P = u({
+      const g = { ...f.map ?? {} }, P = u({
         ...g.polyline ?? {},
         ...a
       });
-      Object.keys(P).length ? g.polyline = P : delete g.polyline, m = { ...d, map: g }, Object.keys(g).length || delete m.map;
+      Object.keys(P).length ? g.polyline = P : delete g.polyline, m = { ...f, map: g }, Object.keys(g).length || delete m.map;
     } else {
       const g = u({
-        ...d[s] ?? {},
+        ...f[s] ?? {},
         ...a
       });
-      m = { ...d }, Object.keys(g).length ? m[s] = g : delete m[s];
+      m = { ...f }, Object.keys(g).length ? m[s] = g : delete m[s];
     }
     return m;
   }
   _stripEmpty(o) {
     const s = {};
-    for (const [h, a] of Object.entries(o))
-      a === void 0 || a === "" || a === null || (s[h] = a);
+    for (const [l, a] of Object.entries(o))
+      a === void 0 || a === "" || a === null || (s[l] = a);
     return s;
   }
-  _renderForm(o, s, h) {
+  _renderForm(o, s, l) {
+    const a = {
+      ...zo[l],
+      ...s ?? {}
+    };
     return Z`
       <ha-form
         .hass=${this.hass}
-        .data=${s ?? {}}
+        .data=${a}
         .schema=${o}
         .computeLabel=${this._computeLabel}
         .computeHelper=${this._computeHelper}
-        @value-changed=${this._onSectionChange(h)}
+        @value-changed=${this._onSectionChange(l)}
       ></ha-form>
     `;
   }
@@ -8610,7 +8679,7 @@ class Pe extends jt {
     };
     return Z`
       <div class="jve-root">
-        ${this._renderForm(ma, s, "top")}
+        ${this._renderForm(ya, s, "top")}
 
         ${this._section(
       "Sources",
@@ -8622,30 +8691,18 @@ class Pe extends jt {
 
         ${this._section(
       "Pagination",
-      this._renderForm(
-        ga,
-        { ...We.pagination, ...o.pagination },
-        "pagination"
-      )
+      this._renderForm(ba, o.pagination, "pagination")
     )}
         ${this._section(
       "Trip label",
-      this._renderForm(va, o.label, "label")
+      this._renderForm(wa, o.label, "label")
     )}
         ${this._section(
       "Map",
       Z`
-            ${this._renderForm(
-        ya,
-        { ...We.map, ...o.map },
-        "map"
-      )}
+            ${this._renderForm(xa, o.map, "map")}
             <div class="jve-subhead">Polyline</div>
-            ${this._renderForm(
-        ba,
-        { ...We["map.polyline"], ...o.map?.polyline },
-        "map.polyline"
-      )}
+            ${this._renderForm(Pa, o.map?.polyline, "map.polyline")}
           `
     )}
 
@@ -8656,14 +8713,14 @@ class Pe extends jt {
 
         ${this._section(
       "Empty state",
-      this._renderForm(Ca, o.empty_state, "empty_state")
+      this._renderForm(Oa, o.empty_state, "empty_state")
     )}
       </div>
     `;
   }
-  _section(o, s, h = !1) {
+  _section(o, s, l = !1) {
     return Z`
-      <ha-expansion-panel outlined header=${o} .expanded=${h}>
+      <ha-expansion-panel outlined header=${o} .expanded=${l}>
         <div class="jve-body">${s}</div>
       </ha-expansion-panel>
     `;
@@ -8672,14 +8729,14 @@ class Pe extends jt {
   _renderSources(o) {
     return Z`
       <div class="jve-list">
-        ${o.map((s, h) => this._renderSourceRow(s, h, o.length))}
+        ${o.map((s, l) => this._renderSourceRow(s, l, o.length))}
         <div class="jve-list-actions">
           <ha-button @click=${this._addSource}>+ Add source</ha-button>
         </div>
       </div>
     `;
   }
-  _renderSourceRow(o, s, h) {
+  _renderSourceRow(o, s, l) {
     return Z`
       <div class="jve-row">
         <div class="jve-row-head">
@@ -8695,7 +8752,7 @@ class Pe extends jt {
               label="Move up"
             ></ha-icon-button>
             <ha-icon-button
-              .disabled=${s === h - 1}
+              .disabled=${s === l - 1}
               .path=${"M7,10L12,15L17,10H7Z"}
               @click=${() => this._moveSource(s, 1)}
               label="Move down"
@@ -8710,7 +8767,7 @@ class Pe extends jt {
         <ha-form
           .hass=${this.hass}
           .data=${o}
-          .schema=${Sa}
+          .schema=${Ca}
           .computeLabel=${this._computeLabel}
           @value-changed=${(a) => this._onSourceChange(s, a)}
         ></ha-form>
@@ -8720,68 +8777,58 @@ class Pe extends jt {
   }
   /** Route-loading preset select + a free-text service field when Custom. */
   _renderRoutePreset(o, s) {
-    const h = this._customRouteRows.has(s) ? "custom" : Ao(o.route_service), a = [
-      {
-        name: "route_preset",
-        selector: {
-          select: {
-            mode: "dropdown",
-            options: So.map((u) => ({ value: u.id, label: u.label }))
-          }
-        }
-      }
-    ];
+    const l = this._customRouteRows.has(s) ? "custom" : Mo(o);
     return Z`
       <ha-form
         .hass=${this.hass}
-        .data=${{ route_preset: h }}
-        .schema=${a}
+        .data=${{ route_preset: l }}
+        .schema=${Ba}
         .computeLabel=${this._computeLabel}
-        @value-changed=${(u) => this._onSourcePresetChange(s, u)}
+        @value-changed=${(a) => this._onSourcePresetChange(s, a)}
       ></ha-form>
-      ${h === "custom" ? Z`<ha-form
+      ${l === "custom" ? Z`<ha-form
             .hass=${this.hass}
             .data=${{ route_service: o.route_service ?? "" }}
-            .schema=${Aa}
+            .schema=${za}
             .computeLabel=${this._computeLabel}
             .computeHelper=${this._computeHelper}
-            @value-changed=${(u) => this._onSourceRouteServiceChange(s, u)}
+            @value-changed=${(a) => this._onSourceRouteServiceChange(s, a)}
           ></ha-form>` : I}
     `;
   }
   _removeSource(o) {
     if (!this._config) return;
-    const s = (this._config.sources ?? []).filter((a, u) => u !== o), h = /* @__PURE__ */ new Set();
+    const s = (this._config.sources ?? []).filter((a, u) => u !== o), l = /* @__PURE__ */ new Set();
     for (const a of this._customRouteRows)
-      a < o ? h.add(a) : a > o && h.add(a - 1);
-    this._customRouteRows = h, this._updateSources(s);
+      a < o ? l.add(a) : a > o && l.add(a - 1);
+    this._customRouteRows = l, this._updateSources(s);
   }
   _moveSource(o, s) {
     if (!this._config) return;
-    const h = [...this._config.sources ?? []], a = o + s;
-    if (a < 0 || a >= h.length) return;
-    [h[o], h[a]] = [h[a], h[o]];
-    const u = this._customRouteRows.has(o), d = this._customRouteRows.has(a), m = new Set(this._customRouteRows);
-    m.delete(o), m.delete(a), d && m.add(o), u && m.add(a), this._customRouteRows = m, this._updateSources(h);
+    const l = [...this._config.sources ?? []], a = o + s;
+    if (a < 0 || a >= l.length) return;
+    [l[o], l[a]] = [l[a], l[o]];
+    const u = this._customRouteRows.has(o), f = this._customRouteRows.has(a), m = new Set(this._customRouteRows);
+    m.delete(o), m.delete(a), f && m.add(o), u && m.add(a), this._customRouteRows = m, this._updateSources(l);
   }
   _updateSources(o) {
     if (!this._config) return;
     const s = { ...this._config, sources: o };
-    this._config = s, Ri(this, s);
+    this._config = s, Zi(this, s);
   }
   // ─── Stats rows builder ────────────────────────────────────────────────
   _renderRows(o) {
     return Z`
       <div class="jve-list">
-        ${o.map((s, h) => this._renderRowCard(s, h, o.length))}
+        ${o.map((s, l) => this._renderRowCard(s, l, o.length))}
         <div class="jve-list-actions">
           <ha-button @click=${this._addRow}>+ Add row</ha-button>
         </div>
       </div>
     `;
   }
-  _renderRowCard(o, s, h) {
-    const a = Co(o.key, o.ratio_of), u = this._buildStatSchema();
+  _renderRowCard(o, s, l) {
+    const a = So(o.key, o.ratio_of);
     return Z`
       <div class="jve-row">
         <div class="jve-row-head">
@@ -8799,7 +8846,7 @@ class Pe extends jt {
               label="Move up"
             ></ha-icon-button>
             <ha-icon-button
-              .disabled=${s === h - 1}
+              .disabled=${s === l - 1}
               .path=${"M7,10L12,15L17,10H7Z"}
               @click=${() => this._moveRow(s, 1)}
               label="Move down"
@@ -8814,17 +8861,16 @@ class Pe extends jt {
         <ha-form
           .hass=${this.hass}
           .data=${{ stat_id: a.id }}
-          .schema=${u}
+          .schema=${Na}
           .computeLabel=${this._computeLabel}
-          .computeHelper=${this._computeStatHelper}
-          @value-changed=${(d) => this._onRowStatChange(s, d)}
+          @value-changed=${(u) => this._onRowStatChange(s, u)}
         ></ha-form>
         ${a.id === "__custom__" ? Z`<ha-form
               .hass=${this.hass}
               .data=${{ key: o.key ?? "", ratio_of: o.ratio_of ?? "" }}
-              .schema=${xa}
+              .schema=${Ta}
               .computeLabel=${this._computeLabel}
-              @value-changed=${(d) => this._onRowFieldsChange(s, d)}
+              @value-changed=${(u) => this._onRowFieldsChange(s, u)}
             ></ha-form>` : I}
         <ha-form
           .hass=${this.hass}
@@ -8834,16 +8880,16 @@ class Pe extends jt {
       format: o.format,
       decimals: o.decimals
     }}
-          .schema=${wa}
+          .schema=${La}
           .computeLabel=${this._computeLabel}
-          @value-changed=${(d) => this._onRowFieldsChange(s, d)}
+          @value-changed=${(u) => this._onRowFieldsChange(s, u)}
         ></ha-form>
 
         ${this._subPanel(
       "Thresholds",
       Z`
             ${(o.thresholds ?? []).map(
-        (d, m) => this._renderThreshold(s, m, d, o.thresholds.length)
+        (u, f) => this._renderThreshold(s, f, u, o.thresholds.length)
       )}
             <div class="jve-list-actions">
               <ha-button @click=${() => this._addThreshold(s)}
@@ -8856,9 +8902,9 @@ class Pe extends jt {
         color_target: o.color_target ?? "value",
         color_mode: o.color_mode ?? "solid"
       }}
-              .schema=${Pa}
+              .schema=${ka}
               .computeLabel=${this._computeLabel}
-              @value-changed=${(d) => this._onRowFieldsChange(s, d)}
+              @value-changed=${(u) => this._onRowFieldsChange(s, u)}
             ></ha-form>
           `
     )}
@@ -8868,9 +8914,9 @@ class Pe extends jt {
             <ha-form
               .hass=${this.hass}
               .data=${o.bar ?? {}}
-              .schema=${Ta}
+              .schema=${Aa}
               .computeLabel=${this._computeLabel}
-              @value-changed=${(d) => this._onBarChange(s, d)}
+              @value-changed=${(u) => this._onBarChange(s, u)}
             ></ha-form>
           `
     )}
@@ -8880,9 +8926,9 @@ class Pe extends jt {
             <ha-form
               .hass=${this.hass}
               .data=${o.trend ?? {}}
-              .schema=${ka}
+              .schema=${Ea}
               .computeLabel=${this._computeLabel}
-              @value-changed=${(d) => this._onTrendChange(s, d)}
+              @value-changed=${(u) => this._onTrendChange(s, u)}
             ></ha-form>
           `
     )}
@@ -8897,7 +8943,7 @@ class Pe extends jt {
     `;
   }
   // ─── Thresholds ────────────────────────────────────────────────────────
-  _renderThreshold(o, s, h, a) {
+  _renderThreshold(o, s, l, a) {
     return Z`
       <div class="jve-threshold">
         <div class="jve-threshold-head">
@@ -8924,8 +8970,8 @@ class Pe extends jt {
         </div>
         <ha-form
           .hass=${this.hass}
-          .data=${h}
-          .schema=${La}
+          .data=${l}
+          .schema=${Sa}
           .computeLabel=${this._computeLabel}
           @value-changed=${(u) => this._onThresholdChange(o, s, u)}
         ></ha-form>
@@ -8934,78 +8980,61 @@ class Pe extends jt {
   }
   _addThreshold(o) {
     if (!this._config) return;
-    const s = [...this._config.stats_grid?.rows ?? []], h = s[o], a = [...h.thresholds ?? []], u = a[a.length - 1];
-    a.push({ value: u ? u.value + 1 : 0 }), s[o] = { ...h, thresholds: a }, this._updateRows(s);
+    const s = [...this._config.stats_grid?.rows ?? []], l = s[o], a = [...l.thresholds ?? []], u = a[a.length - 1];
+    a.push({ value: u ? u.value + 1 : 0 }), s[o] = { ...l, thresholds: a }, this._updateRows(s);
   }
   _removeThreshold(o, s) {
     if (!this._config) return;
-    const h = [...this._config.stats_grid?.rows ?? []], a = h[o], u = (a.thresholds ?? []).filter((d, m) => m !== s);
-    h[o] = {
+    const l = [...this._config.stats_grid?.rows ?? []], a = l[o], u = (a.thresholds ?? []).filter((f, m) => m !== s);
+    l[o] = {
       ...a,
       ...u.length ? { thresholds: u } : {}
-    }, u.length || delete h[o].thresholds, this._updateRows(h);
+    }, u.length || delete l[o].thresholds, this._updateRows(l);
   }
-  _moveThreshold(o, s, h) {
+  _moveThreshold(o, s, l) {
     if (!this._config) return;
-    const a = [...this._config.stats_grid?.rows ?? []], u = a[o], d = [...u.thresholds ?? []], m = s + h;
-    m < 0 || m >= d.length || ([d[s], d[m]] = [d[m], d[s]], a[o] = { ...u, thresholds: d }, this._updateRows(a));
+    const a = [...this._config.stats_grid?.rows ?? []], u = a[o], f = [...u.thresholds ?? []], m = s + l;
+    m < 0 || m >= f.length || ([f[s], f[m]] = [f[m], f[s]], a[o] = { ...u, thresholds: f }, this._updateRows(a));
   }
-  _onThresholdChange(o, s, h) {
+  _onThresholdChange(o, s, l) {
     if (!this._config) return;
-    const a = h.detail?.value ?? {}, u = [...this._config.stats_grid?.rows ?? []], d = u[o], m = [...d.thresholds ?? []];
-    m[s] = { ...m[s], ...a }, a.color || delete m[s].color, a.icon || delete m[s].icon, u[o] = { ...d, thresholds: m }, this._updateRows(u);
+    const a = l.detail?.value ?? {}, u = [...this._config.stats_grid?.rows ?? []], f = u[o], m = [...f.thresholds ?? []];
+    m[s] = { ...m[s], ...a }, a.color || delete m[s].color, a.icon || delete m[s].icon, u[o] = { ...f, thresholds: m }, this._updateRows(u);
   }
   // ─── Bar / Trend sub-objects ───────────────────────────────────────────
   _onBarChange(o, s) {
     if (!this._config) return;
-    const h = s.detail?.value ?? {}, a = [...this._config.stats_grid?.rows ?? []], u = a[o], d = this._stripEmpty(h);
-    a[o] = Object.keys(d).length ? { ...u, bar: d } : (() => {
+    const l = s.detail?.value ?? {}, a = [...this._config.stats_grid?.rows ?? []], u = a[o], f = this._stripEmpty(l);
+    a[o] = Object.keys(f).length ? { ...u, bar: f } : (() => {
       const { bar: m, ...g } = u;
       return g;
     })(), this._updateRows(a);
   }
   _onTrendChange(o, s) {
     if (!this._config) return;
-    const h = s.detail?.value ?? {}, a = [...this._config.stats_grid?.rows ?? []], u = a[o], d = this._stripEmpty(h);
-    a[o] = Object.keys(d).length ? { ...u, trend: d } : (() => {
+    const l = s.detail?.value ?? {}, a = [...this._config.stats_grid?.rows ?? []], u = a[o], f = this._stripEmpty(l);
+    a[o] = Object.keys(f).length ? { ...u, trend: f } : (() => {
       const { trend: m, ...g } = u;
       return g;
     })(), this._updateRows(a);
   }
-  /** Build the stat-picker schema from the catalogue. */
-  _buildStatSchema() {
-    return [
-      {
-        name: "stat_id",
-        selector: {
-          select: {
-            mode: "dropdown",
-            options: Wt.map((o) => ({
-              value: o.id,
-              label: o.label
-            }))
-          }
-        }
-      }
-    ];
-  }
   _removeRow(o) {
     if (!this._config) return;
-    const s = (this._config.stats_grid?.rows ?? []).filter((h, a) => a !== o);
+    const s = (this._config.stats_grid?.rows ?? []).filter((l, a) => a !== o);
     this._updateRows(s);
   }
   _moveRow(o, s) {
     if (!this._config) return;
-    const h = [...this._config.stats_grid?.rows ?? []], a = o + s;
-    a < 0 || a >= h.length || ([h[o], h[a]] = [h[a], h[o]], this._updateRows(h));
+    const l = [...this._config.stats_grid?.rows ?? []], a = o + s;
+    a < 0 || a >= l.length || ([l[o], l[a]] = [l[a], l[o]], this._updateRows(l));
   }
   _updateRows(o) {
     if (!this._config) return;
-    const s = { ...this._config.stats_grid ?? { rows: [] }, rows: o }, h = { ...this._config, stats_grid: s };
-    this._config = h, Ri(this, h);
+    const s = { ...this._config.stats_grid ?? { rows: [] }, rows: o }, l = { ...this._config, stats_grid: s };
+    this._config = l, Zi(this, l);
   }
   static {
-    this.styles = zo`
+    this.styles = Ro`
     :host {
       display: block;
     }
@@ -9104,17 +9133,17 @@ class Pe extends jt {
   `;
   }
 }
-Fi([
-  Hi({ attribute: !1 })
+Vi([
+  ji({ attribute: !1 })
 ], Pe.prototype, "hass");
-Fi([
+Vi([
   we()
 ], Pe.prototype, "_config");
-Fi([
+Vi([
   we()
 ], Pe.prototype, "_customRouteRows");
 customElements.get("journey-viewer-card-editor") || customElements.define("journey-viewer-card-editor", Pe);
-const Ra = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Ha = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   JourneyViewerCardEditor: Pe
 }, Symbol.toStringTag, { value: "Module" }));

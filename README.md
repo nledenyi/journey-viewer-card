@@ -87,7 +87,7 @@ Everything under `stats` is an open namespace - the stats grid reads any dot-pat
     activity_id: $trip_id
   ```
 
-  `$device_id` is resolved from the source entity's device; sources without a device (template sensors) must use a payload that doesn't reference it.
+  `$device_id` is resolved from the source entity's device; sources without a device (template sensors) must use a payload that doesn't reference it. A value that is exactly `$trip_id` passes the trip's `id` through verbatim (numeric ids stay numeric); embedded placeholders (`"trip-$trip_id"`) substitute as strings.
 - Fetched routes are cached per card instance; navigating back to a trip doesn't re-call the service.
 
 Trips that arrive **with** `route` inline (fixtures, small datasets, template sensors) skip the service call entirely. Set `route_service: ""` on a source to disable lazy-loading for it.
@@ -210,7 +210,7 @@ stats_grid:
 empty_state:
   title: "No recent journeys"
   body: "No journey data in the last 14 days."
-  icon: mdi:car-off
+  icon: mdi:car-off                # default mdi:map-marker-off; "" hides the icon
 ```
 
 ## Theming

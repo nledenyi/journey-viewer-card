@@ -17,15 +17,17 @@ import {
   resolveMax,
   type TrendInfo,
 } from "./decorators.js";
+import { MAP_DEFAULTS, PAGINATION_DEFAULTS } from "./defaults.js";
+import { STAT_CATALOGUE } from "./editor/stat-catalogue.js";
 
 /** Bumped on each release; surfaced in the HACS console banner. */
-const CARD_VERSION = "0.2.0";
+const CARD_VERSION = "0.2.1";
 
 /** Layout constants used by getCardSize() to estimate a stable Lovelace size. */
 const CARD_HEADER_HEIGHT_PX = 60;
 const STATS_ROW_HEIGHT_PX = 50;
 const STATS_GRID_DEFAULT_COLS = 4;
-const DEFAULT_MAP_HEIGHT_PX = 280;
+const DEFAULT_MAP_HEIGHT_PX = MAP_DEFAULTS.height;
 
 /** Watch only the entities our sources point at, not the whole hass tree. */
 function relevantEntitiesChanged(
@@ -92,29 +94,21 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
   }
 
   static getStubConfig(): Partial<CardConfig> {
+    // Seed the two universal stats so a fresh card isn't map-only. Stamped
+    // from the editor catalogue so the seeded rows can't drift from what the
+    // stat picker would stamp (single-file bundle; the import costs nothing).
+    const rows = ["distance", "duration"].map((id) => {
+      const e = STAT_CATALOGUE.find((c) => c.id === id)!;
+      const row: StatsRow = { key: e.key, label: e.label };
+      if (e.defaultFormat) row.format = e.defaultFormat;
+      if (e.defaultIcon) row.icon = e.defaultIcon;
+      if (e.defaultDecimals != null) row.decimals = e.defaultDecimals;
+      return row;
+    });
     return {
       type: "custom:journey-viewer-card",
       sources: [{ name: "Journeys", entity: "" }],
-      // Seed the two universal stats so a fresh card isn't map-only. Values
-      // mirror the editor catalogue's Distance / Duration entries (the
-      // catalogue lives in the lazy-loaded editor bundle, so no import here).
-      stats_grid: {
-        rows: [
-          {
-            key: "stats.distance_m",
-            label: "Distance",
-            format: "km",
-            icon: "mdi:map-marker-distance",
-            decimals: 2,
-          },
-          {
-            key: "stats.duration_s",
-            label: "Duration",
-            format: "duration",
-            icon: "mdi:timer-outline",
-          },
-        ],
-      },
+      stats_grid: { rows },
     };
   }
 
@@ -248,18 +242,10 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     // double-bail strategy is more reliable than scheduling rAFs from
     // firstUpdated, which races with Lit's internal property batch updates
     // inside HA's grid sections layout.
-    const map = this.config?.map ?? {};
     const dark = this.isDark();
-    if (
-      this.tripMap &&
-      resolveTileKey(map, this.mapDark) !== resolveTileKey(map, dark)
-    ) {
-      // Theme flipped and it changes the effective tiles (auto/unset
-      // provider): this wrapper bakes the tile layer in at construction, so
-      // rebuild the map against the new theme.
-      this.tripMap.destroy();
-      this.tripMap = undefined;
-    }
+    // Theme flip: TripMap swaps just the tile layer when the effective
+    // provider changes (auto/unset only) — viewport and layers stay intact.
+    this.tripMap?.setDark(dark);
     // Resync unconditionally, even with no map (empty/warning state), so the
     // theme gate in shouldUpdate() can't get stuck returning true on every
     // hass update while mapDark stays stale.
@@ -359,12 +345,19 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     }
     const data: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(payloadTemplate)) {
-      data[k] =
-        typeof v === "string"
-          ? v
-              .replace("$trip_id", String(trip.id))
-              .replace("$device_id", deviceId ?? "")
-          : v;
+      if (v === "$trip_id") {
+        // Exactly the placeholder: pass the id through verbatim so producers
+        // with numeric trip ids keep numbers on the wire (a strict service
+        // schema may reject a stringified int). Embedded placeholders
+        // ("trip-$trip_id") still substitute as strings.
+        data[k] = trip.id;
+      } else if (typeof v === "string") {
+        data[k] = v
+          .replace("$trip_id", String(trip.id))
+          .replace("$device_id", deviceId ?? "");
+      } else {
+        data[k] = v;
+      }
     }
 
     this.routeFetchInFlight.add(key);
@@ -470,7 +463,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
 
   private prev = (ev?: Event): void => {
     ev?.stopPropagation();
-    const wrap = this.config?.pagination?.wrap ?? false;
+    const wrap = this.config?.pagination?.wrap ?? PAGINATION_DEFAULTS.wrap;
     if (this.index > 0) {
       this.index -= 1;
     } else if (wrap) {
@@ -480,7 +473,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
 
   private next = (ev?: Event): void => {
     ev?.stopPropagation();
-    const wrap = this.config?.pagination?.wrap ?? false;
+    const wrap = this.config?.pagination?.wrap ?? PAGINATION_DEFAULTS.wrap;
     if (this.index < this.trips.length - 1) {
       this.index += 1;
     } else if (wrap) {
@@ -671,9 +664,12 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
       (unconfigured
         ? "Pick a source entity in the card editor to get started."
         : "No trip data available.");
+    // "" explicitly suppresses the icon (YAML-only escape hatch — the GUI
+    // editor strips empty strings); unset falls back to the default.
+    const icon = e.icon === "" ? undefined : (e.icon ?? "mdi:map-marker-off");
     return html`<ha-card>
       <div class="tv-empty">
-        <ha-icon icon=${e.icon ?? "mdi:map-marker-off"}></ha-icon>
+        ${icon ? html`<ha-icon icon=${icon}></ha-icon>` : nothing}
         <div class="tv-empty-title">${title}</div>
         <div class="tv-empty-body">${body}</div>
       </div>
@@ -684,7 +680,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     if (!this.trips.length) return nothing;
     const cfg = this.config?.pagination ?? {};
     const counter = cfg.show_counter !== false;
-    const wrap = cfg.wrap ?? false;
+    const wrap = cfg.wrap ?? PAGINATION_DEFAULTS.wrap;
     const atFirst = !wrap && this.index === 0;
     const atLast = !wrap && this.index === this.trips.length - 1;
     return html`<div

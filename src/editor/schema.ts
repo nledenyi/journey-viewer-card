@@ -6,6 +6,11 @@
  */
 
 import { LABEL_TOKENS } from "../format.js";
+import {
+  MAP_DEFAULTS,
+  PAGINATION_DEFAULTS,
+  POLYLINE_DEFAULTS,
+} from "../defaults.js";
 
 export type Schema = readonly Record<string, unknown>[];
 
@@ -291,12 +296,39 @@ export const SOURCE_PRESETS: SourcePreset[] = [
   },
 ];
 
-/** Map a source's stored route_service back to a preset id. */
-export function detectSourcePreset(routeService: string | null | undefined): string {
-  if (routeService === null || routeService === "") return "none";
-  if (routeService === undefined || routeService === "toyota.get_trip_route")
-    return "toyota";
-  if (routeService === "ha_strava.get_activity_route") return "strava";
+function payloadEquals(
+  a: Record<string, string> | undefined,
+  b: Record<string, string> | undefined,
+): boolean {
+  const ka = Object.keys(a ?? {});
+  const kb = Object.keys(b ?? {});
+  return ka.length === kb.length && ka.every((k) => a![k] === b?.[k]);
+}
+
+/** Map a source's stored route-loading config back to a preset id by matching
+ *  (route_service, route_service_data) against SOURCE_PRESETS — a payload
+ *  that deviates from the preset's reports as custom. */
+export function detectSourcePreset(src: {
+  route_service?: string | null;
+  route_service_data?: Record<string, string>;
+}): string {
+  // Documented aliases (types.ts SourceConfig): unset and the literal default
+  // service both mean the Toyota default; "" and null both disable.
+  const service =
+    src.route_service === "toyota.get_trip_route"
+      ? undefined
+      : src.route_service === ""
+        ? null
+        : src.route_service;
+  for (const p of SOURCE_PRESETS) {
+    if (p.id === "custom") continue;
+    if (
+      p.route_service === service &&
+      payloadEquals(p.route_service_data, src.route_service_data)
+    ) {
+      return p.id;
+    }
+  }
   return "custom";
 }
 
@@ -313,18 +345,12 @@ export const EMPTY_STATE_SCHEMA: Schema = [
 /** Card-side defaults per editor section, bound into each ha-form's data so
  *  unset fields show the value the card actually uses (an empty slider at
  *  minimum position lies about height=280). The section-change handler strips
- *  keys equal to these before persisting, so the YAML stays minimal. Must
- *  match the fallbacks in card.ts / map.ts. */
+ *  keys equal to these before persisting, so the YAML stays minimal. Shared
+ *  with the runtime via defaults.ts, so the two can't drift. */
 export const SECTION_DEFAULTS: Record<string, Record<string, unknown>> = {
-  pagination: { show_counter: true, wrap: false, keyboard: true },
-  map: {
-    height: 280,
-    padding_pct: 10,
-    gestures: "locked",
-    tile_provider: "auto",
-    zoom_to_fit: false,
-  },
-  "map.polyline": { color_by: "solid", weight: 4, opacity: 0.9 },
+  pagination: PAGINATION_DEFAULTS,
+  map: MAP_DEFAULTS,
+  "map.polyline": POLYLINE_DEFAULTS,
 };
 
 /** Helper text under specific fields, looked up by schema field name via
