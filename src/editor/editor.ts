@@ -2,8 +2,8 @@
  *
  *  Schema-driven sections (top-level, pagination, label, map, polyline,
  *  empty_state) plus list builders for sources[] and stats_grid.rows[]
- *  (threshold / bar / trend sub-editors included), with a YAML fallback
- *  pane for anything not surfaced in the GUI.
+ *  (threshold / bar / trend sub-editors included). Anything not surfaced
+ *  in the GUI is reachable via HA's own "Show code editor" YAML view.
  *
  *  Architecture: each section gets its own <ha-form> bound to a flat slice of
  *  the config. _onSectionChange merges the slice back at the right path and
@@ -38,31 +38,26 @@ function loadHaComponents(): void {
   }
 }
 
-declare global {
-  interface Window {
-    /** HA exposes its bundled js-yaml as a global. We use it for the YAML
-     *  edit-fallback view; falls back to JSON.stringify when not present. */
-    jsyaml?: {
-      dump: (o: unknown) => string;
-      load: (s: string) => unknown;
-    };
-  }
-}
 import {
   BAR_SCHEMA,
   EMPTY_STATE_SCHEMA,
+  HELPERS,
   LABELS,
   LABEL_SCHEMA,
   MAP_SCHEMA,
   PAGINATION_SCHEMA,
   POLYLINE_SCHEMA,
+  ROUTE_CUSTOM_SCHEMA,
   ROW_BASE_SCHEMA,
   ROW_CUSTOM_PATH_SCHEMA,
   ROW_DECORATOR_SCHEMA,
+  SECTION_DEFAULTS,
+  SOURCE_PRESETS,
   SOURCE_SCHEMA,
   THRESHOLD_SCHEMA,
   TOP_LEVEL_SCHEMA,
   TREND_SCHEMA,
+  detectSourcePreset,
   type Schema,
 } from "./schema.js";
 import type {
@@ -88,9 +83,11 @@ export class JourneyViewerCardEditor
 {
   @property({ attribute: false }) public hass?: HomeAssistant;
   @state() private _config?: CardConfig;
-  @state() private _yamlMode = false;
-  @state() private _yamlDraft = "";
-  @state() private _yamlError?: string;
+  /** Source indices the user has switched into "Custom service…" mode. Kept
+   *  as local editor state (not persisted) so the free-text field stays shown
+   *  while the service is empty, without stamping a placeholder into config.
+   *  Index-keyed to match the rest of the source UI; remapped on move/remove. */
+  @state() private _customRouteRows = new Set<number>();
 
   override connectedCallback(): void {
     super.connectedCallback();
@@ -99,48 +96,6 @@ export class JourneyViewerCardEditor
 
   setConfig(config: CardConfig): void {
     this._config = config;
-  }
-
-  // ─── YAML fallback ─────────────────────────────────────────────────────
-
-  private _toggleYaml(): void {
-    if (!this._yamlMode) {
-      this._yamlDraft = this._configToYaml(this._config);
-      this._yamlError = undefined;
-    }
-    this._yamlMode = !this._yamlMode;
-  }
-
-  private _onYamlInput(ev: CustomEvent): void {
-    this._yamlDraft = (ev.detail?.value ?? "") as string;
-  }
-
-  private _applyYaml(): void {
-    try {
-      const parsed = this._yamlToConfig(this._yamlDraft);
-      this._yamlError = undefined;
-      this._config = parsed;
-      fireConfigChanged(this, parsed);
-      this._yamlMode = false;
-    } catch (err) {
-      this._yamlError = (err as Error).message;
-    }
-  }
-
-  private _configToYaml(c: CardConfig | undefined): string {
-    if (!c) return "";
-    // Round-trip through HA's bundled YAML lib if available; fallback JSON.
-    const yaml = window.jsyaml;
-    return yaml ? yaml.dump(c) : JSON.stringify(c, null, 2);
-  }
-
-  private _yamlToConfig(text: string): CardConfig {
-    const yaml = window.jsyaml;
-    const parsed = yaml ? yaml.load(text) : JSON.parse(text);
-    if (!parsed || typeof parsed !== "object") {
-      throw new Error("Config must be an object");
-    }
-    return parsed as CardConfig;
   }
 
   // ─── Schema-section change handler ─────────────────────────────────────
@@ -160,6 +115,21 @@ export class JourneyViewerCardEditor
   ): CardConfig {
     // Strip nullish / empty keys so we don't bloat the YAML with `: null`.
     const clean = this._stripEmpty(patch);
+    // Defaults are bound into the form data (SECTION_DEFAULTS) so sliders /
+    // toggles show reality; delete default-equal keys from the merged section
+    // or every edit would persist the whole default set into the YAML (and
+    // sliding a customised value BACK to the default couldn't clear it).
+    const dropDefaults = (
+      o: Record<string, unknown>,
+    ): Record<string, unknown> => {
+      const defaults = SECTION_DEFAULTS[path];
+      if (defaults) {
+        for (const [k, v] of Object.entries(defaults)) {
+          if (o[k] === v) delete o[k];
+        }
+      }
+      return o;
+    };
     // CardConfig fields are typed objects; the merge below works at the
     // generic-record level, then we cast back at the single exit point.
     const cfg = config as Record<string, unknown>;
@@ -168,16 +138,24 @@ export class JourneyViewerCardEditor
       result = { ...cfg, ...clean };
     } else if (path === "map.polyline") {
       const map = { ...((cfg.map as Record<string, unknown>) ?? {}) };
-      map.polyline = {
+      const polyline = dropDefaults({
         ...((map.polyline as Record<string, unknown>) ?? {}),
         ...clean,
-      };
+      });
+      // Sections reduced to all-defaults leave `map: {}` / `polyline: {}`
+      // husks in the YAML — prune them.
+      if (Object.keys(polyline).length) map.polyline = polyline;
+      else delete map.polyline;
       result = { ...cfg, map };
+      if (!Object.keys(map).length) delete result.map;
     } else {
-      result = {
-        ...cfg,
-        [path]: { ...((cfg[path] as Record<string, unknown>) ?? {}), ...clean },
-      };
+      const section = dropDefaults({
+        ...((cfg[path] as Record<string, unknown>) ?? {}),
+        ...clean,
+      });
+      result = { ...cfg };
+      if (Object.keys(section).length) result[path] = section;
+      else delete result[path];
     }
     return result as CardConfig;
   }
@@ -196,6 +174,9 @@ export class JourneyViewerCardEditor
   private _computeLabel = (s: { name: string }): string =>
     LABELS[s.name] ?? s.name;
 
+  private _computeHelper = (s: { name: string }): string | undefined =>
+    HELPERS[s.name];
+
   private _renderForm(
     schema: Schema,
     data: unknown,
@@ -207,6 +188,7 @@ export class JourneyViewerCardEditor
         .data=${data ?? {}}
         .schema=${schema}
         .computeLabel=${this._computeLabel}
+        .computeHelper=${this._computeHelper}
         @value-changed=${this._onSectionChange(path)}
       ></ha-form>
     `;
@@ -218,8 +200,6 @@ export class JourneyViewerCardEditor
     if (!this._config) return nothing;
     const c = this._config;
 
-    if (this._yamlMode) return this._renderYaml();
-
     const topData = {
       title: c.title,
       order: c.order,
@@ -230,11 +210,21 @@ export class JourneyViewerCardEditor
       <div class="jve-root">
         ${this._renderForm(TOP_LEVEL_SCHEMA, topData, "top")}
 
-        ${this._section("Sources", this._renderSources(c.sources ?? []))}
+        ${this._section(
+          "Sources",
+          this._renderSources(c.sources ?? []),
+          // Expanded by default: picking a source entity is the one action a
+          // fresh card needs, so don't hide it behind a collapsed panel.
+          true,
+        )}
 
         ${this._section(
           "Pagination",
-          this._renderForm(PAGINATION_SCHEMA, c.pagination, "pagination"),
+          this._renderForm(
+            PAGINATION_SCHEMA,
+            { ...SECTION_DEFAULTS.pagination, ...c.pagination },
+            "pagination",
+          ),
         )}
         ${this._section(
           "Trip label",
@@ -243,11 +233,15 @@ export class JourneyViewerCardEditor
         ${this._section(
           "Map",
           html`
-            ${this._renderForm(MAP_SCHEMA, c.map, "map")}
+            ${this._renderForm(
+              MAP_SCHEMA,
+              { ...SECTION_DEFAULTS.map, ...c.map },
+              "map",
+            )}
             <div class="jve-subhead">Polyline</div>
             ${this._renderForm(
               POLYLINE_SCHEMA,
-              c.map?.polyline,
+              { ...SECTION_DEFAULTS["map.polyline"], ...c.map?.polyline },
               "map.polyline",
             )}
           `,
@@ -262,40 +256,13 @@ export class JourneyViewerCardEditor
           "Empty state",
           this._renderForm(EMPTY_STATE_SCHEMA, c.empty_state, "empty_state"),
         )}
-
-        <div class="jve-yaml-bar">
-          <ha-button @click=${this._toggleYaml}>Show YAML</ha-button>
-        </div>
       </div>
     `;
   }
 
-  private _renderYaml() {
+  private _section(title: string, body: unknown, expanded = false) {
     return html`
-      <div class="jve-yaml">
-        <div class="jve-yaml-hint">
-          Editing as YAML. Click Apply to commit, or Back to discard.
-        </div>
-        <ha-code-editor
-          mode="yaml"
-          autofocus
-          .value=${this._yamlDraft}
-          @value-changed=${this._onYamlInput}
-        ></ha-code-editor>
-        ${this._yamlError
-          ? html`<div class="jve-yaml-error">${this._yamlError}</div>`
-          : nothing}
-        <div class="jve-yaml-bar">
-          <ha-button @click=${this._toggleYaml}>Back</ha-button>
-          <ha-button raised @click=${this._applyYaml}>Apply</ha-button>
-        </div>
-      </div>
-    `;
-  }
-
-  private _section(title: string, body: unknown) {
-    return html`
-      <ha-expansion-panel outlined header=${title}>
+      <ha-expansion-panel outlined header=${title} .expanded=${expanded}>
         <div class="jve-body">${body}</div>
       </ha-expansion-panel>
     `;
@@ -349,20 +316,122 @@ export class JourneyViewerCardEditor
           .computeLabel=${this._computeLabel}
           @value-changed=${(ev: CustomEvent) => this._onSourceChange(i, ev)}
         ></ha-form>
+        ${this._renderRoutePreset(src, i)}
       </div>
     `;
   }
+
+  /** Route-loading preset select + a free-text service field when Custom. */
+  private _renderRoutePreset(src: SourceConfig, i: number) {
+    // Sticky custom mode: once the user picks "Custom service…", keep showing
+    // the text field even when the service is blank, instead of snapping back
+    // to whatever detectSourcePreset() reads from an empty value.
+    const preset = this._customRouteRows.has(i)
+      ? "custom"
+      : detectSourcePreset(src.route_service);
+    const presetSchema: Schema = [
+      {
+        name: "route_preset",
+        selector: {
+          select: {
+            mode: "dropdown",
+            options: SOURCE_PRESETS.map((p) => ({ value: p.id, label: p.label })),
+          },
+        },
+      },
+    ];
+    return html`
+      <ha-form
+        .hass=${this.hass}
+        .data=${{ route_preset: preset }}
+        .schema=${presetSchema}
+        .computeLabel=${this._computeLabel}
+        @value-changed=${(ev: CustomEvent) => this._onSourcePresetChange(i, ev)}
+      ></ha-form>
+      ${preset === "custom"
+        ? html`<ha-form
+            .hass=${this.hass}
+            .data=${{ route_service: src.route_service ?? "" }}
+            .schema=${ROUTE_CUSTOM_SCHEMA}
+            .computeLabel=${this._computeLabel}
+            .computeHelper=${this._computeHelper}
+            @value-changed=${(ev: CustomEvent) =>
+              this._onSourceRouteServiceChange(i, ev)}
+          ></ha-form>`
+        : nothing}
+    `;
+  }
+
+  private _onSourcePresetChange = (i: number, ev: CustomEvent): void => {
+    if (!this._config) return;
+    const next = (ev.detail?.value ?? {}) as { route_preset?: string };
+    const preset = SOURCE_PRESETS.find((p) => p.id === next.route_preset);
+    if (!preset) return;
+    const sources = [...(this._config.sources ?? [])];
+    const src = { ...sources[i] };
+    const custom = new Set(this._customRouteRows);
+    if (preset.id === "custom") {
+      // Enter custom mode locally; do NOT persist a placeholder service. Clear
+      // a recognized preset's service so the text field starts blank (blank =
+      // card default until the user types), and drop the preset payload.
+      custom.add(i);
+      if (detectSourcePreset(src.route_service) !== "custom") {
+        delete src.route_service;
+      }
+      delete src.route_service_data;
+    } else {
+      custom.delete(i);
+      if (preset.route_service !== undefined) {
+        src.route_service = preset.route_service;
+      } else {
+        delete src.route_service;
+      }
+      if (preset.route_service_data) {
+        src.route_service_data = preset.route_service_data;
+      } else {
+        delete src.route_service_data;
+      }
+    }
+    this._customRouteRows = custom;
+    sources[i] = src;
+    this._updateSources(sources);
+  };
+
+  private _onSourceRouteServiceChange = (i: number, ev: CustomEvent): void => {
+    if (!this._config) return;
+    const next = (ev.detail?.value ?? {}) as { route_service?: string };
+    const sources = [...(this._config.sources ?? [])];
+    const src = { ...sources[i] };
+    // Blank in custom mode falls back to the card default (delete the key);
+    // use the "None" preset to disable route loading entirely. The row stays
+    // in custom mode (_customRouteRows) so clearing the field to retype does
+    // not collapse the preset select mid-edit.
+    if (next.route_service) src.route_service = next.route_service;
+    else delete src.route_service;
+    sources[i] = src;
+    this._updateSources(sources);
+  };
 
   private _onSourceChange = (i: number, ev: CustomEvent): void => {
     if (!this._config) return;
     const next = (ev.detail?.value ?? {}) as SourceConfig;
     const sources = [...(this._config.sources ?? [])];
+    const prev = sources[i] ?? ({} as SourceConfig);
     // Strip cleared fields so emptying e.g. `icon` removes the key from the
     // YAML instead of persisting `icon: ""`.
-    sources[i] = this._stripEmpty({
-      ...sources[i],
+    const merged = this._stripEmpty({
+      ...prev,
       ...next,
     }) as unknown as SourceConfig;
+    // Route-loading keys are managed by the preset control, not this form -
+    // re-attach them verbatim or the strip above silently drops the "None"
+    // preset's route_service: null on every unrelated edit.
+    if ("route_service" in prev) merged.route_service = prev.route_service;
+    else delete merged.route_service;
+    if (prev.route_service_data)
+      merged.route_service_data = prev.route_service_data;
+    else delete merged.route_service_data;
+    sources[i] = merged;
     this._updateSources(sources);
   };
 
@@ -376,6 +445,13 @@ export class JourneyViewerCardEditor
   private _removeSource(i: number): void {
     if (!this._config) return;
     const sources = (this._config.sources ?? []).filter((_, j) => j !== i);
+    // Drop the removed row's custom flag and shift indices above it down.
+    const custom = new Set<number>();
+    for (const x of this._customRouteRows) {
+      if (x < i) custom.add(x);
+      else if (x > i) custom.add(x - 1);
+    }
+    this._customRouteRows = custom;
     this._updateSources(sources);
   }
 
@@ -385,6 +461,15 @@ export class JourneyViewerCardEditor
     const j = i + dir;
     if (j < 0 || j >= sources.length) return;
     [sources[i], sources[j]] = [sources[j], sources[i]];
+    // Swap the two rows' custom flags to follow the moved sources.
+    const hadI = this._customRouteRows.has(i);
+    const hadJ = this._customRouteRows.has(j);
+    const custom = new Set(this._customRouteRows);
+    custom.delete(i);
+    custom.delete(j);
+    if (hadJ) custom.add(i);
+    if (hadI) custom.add(j);
+    this._customRouteRows = custom;
     this._updateSources(sources);
   }
 
@@ -693,7 +778,10 @@ export class JourneyViewerCardEditor
   };
 
   /** User picked a different entry from the stat catalogue. Stamp key,
-   *  ratio_of, and seed any missing defaults (label/format/icon). */
+   *  ratio_of, and re-seed label/format/icon/decimals — but only fields the
+   *  user hasn't customised, i.e. fields still equal to the PREVIOUS entry's
+   *  defaults. Otherwise switching Distance → Duration keeps "Distance" +
+   *  the km formatter and renders nonsense ("441 m" for a 441 s duration). */
   private _onRowStatChange = (i: number, ev: CustomEvent): void => {
     if (!this._config) return;
     const next = (ev.detail?.value ?? {}) as { stat_id?: string };
@@ -703,6 +791,7 @@ export class JourneyViewerCardEditor
     const rows = [...(this._config.stats_grid?.rows ?? [])];
     const existing = rows[i] ?? { label: "" };
     const stamped: StatsRow = { ...existing };
+    const prev = findCatalogueEntry(existing.key, existing.ratio_of);
 
     if (entry.id === "__custom__") {
       // Don't overwrite key/ratio_of when switching TO custom — keep what's
@@ -714,13 +803,23 @@ export class JourneyViewerCardEditor
       else delete stamped.ratio_of;
     }
 
-    // Seed defaults only when the user hasn't set them.
-    if (!stamped.label) stamped.label = entry.label;
-    if (!stamped.format && entry.defaultFormat)
-      stamped.format = entry.defaultFormat;
-    if (!stamped.icon && entry.defaultIcon) stamped.icon = entry.defaultIcon;
-    if (stamped.decimals == null && entry.defaultDecimals != null)
-      stamped.decimals = entry.defaultDecimals;
+    // A field is "untouched" when empty OR still carrying the previous
+    // entry's default — either way the user hasn't customised it.
+    const untouched = (v: unknown, prevDefault: unknown) =>
+      v == null || v === "" || v === prevDefault;
+    if (untouched(stamped.label, prev.label)) stamped.label = entry.label;
+    if (untouched(stamped.format, prev.defaultFormat)) {
+      if (entry.defaultFormat) stamped.format = entry.defaultFormat;
+      else delete stamped.format;
+    }
+    if (untouched(stamped.icon, prev.defaultIcon)) {
+      if (entry.defaultIcon) stamped.icon = entry.defaultIcon;
+      else delete stamped.icon;
+    }
+    if (untouched(stamped.decimals, prev.defaultDecimals)) {
+      if (entry.defaultDecimals != null) stamped.decimals = entry.defaultDecimals;
+      else delete stamped.decimals;
+    }
 
     rows[i] = stamped;
     this._updateRows(rows);
@@ -805,25 +904,6 @@ export class JourneyViewerCardEditor
       font-size: 0.85rem;
       color: var(--secondary-text-color);
       margin-top: 4px;
-    }
-    .jve-yaml {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .jve-yaml-hint {
-      font-size: 0.85rem;
-      color: var(--secondary-text-color);
-    }
-    .jve-yaml-error {
-      color: var(--error-color);
-      font-size: 0.85rem;
-      white-space: pre-wrap;
-    }
-    .jve-yaml-bar {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
     }
     .jve-list {
       display: flex;

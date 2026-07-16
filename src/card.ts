@@ -4,7 +4,7 @@ import type { ActionConfig, HomeAssistant, LovelaceCard } from "custom-card-help
 import { hasAction } from "custom-card-helpers";
 import leafletCss from "leaflet/dist/leaflet.css?inline";
 import type { CardConfig, RoutePoint, StatsRow, Trip } from "./types.js";
-import { TripMap } from "./map.js";
+import { TripMap, resolveTileKey } from "./map.js";
 import { formatStat, renderLabel, validateLabelTemplate } from "./format.js";
 import { getByPath } from "./lookup.js";
 import { sortTrips, normalizeFromHass } from "./data.js";
@@ -19,7 +19,7 @@ import {
 } from "./decorators.js";
 
 /** Bumped on each release; surfaced in the HACS console banner. */
-const CARD_VERSION = "0.1.0";
+const CARD_VERSION = "0.2.0";
 
 /** Layout constants used by getCardSize() to estimate a stable Lovelace size. */
 const CARD_HEADER_HEIGHT_PX = 60;
@@ -64,6 +64,8 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
 
   @query(".tv-map") private mapEl?: HTMLElement;
   private tripMap?: TripMap;
+  /** Theme darkness the current TripMap was built with (auto tiles). */
+  private mapDark = false;
   /** Memoized stats-row decorations, keyed on (trip, prevTrip) reference pair.
    *  Cleared whenever `trips` changes (refreshTrips() reassigns the array). */
   private rowCache?: { trip: Trip; prevTrip?: Trip; rows: WeakMap<StatsRow, RowComputed> };
@@ -75,6 +77,9 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
   /** Trip ids whose route fetch is currently in flight; debounces
    *  duplicate kickoffs from successive `updated()` cycles. */
   private routeFetchInFlight = new Set<string>();
+  /** Source entities already warned about a missing $device_id, so the
+   *  warning fires once per source instead of on every `updated()` cycle. */
+  private warnedNoDevice = new Set<string>();
   private keyboardListenerActive = false;
 
   // ─── Lovelace lifecycle ────────────────────────────────────────────────
@@ -89,7 +94,27 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
   static getStubConfig(): Partial<CardConfig> {
     return {
       type: "custom:journey-viewer-card",
-      sources: [{ name: "Vehicle", entity: "" }],
+      sources: [{ name: "Journeys", entity: "" }],
+      // Seed the two universal stats so a fresh card isn't map-only. Values
+      // mirror the editor catalogue's Distance / Duration entries (the
+      // catalogue lives in the lazy-loaded editor bundle, so no import here).
+      stats_grid: {
+        rows: [
+          {
+            key: "stats.distance_m",
+            label: "Distance",
+            format: "km",
+            icon: "mdi:map-marker-distance",
+            decimals: 2,
+          },
+          {
+            key: "stats.duration_s",
+            label: "Duration",
+            format: "duration",
+            icon: "mdi:timer-outline",
+          },
+        ],
+      },
     };
   }
 
@@ -171,6 +196,14 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
       return true;
     }
     if (changed.has("hass")) {
+      // A theme flip only matters when it changes the effective tile layer
+      // (unset/"auto" provider). Compare resolved tile keys, not raw
+      // darkness: with an explicit provider the tiles are theme-independent,
+      // so this must stay false — otherwise the map never rebuilds to resync
+      // mapDark and every later hass update slips through this gate.
+      const map = this.config.map ?? {};
+      if (resolveTileKey(map, this.mapDark) !== resolveTileKey(map, this.isDark()))
+        return true;
       const oldHass = changed.get("hass") as HomeAssistant | undefined;
       const entityIds = (this.config.sources ?? [])
         .map((s) => s.entity)
@@ -194,7 +227,11 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
    *  from connectedCallback (re-attach after Lovelace edit-mode toggle).
    *  Idempotent: safe to call repeatedly. */
   private syncKeyboardListener(): void {
-    const wanted = !!this.config?.pagination?.keyboard;
+    // Default ON (README documents keyboard: true as the default) - same
+    // `!== false` idiom as show_counter. `!!` here meant a config without a
+    // `pagination:` block (e.g. anything the GUI editor produces) silently
+    // lost keyboard pagination.
+    const wanted = this.config?.pagination?.keyboard !== false;
     if (wanted && !this.keyboardListenerActive) {
       document.addEventListener("keydown", this.handleKey);
       this.keyboardListenerActive = true;
@@ -211,6 +248,22 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     // double-bail strategy is more reliable than scheduling rAFs from
     // firstUpdated, which races with Lit's internal property batch updates
     // inside HA's grid sections layout.
+    const map = this.config?.map ?? {};
+    const dark = this.isDark();
+    if (
+      this.tripMap &&
+      resolveTileKey(map, this.mapDark) !== resolveTileKey(map, dark)
+    ) {
+      // Theme flipped and it changes the effective tiles (auto/unset
+      // provider): this wrapper bakes the tile layer in at construction, so
+      // rebuild the map against the new theme.
+      this.tripMap.destroy();
+      this.tripMap = undefined;
+    }
+    // Resync unconditionally, even with no map (empty/warning state), so the
+    // theme gate in shouldUpdate() can't get stuck returning true on every
+    // hass update while mapDark stays stale.
+    this.mapDark = dark;
     this.ensureMap();
     const trip = this.currentTrip;
     if (this.tripMap && trip) {
@@ -245,7 +298,8 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
   /** Kick off a route fetch for ``trip`` if not already cached / in-flight.
    *  No-op when the trip has no route (route_point_count missing or 0),
    *  when the trip already has a route, when the source has lazy-loading
-   *  disabled, or when the device id can't be resolved.
+   *  disabled, or when the payload references $device_id and no device id
+   *  can be resolved.
    */
   private maybeLoadRoute(trip: Trip): void {
     if (trip.route?.length) return;
@@ -272,16 +326,46 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
         : source.route_service;
     if (!serviceName) return; // Empty/null disables lazy-load.
 
+    const [domain, service] = serviceName.split(".");
+    if (!domain || !service) return;
+
+    // Build the service payload. Values are copied verbatim except for the
+    // `$trip_id` / `$device_id` placeholders. Default payload matches
+    // ha_toyota's get_trip_route; ha_strava needs {activity_id: "$trip_id"}.
+    const payloadTemplate = source.route_service_data ?? {
+      device_id: "$device_id",
+      trip_id: "$trip_id",
+    };
+    const needsDevice = Object.values(payloadTemplate).some(
+      (v) => typeof v === "string" && v.includes("$device_id"),
+    );
     // hass.entities is a Record<entity_id, EntityRegistryDisplayEntry> in
     // HA 2023.4+ but isn't typed in custom-card-helpers yet.
     const entityReg = (this.hass as unknown as {
       entities?: Record<string, { device_id?: string }>;
     }).entities?.[source.entity];
     const deviceId = entityReg?.device_id;
-    if (!deviceId) return;
-
-    const [domain, service] = serviceName.split(".");
-    if (!domain || !service) return;
+    if (needsDevice && !deviceId) {
+      if (!this.warnedNoDevice.has(source.entity)) {
+        this.warnedNoDevice.add(source.entity);
+        console.warn(
+          `journey-viewer-card: source "${source.name}" has no device for ` +
+            `$device_id in route_service_data; skipping route lazy-load. ` +
+            `Template-sensor sources should set route_service_data without ` +
+            `$device_id (e.g. {activity_id: "$trip_id"}).`,
+        );
+      }
+      return;
+    }
+    const data: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(payloadTemplate)) {
+      data[k] =
+        typeof v === "string"
+          ? v
+              .replace("$trip_id", String(trip.id))
+              .replace("$device_id", deviceId ?? "")
+          : v;
+    }
 
     this.routeFetchInFlight.add(key);
     // HA's hass.callService(...) accepts (domain, service, data, target,
@@ -298,14 +382,7 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
       ) => Promise<{ response?: { route?: RoutePoint[] } }>;
     }).callService;
 
-    callService(
-      domain,
-      service,
-      { device_id: deviceId, trip_id: trip.id },
-      undefined,
-      false,
-      true,
-    )
+    callService(domain, service, data, undefined, false, true)
       .then((resp) => {
         const route = resp?.response?.route ?? [];
         this.routeCache.set(key, route);
@@ -341,9 +418,19 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
     this.rowCache = undefined;
   }
 
+  /** hass.themes.darkMode is set by the frontend at runtime but missing from
+   *  custom-card-helpers' Themes type. */
+  private isDark(): boolean {
+    return (
+      (this.hass?.themes as { darkMode?: boolean } | undefined)?.darkMode ??
+      false
+    );
+  }
+
   private ensureMap(): void {
     if (!this.mapEl || this.tripMap) return;
-    this.tripMap = new TripMap(this.mapEl, this.config?.map ?? {});
+    this.mapDark = this.isDark();
+    this.tripMap = new TripMap(this.mapEl, this.config?.map ?? {}, this.mapDark);
   }
 
   override disconnectedCallback(): void {
@@ -575,11 +662,20 @@ export class JourneyViewerCard extends LitElement implements LovelaceCard {
 
   private renderEmpty() {
     const e = this.config?.empty_state ?? {};
+    // "No trips" on a card whose source has no entity yet sends the user
+    // hunting for a data problem when the real fix is one editor field.
+    const unconfigured = !(this.config?.sources ?? []).some((s) => s.entity);
+    const title = e.title ?? (unconfigured ? "No source configured" : "No trips");
+    const body =
+      e.body ??
+      (unconfigured
+        ? "Pick a source entity in the card editor to get started."
+        : "No trip data available.");
     return html`<ha-card>
       <div class="tv-empty">
-        ${e.icon ? html`<ha-icon icon=${e.icon}></ha-icon>` : nothing}
-        <div class="tv-empty-title">${e.title ?? "No trips"}</div>
-        <div class="tv-empty-body">${e.body ?? "No trip data available."}</div>
+        <ha-icon icon=${e.icon ?? "mdi:map-marker-off"}></ha-icon>
+        <div class="tv-empty-title">${title}</div>
+        <div class="tv-empty-body">${body}</div>
       </div>
     </ha-card>`;
   }

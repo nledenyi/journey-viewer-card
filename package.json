@@ -1,6 +1,6 @@
 {
   "name": "journey-viewer-card",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Paginated GPS journey viewer for Home Assistant. Drive, ride, run, hike, sail. Source-agnostic: Toyota, Strava, Garmin, Komoot, OwnTracks-replay, or any custom integration.",
   "type": "module",
   "main": "dist/journey-viewer-card.js",

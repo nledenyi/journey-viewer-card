@@ -27,6 +27,18 @@ const TILE_PROVIDERS: Record<
   },
 };
 
+/** Resolve the effective tile-provider key for a map config + theme darkness.
+ *  Exported so the card can tell whether a theme flip actually changes the
+ *  tiles (unset/"auto" only) or is a no-op (explicit provider), and gate its
+ *  re-render/rebuild on that. Single source of truth: only this function knows
+ *  that "auto"/unset maps to Carto Dark Matter in dark and OSM in light. */
+export function resolveTileKey(cfg: MapConfig, dark: boolean): string {
+  if (cfg.tile_provider && cfg.tile_provider !== "auto") {
+    return cfg.tile_provider;
+  }
+  return dark ? "carto-dark-matter" : "openstreetmap";
+}
+
 /** Hardcoded fallback palette used when neither the YAML config nor the theme
  * supplies a color. Picked to be readable on both light and dark base maps. */
 const DEFAULT_PALETTE: Record<string, string> = {
@@ -89,7 +101,13 @@ export class TripMap {
   private lastTrip?: Trip;
   private lastSize = { w: 0, h: 0 };
 
-  constructor(private container: HTMLElement, private cfg: MapConfig) {
+  constructor(
+    private container: HTMLElement,
+    private cfg: MapConfig,
+    /** HA theme darkness at construction time; drives the "auto" tile
+     *  provider. The card rebuilds the map when this flips. */
+    private dark = false,
+  ) {
     // Observe from day one. If render() is called while the container is
     // zero-sized (hidden conditional card, inactive tab, edit-mode layout
     // churn), the observer wakes us the moment layout gives it a real box —
@@ -146,16 +164,15 @@ export class TripMap {
     const rect = this.container.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return undefined;
 
-    const provider =
-      TILE_PROVIDERS[this.cfg.tile_provider ?? "openstreetmap"] ??
-      TILE_PROVIDERS.openstreetmap;
+    const tileKey = resolveTileKey(this.cfg, this.dark);
+    const provider = TILE_PROVIDERS[tileKey] ?? TILE_PROVIDERS.openstreetmap;
 
     // gestures: "locked" (default) → all interaction off. Page scroll passes
     // through cleanly on mobile. The +/- zoom buttons remain functional —
     // they're a separate UI element bound to map.zoomIn/Out, not gesture-
     // captured. Locked mode is the right default for an embedded dashboard
     // card; users wanting to explore the map should switch to "enabled".
-    const locked = this.cfg.gestures === "locked";
+    const locked = this.cfg.gestures !== "enabled";
     const m = L.map(this.container, {
       zoomControl: true,
       // Attribution stays on per OSM / CARTO usage-policy requirements. Style
@@ -184,8 +201,15 @@ export class TripMap {
     // microtask later. Cheap, idempotent, and reliably fixes the "panes are
     // 0×0 even though the container is sized" symptom inside shadow DOM /
     // grid-layout containers.
-    setTimeout(() => m.invalidateSize(), 0);
-    requestAnimationFrame(() => m.invalidateSize());
+    // `this.map === m` guards: destroy() (e.g. an editor map.* change tears
+    // the map down between slider ticks) may run before these fire — calling
+    // into a removed Leaflet instance throws on its unloaded panes.
+    setTimeout(() => {
+      if (this.map === m) m.invalidateSize();
+    }, 0);
+    requestAnimationFrame(() => {
+      if (this.map === m) m.invalidateSize();
+    });
     return m;
   }
 
@@ -225,11 +249,15 @@ export class TripMap {
   private fitAndSettle(m: L.Map, coords: Array<[number, number]>): void {
     m.invalidateSize();
     this.fitToBounds(m, coords);
+    // Same destroy() race as in ensure(): skip if the map was torn down (or
+    // replaced) before the deferred checkpoints fire.
     setTimeout(() => {
+      if (this.map !== m) return;
       m.invalidateSize();
       this.fitToBounds(m, coords);
     }, 0);
     requestAnimationFrame(() => {
+      if (this.map !== m) return;
       m.invalidateSize();
       this.fitToBounds(m, coords);
     });

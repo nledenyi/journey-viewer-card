@@ -5,6 +5,8 @@
  *  editor merges each section's output back into the right slice of config.
  */
 
+import { LABEL_TOKENS } from "../format.js";
+
 export type Schema = readonly Record<string, unknown>[];
 
 export const TOP_LEVEL_SCHEMA: Schema = [
@@ -14,7 +16,14 @@ export const TOP_LEVEL_SCHEMA: Schema = [
     schema: [
       {
         name: "order",
-        selector: { select: { options: ["newest_first", "oldest_first"] } },
+        selector: {
+          select: {
+            options: [
+              { value: "newest_first", label: "Newest first" },
+              { value: "oldest_first", label: "Oldest first" },
+            ],
+          },
+        },
       },
       { name: "default_index", selector: { number: { min: 0, mode: "box" } } },
     ],
@@ -50,13 +59,25 @@ export const MAP_SCHEMA: Schema = [
       },
       {
         name: "gestures",
-        selector: { select: { options: ["locked", "enabled"] } },
+        selector: {
+          select: {
+            options: [
+              { value: "locked", label: "Locked (page scrolls over map)" },
+              { value: "enabled", label: "Enabled (pan & zoom)" },
+            ],
+          },
+        },
       },
       {
         name: "tile_provider",
         selector: {
           select: {
-            options: ["openstreetmap", "carto-positron", "carto-dark-matter"],
+            options: [
+              { value: "auto", label: "Auto (follow theme)" },
+              { value: "openstreetmap", label: "OpenStreetMap" },
+              { value: "carto-positron", label: "Carto Positron (light)" },
+              { value: "carto-dark-matter", label: "Carto Dark Matter (dark)" },
+            ],
           },
         },
       },
@@ -73,7 +94,13 @@ export const POLYLINE_SCHEMA: Schema = [
         name: "color_by",
         selector: {
           select: {
-            options: ["solid", "ev", "overspeed", "highway", "mode"],
+            options: [
+              { value: "solid", label: "Solid colour" },
+              { value: "ev", label: "EV vs combustion" },
+              { value: "overspeed", label: "Overspeed" },
+              { value: "highway", label: "Highway vs city" },
+              { value: "mode", label: "Mode (multi-modal)" },
+            ],
           },
         },
       },
@@ -125,11 +152,25 @@ export const ROW_DECORATOR_SCHEMA: Schema = [
     schema: [
       {
         name: "color_target",
-        selector: { select: { options: ["value", "tile"] } },
+        selector: {
+          select: {
+            options: [
+              { value: "value", label: "Value text" },
+              { value: "tile", label: "Tile background" },
+            ],
+          },
+        },
       },
       {
         name: "color_mode",
-        selector: { select: { options: ["solid", "gradient"] } },
+        selector: {
+          select: {
+            options: [
+              { value: "solid", label: "Solid" },
+              { value: "gradient", label: "Gradient" },
+            ],
+          },
+        },
       },
     ],
   },
@@ -171,7 +212,11 @@ export const TREND_SCHEMA: Schema = [
         name: "position",
         selector: {
           select: {
-            options: ["after_value", "before_value", "replace_icon"],
+            options: [
+              { value: "after_value", label: "After value" },
+              { value: "before_value", label: "Before value" },
+              { value: "replace_icon", label: "Replace icon" },
+            ],
           },
         },
       },
@@ -199,6 +244,8 @@ export const TREND_SCHEMA: Schema = [
 ];
 
 export const SOURCE_SCHEMA: Schema = [
+  // Entity first: it's the one required action for a working card.
+  { name: "entity", selector: { entity: {} } },
   {
     type: "grid",
     schema: [
@@ -206,9 +253,55 @@ export const SOURCE_SCHEMA: Schema = [
       { name: "icon", selector: { icon: {} } },
     ],
   },
-  { name: "entity", selector: { entity: {} } },
   // Plain text so CSS vars / named colors survive round-tripping.
   { name: "color", selector: { text: {} } },
+];
+
+/** Route-loading presets offered per source. Picking one stamps
+ *  route_service + route_service_data onto the source config; the config
+ *  itself never stores a `preset` key. */
+export interface SourcePreset {
+  id: string;
+  label: string;
+  /** undefined = delete both keys (card default = ha_toyota shape). */
+  route_service?: string | null;
+  route_service_data?: Record<string, string>;
+}
+
+export const SOURCE_PRESETS: SourcePreset[] = [
+  {
+    id: "toyota",
+    label: "Toyota (ha_toyota fork)",
+    // Card defaults - both keys deleted from YAML.
+  },
+  {
+    id: "strava",
+    label: "Strava (ha_strava 4.3.1+)",
+    route_service: "ha_strava.get_activity_route",
+    route_service_data: { activity_id: "$trip_id" },
+  },
+  {
+    id: "none",
+    label: "None (routes inline / no route)",
+    route_service: null,
+  },
+  {
+    id: "custom",
+    label: "Custom service…",
+  },
+];
+
+/** Map a source's stored route_service back to a preset id. */
+export function detectSourcePreset(routeService: string | null | undefined): string {
+  if (routeService === null || routeService === "") return "none";
+  if (routeService === undefined || routeService === "toyota.get_trip_route")
+    return "toyota";
+  if (routeService === "ha_strava.get_activity_route") return "strava";
+  return "custom";
+}
+
+export const ROUTE_CUSTOM_SCHEMA: Schema = [
+  { name: "route_service", selector: { text: {} } },
 ];
 
 export const EMPTY_STATE_SCHEMA: Schema = [
@@ -216,6 +309,32 @@ export const EMPTY_STATE_SCHEMA: Schema = [
   { name: "body", selector: { text: { multiline: true } } },
   { name: "icon", selector: { icon: {} } },
 ];
+
+/** Card-side defaults per editor section, bound into each ha-form's data so
+ *  unset fields show the value the card actually uses (an empty slider at
+ *  minimum position lies about height=280). The section-change handler strips
+ *  keys equal to these before persisting, so the YAML stays minimal. Must
+ *  match the fallbacks in card.ts / map.ts. */
+export const SECTION_DEFAULTS: Record<string, Record<string, unknown>> = {
+  pagination: { show_counter: true, wrap: false, keyboard: true },
+  map: {
+    height: 280,
+    padding_pct: 10,
+    gestures: "locked",
+    tile_provider: "auto",
+    zoom_to_fit: false,
+  },
+  "map.polyline": { color_by: "solid", weight: 4, opacity: 0.9 },
+};
+
+/** Helper text under specific fields, looked up by schema field name via
+ *  ha-form's computeHelper. Kept sparse — only where the field's value
+ *  grammar isn't guessable from its label. */
+export const HELPERS: Record<string, string> = {
+  template: `Tokens: ${LABEL_TOKENS.join(" ")}`,
+  route_service:
+    "Blank falls back to the default Toyota service; pick the None preset to disable route loading.",
+};
 
 /** English label map. Schema field names translate to user-facing strings. */
 export const LABELS: Record<string, string> = {
@@ -246,6 +365,8 @@ export const LABELS: Record<string, string> = {
   name: "Name",
   entity: "Entity",
   color: "Colour",
+  route_service: "Route service (domain.service)",
+  route_preset: "Route loading",
 
   label: "Label",
   format: "Format",

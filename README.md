@@ -62,12 +62,32 @@ Each source's `entity` should expose `attributes.trips[]`, where each item match
 
 Per-route-point flags are optional and drive the polyline colouring: `isEv`, `overspeed`, `highway`, `mode`. Behaviours are GPS-tagged events (hard accel/brake) that render as map markers.
 
+Everything under `stats` is an open namespace - the stats grid reads any dot-path. For sport/fitness sources the card's stat picker additionally knows these optional keys; supply whichever your source has:
+
+```json
+"stats": {
+  "pace_s_per_km": 332,
+  "elevation_gain_m": 214,
+  "average_heartrate_bpm": 148,
+  "calories_kcal": 620
+}
+```
+
 ### Lazy route loading
 
 `route` is **optional**. Entity attributes are recorded to HA's database on every state change and broadcast to every websocket subscriber, so a full GPS polyline per trip quickly bloats both (HA warns at 16 KiB per entity). The recommended producer shape is:
 
 - The sensor ships each trip with metadata + `route_point_count` (how many points exist upstream), but **without** `route`.
-- The card calls the source's `route_service` (default `toyota.get_trip_route`) with `{device_id, trip_id}` when the user navigates to a trip, and the service returns `{route: [...]}` (a response-supporting service, HA 2024.4+).
+- The card calls the source's `route_service` (default `toyota.get_trip_route`) when the user navigates to a trip, and the service returns `{route: [...]}` (a response-supporting service, HA 2024.4+).
+- The call payload is configurable per source via `route_service_data`, with `$trip_id` / `$device_id` placeholders. The default is `{device_id: $device_id, trip_id: $trip_id}` (ha_toyota's shape). For `ha_strava` ≥ 4.3.1 use:
+
+  ```yaml
+  route_service: ha_strava.get_activity_route
+  route_service_data:
+    activity_id: $trip_id
+  ```
+
+  `$device_id` is resolved from the source entity's device; sources without a device (template sensors) must use a payload that doesn't reference it.
 - Fetched routes are cached per card instance; navigating back to a trip doesn't re-call the service.
 
 Trips that arrive **with** `route` inline (fixtures, small datasets, template sensors) skip the service call entirely. Set `route_service: ""` on a source to disable lazy-loading for it.
@@ -85,6 +105,10 @@ sources:
     icon: mdi:car
     route_service: toyota.get_trip_route  # service for lazy route loading (default).
                                           # "" disables; see "Lazy route loading".
+    route_service_data:                   # payload for the route_service call.
+      device_id: $device_id               # placeholders: $trip_id, $device_id.
+      trip_id: $trip_id                   # this default matches ha_toyota;
+                                          # ha_strava wants {activity_id: $trip_id}.
 
 order: newest_first                       # newest_first | oldest_first
 default_index: 0
@@ -105,14 +129,18 @@ pagination:
 label:
   template: "{relative_day} {start_time} ({distance} / {duration})"
   # tokens: {relative_day} {start_time} {end_time} {distance} {duration}
+  #         {label} {activity_type} {source}   (from the trip object; "" when absent)
+  # e.g. a Strava-style feed: "{label} · {distance} / {duration}"
 
 map:
   height: 280
   zoom_to_fit: true                       # default false: center on start point
                                           # at fixed zoom. true: fit whole route.
   padding_pct: 10
-  gestures: locked                        # locked | enabled
-  tile_provider: openstreetmap            # openstreetmap | carto-positron | carto-dark-matter
+  gestures: locked                        # locked (default) | enabled
+  tile_provider: auto                     # auto (default: OSM light / Carto Dark Matter dark,
+                                          # follows the theme) | openstreetmap | carto-positron
+                                          # | carto-dark-matter
   polyline:
     color_by: ev                          # solid | ev | overspeed | highway | mode
     weight: 4
@@ -315,10 +343,10 @@ npm run build
 The card ships a built-in GUI editor (`getConfigElement`). When you add the card via "+ Add card" or click edit on an existing instance, HA loads `<journey-viewer-card-editor>` automatically. It covers:
 
 - All top-level fields (title, order, default index; `tap_action` / `hold_action` / `double_tap_action` and stats-grid tile background are YAML-only for now)
-- Sources list builder (add/remove/reorder, name, entity, icon, colour)
+- Sources list builder (add/remove/reorder, name, entity, icon, colour, route-loading preset: Toyota / Strava / None / custom service)
 - Pagination, label template, map (with polyline subsection), empty state
 - Stats grid row builder with a stat-catalogue picker (Distance, Duration, Avg/Max speed, Fuel, Score, EV/Eco/Highway ratio, custom path) plus per-row threshold ladder, bar background, and trend arrow editors
-- "Show YAML" fallback drops to a code editor for anything beyond the GUI
+- HA's built-in "Show code editor" covers anything beyond the GUI
 
 ### Generating a Strava fixture (optional tool)
 
@@ -328,7 +356,7 @@ The card ships a built-in GUI editor (`getConfigElement`). When you add the card
 ./scripts/strava-fixture.py --since 2019-01-01 --detailed --out my-trips.json
 ```
 
-First run prompts for Strava API client_id / client_secret (create at https://www.strava.com/settings/api with `localhost` as the callback domain), opens a browser for OAuth, then writes the fixture. Tokens cached under `~/.config/strava-fixture.json`. The card itself never sees Strava data unless you wire it via a sensor; the script writes a JSON file you choose what to do with.
+First run prompts for Strava API client_id / client_secret (create at https://www.strava.com/settings/api). Heads-up on the app's **Authorization Callback Domain**: this script needs `localhost`, but the `ha_strava` integration needs `my.home-assistant.io` - Strava only allows one. If you plan to use both, set it to `my.home-assistant.io` for the integration and change it to `localhost` temporarily when (re-)authorizing this script. The script opens a browser for OAuth, then writes the fixture. Tokens cached under `~/.config/strava-fixture.json`. The card itself never sees Strava data unless you wire it via a sensor; the script writes a JSON file you choose what to do with.
 
 ### Localization
 

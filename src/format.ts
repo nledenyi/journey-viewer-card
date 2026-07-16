@@ -55,6 +55,14 @@ export function formatVolume(
   return `${(ml / 1000).toFixed(decimals)} L`;
 }
 
+/** Running/cycling pace from seconds-per-km: "5:32 /km". */
+export function formatPace(secPerKm: number | null | undefined): string {
+  if (secPerKm == null || !Number.isFinite(secPerKm) || secPerKm <= 0)
+    return "—";
+  const s = Math.round(secPerKm);
+  return `${Math.floor(s / 60)}:${PAD(s % 60)} /km`;
+}
+
 /** Tokens recognised by the card's `label.template` config. Listed once so
  *  validateLabelTemplate() and renderLabel() agree on the supported set. */
 export const LABEL_TOKENS = [
@@ -63,6 +71,9 @@ export const LABEL_TOKENS = [
   "{end_time}",
   "{distance}",
   "{duration}",
+  "{label}",
+  "{activity_type}",
+  "{source}",
 ] as const;
 
 /** Return the list of `{tokens}` in the template that aren't in LABEL_TOKENS.
@@ -77,15 +88,21 @@ export function validateLabelTemplate(template: string): string[] {
 /** Compose the card's top-row label from the configured template.
  *
  *  Supported tokens (see LABEL_TOKENS):
- *  - `{relative_day}`  - "Today" / "Yesterday" / "Mon" / "2026-04-27"
- *  - `{start_time}`    - HH:MM of trip start
- *  - `{end_time}`      - HH:MM of trip end
- *  - `{distance}`      - "1.22 km" / "876 m"
- *  - `{duration}`      - "4:25" / "1h 23m" / "45s"
+ *  - `{relative_day}`   - "Today" / "Yesterday" / "Mon" / "2026-04-27"
+ *  - `{start_time}`     - HH:MM of trip start
+ *  - `{end_time}`       - HH:MM of trip end
+ *  - `{distance}`       - "1.22 km" / "876 m"
+ *  - `{duration}`       - "4:25" / "1h 23m" / "45s"
+ *  - `{label}`          - the trip's own title ("Morning Run"); "" if absent
+ *  - `{activity_type}`  - contract activity_type ("drive", "run"); "" if absent
+ *  - `{source}`         - trip's source string; "" if absent
  */
 export function renderLabel(template: string, trip: {
   start_ts?: string;
   end_ts?: string;
+  label?: string | null;
+  activity_type?: string | null;
+  source?: string | null;
   stats: { distance_m?: number | null; duration_s?: number | null };
 }): string {
   return template
@@ -93,7 +110,12 @@ export function renderLabel(template: string, trip: {
     .replaceAll("{start_time}", formatTime(trip.start_ts))
     .replaceAll("{end_time}", formatTime(trip.end_ts))
     .replaceAll("{distance}", formatDistance(trip.stats.distance_m))
-    .replaceAll("{duration}", formatDuration(trip.stats.duration_s));
+    .replaceAll("{duration}", formatDuration(trip.stats.duration_s))
+    .replaceAll("{label}", trip.label ?? "")
+    .replaceAll("{activity_type}", trip.activity_type ?? "")
+    .replaceAll("{source}", trip.source ?? "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
 }
 
 /** Format a single stats-grid row value. */
@@ -113,6 +135,7 @@ export function formatStat(
   if (format === "km") return numeric ? formatDistance(v) : "—";
   if (format === "L") return numeric ? formatVolume(v, decimals ?? 3) : "—";
   if (format === "duration") return numeric ? formatDuration(v) : "—";
+  if (format === "pace") return numeric ? formatPace(v) : "—";
 
   if (format && format.includes("{v")) {
     if (!numeric) return "—";

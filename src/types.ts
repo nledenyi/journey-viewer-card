@@ -127,10 +127,17 @@ export interface SourceConfig {
   icon?: string;
   /** HA service to call to lazy-load a single trip's route polyline. Format
    *  "domain.service". Default "toyota.get_trip_route" for the canonical
-   *  ha_toyota integration. The service must accept `{device_id, trip_id}`
-   *  and return `{route: RoutePoint[]}`. Set to "" or null to disable
-   *  lazy-loading (the card will render trips without polylines). */
+   *  ha_toyota integration. The service must return `{route: RoutePoint[]}`.
+   *  Set to "" or null to disable lazy-loading (the card will render trips
+   *  without polylines). */
   route_service?: string | null;
+  /** Payload for the route_service call. String values support the
+   *  placeholders `$trip_id` (the trip's `id`) and `$device_id` (the device
+   *  of the source entity, resolved from the entity registry). Default:
+   *  `{device_id: "$device_id", trip_id: "$trip_id"}` (ha_toyota's shape).
+   *  ha_strava example: `{activity_id: "$trip_id"}`. A device is only
+   *  required when a value references `$device_id`. */
+  route_service_data?: Record<string, string>;
 }
 
 export interface MapConfig {
@@ -138,7 +145,11 @@ export interface MapConfig {
   zoom_to_fit?: boolean;
   padding_pct?: number;
   gestures?: "locked" | "enabled";
-  tile_provider?: "openstreetmap" | "carto-positron" | "carto-dark-matter";
+  tile_provider?:
+    | "auto"
+    | "openstreetmap"
+    | "carto-positron"
+    | "carto-dark-matter";
   polyline?: {
     color_by?: ColorBy;
     weight?: number;

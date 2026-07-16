@@ -92,6 +92,38 @@ export const STAT_CATALOGUE: StatCatalogueEntry[] = [
     key: "scores.braking",
     defaultFormat: "{v} / 100",
   },
+  // Sport / fitness (producers supply these; see the README data contract's
+  // optional sport-stat keys)
+  {
+    id: "pace",
+    label: "Pace",
+    description: "Seconds per km, shown as m:ss /km",
+    key: "stats.pace_s_per_km",
+    defaultFormat: "pace",
+    defaultIcon: "mdi:run-fast",
+  },
+  {
+    id: "elevation_gain",
+    label: "Elevation gain",
+    description: "Total ascent",
+    key: "stats.elevation_gain_m",
+    defaultFormat: "{v:.0f} m",
+    defaultIcon: "mdi:trending-up",
+  },
+  {
+    id: "avg_heartrate",
+    label: "Avg heart rate",
+    key: "stats.average_heartrate_bpm",
+    defaultFormat: "{v:.0f} bpm",
+    defaultIcon: "mdi:heart-pulse",
+  },
+  {
+    id: "calories",
+    label: "Calories",
+    key: "stats.calories_kcal",
+    defaultFormat: "{v:.0f} kcal",
+    defaultIcon: "mdi:fire",
+  },
   // Ratios (used to be `computed`)
   {
     id: "ev_ratio",
